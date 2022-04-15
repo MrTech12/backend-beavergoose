@@ -14,5 +14,15 @@ namespace LinkService.BTest
 
             Assert.Equal(12, result);
         }
+
+        [Fact]
+        public void ReturningResult20()
+        {
+            CreationService creationService = new CreationService();
+
+            var result = creationService.AddNumbers(12, 8);
+
+            Assert.Equal(20, result);
+        }
     }
 }
