@@ -1,18 +1,18 @@
-name: link service build, test & anaylse
+name: "link service build, test & anaylse"
 on:
   push:
     branches:
-      - main
-      - development
-      - feature-**
+      - "main"
+      - "development"
+      - "feature-**"
     paths:
       - "src/Services/LinkService/**"
       - "tests/LinkService.BTest/**"
       - ".github/workflows/link-service-workflow.yml"
   pull_request:
     branches:
-      - main
-      - development
+      - "main"
+      - "development"
     paths:
       - "src/Services/LinkService/**"
       - "tests/LinkService.BTest/**"
@@ -20,7 +20,7 @@ on:
 
 jobs:
   link-build-test-analyse:
-    uses: ./.github/workflows/build-test-analyse-template.yml
+    uses: "./.github/workflows/build-test-analyse-template.yml"
     with:
-      project-location: src/Services/LinkService
-      test-location: tests/LinkService.BTest
+      project-location: "src/Services/LinkService"
+      test-location: "tests/LinkService.BTest"

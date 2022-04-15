@@ -1,41 +1,41 @@
-name: build, test & analyse template
+name: "build, test & analyse template"
 on:
   workflow_call:
     inputs:
       project-location:
         required: true
         type: string
-        description: Path to project files
+        description: "Path to project files"
       test-location:
         required: true
         type: string
-        description: Path to test files
+        description: "Path to test files"
 
 jobs:
   build-test-analyse:
     runs-on: ubuntu-20.04
     steps:
-      - name: checkout project code
+      - name: "checkout project code"
         uses: actions/checkout@v2
       
-      - name: Setup dotnet 6
+      - name: "Setup dotnet 6"
         uses: actions/setup-dotnet@v2
         with:
           dotnet-version: '6.0.x'
       
-      - name: Restore Nuget dependencies on project
+      - name: "Restore Nuget dependencies on project"
         run: dotnet restore ${{ inputs.project-location }}
 
-      - name: Build release version of project
+      - name: "Build release version of project"
         run: dotnet build ${{ inputs.project-location }} --no-restore --configuration Release 
       
-      - name: Run test on project
+      - name: "Run test on project"
         run: dotnet test ${{ inputs.test-location }} --logger "trx;LogFileName=test-results.trx"
 
       - name: 'Test Report'
         uses: dorny/test-reporter@v1
         if: success() # run this step even if previous step failed
         with:
-          name: Tests results # Name of the check run which will be created
+          name: "Tests results" # Name of the check run which will be created
           path: ${{ inputs.inputs.test-location }}/TestResults/test-results.trx # Path to test results
           reporter: dotnet-trx
