@@ -37,5 +37,5 @@ jobs:
         if: success() # run this step even if previous step failed
         with:
           name: "Tests results" # Name of the check run which will be created
-          path: ${{ inputs.inputs.test-location }}/TestResults/test-results.trx # Path to test results
+          path: ${{ inputs.test-location }}/TestResults/test-results.trx # Path to test results
           reporter: dotnet-trx

@@ -16,13 +16,13 @@ namespace LinkService.BTest
         }
 
         [Fact]
-        public void ReturningResult20()
+        public void ReturningResult36()
         {
             CreationService creationService = new CreationService();
 
-            var result = creationService.AddNumbers(12, 8);
+            var result = creationService.AddNumbers(12, 24);
 
-            Assert.Equal(20, result);
+            Assert.Equal(36, result);
         }
     }
 }
