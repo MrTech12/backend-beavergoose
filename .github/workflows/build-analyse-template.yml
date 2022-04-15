@@ -24,13 +24,13 @@ jobs:
           dotnet-version: '6.0.x'
       
       - name: Restore Nuget dependencies on project
-        uses: dotnet restore ${{ inputs.project-location }}
+        run: dotnet restore ${{ inputs.project-location }}
 
       - name: Build release version of project
-        uses: dotnet build ${{ inputs.project-location }} --no-restore --configuration Release 
+        run: dotnet build ${{ inputs.project-location }} --no-restore --configuration Release 
       
       - name: Run test on project
-        uses: dotnet test ${{ inputs.test-location }} --logger "trx;LogFileName=test-results.trx"
+        run: dotnet test ${{ inputs.test-location }} --logger "trx;LogFileName=test-results.trx"
 
       - name: 'Test Report'
         uses: dorny/test-reporter@v1

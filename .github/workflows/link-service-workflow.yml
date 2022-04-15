@@ -20,7 +20,7 @@ on:
 
 jobs:
   link-build-test-analyse:
-    uses: ".github/workflows/build-test-analyse-template.yml"
+    uses: .github/workflows/build-test-analyse-template.yml
     with:
       project-location: src/Services/LinkService
       test-location: tests/LinkService.BTest
