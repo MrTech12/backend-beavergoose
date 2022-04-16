@@ -10,9 +10,12 @@ on:
         required: true
         type: string
         description: "Path to test files"
+    secrets:
+      sonar-token:
+        required: true
 
 env:
-    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  SONAR_TOKEN: ${{ secrets.sonar-token }}
 
 jobs:
   analyse:
@@ -30,6 +33,5 @@ jobs:
           sonarOrganization: mrtech12
           dotnetBuildArguments: ${{ inputs.project-location }}
           dotnetTestArguments: --logger trx --collect:"XPlat Code Coverage"
-          # Optional extra command arguments the the SonarScanner 'begin' command
           sonarBeginArguments: /d:sonar.cs.opencover.reportsPaths="${{ inputs.test-location }}/TestResults/**/coverage.opencover.xml"  -d:sonar.cs.xunit.reportsPaths="${{ inputs.test-location }}/TestResults/*.trx"
-          # /d:sonar.cs.opencover.reportsPaths="**/TestResults/coverage.opencover.xml" -d:sonar.cs.vstest.reportsPaths="**/TestResults/*.trx" 
+          # /d:sonar.cs.opencover.reportsPaths="**/TestResults/coverage.opencover.xml" -d:sonar.cs.vstest.reportsPaths="**/TestResults/*.trx"
