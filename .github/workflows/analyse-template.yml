@@ -13,9 +13,12 @@ on:
     secrets:
       sonar-token:
         required: true
+      github-token:
+        required: true
 
 env:
   SONAR_TOKEN: ${{ secrets.sonar-token }}
+  GITHUB_TOKEN: ${{ secrets.github-token }}
 
 jobs:
   analyse:

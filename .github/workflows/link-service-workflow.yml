@@ -31,3 +31,4 @@ jobs:
       test-location: "tests/LinkService.BTest"
     secrets:
       sonar-token: ${{ secrets.SONAR_TOKEN }}
+      github-token: ${{ secrets.GITHUB_TOKEN }}
