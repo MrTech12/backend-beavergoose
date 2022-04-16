@@ -41,12 +41,12 @@ jobs:
           reporter: dotnet-trx
 
       - name: "Copy coverage report to convenient location"
-        run: cp ${{ inputs.test-location }}/TestResults/**/In/**/coverage.cobertura.xml TestResults/coverage.cobertura.xml
+        run: cp ${{ inputs.test-location }}/TestResults/**/In/**/coverage.cobertura.xml ${{ inputs.test-location }}/TestResults/coverage.cobertura.xml
 
       - name: "Create Coverage Summary Report"
         uses: irongut/CodeCoverageSummary@v1.0.2
         with:
-          filename: TestResults/coverage.cobertura.xml
+          filename: ${{ inputs.test-location }}/TestResults/coverage.cobertura.xml
           badge: true
           format: 'markdown'
           output: 'both'
