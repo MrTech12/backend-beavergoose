@@ -1,4 +1,4 @@
-name: "link service build, test & anaylse"
+name: "link service - build, test & anaylse"
 on:
   push:
     branches:

@@ -1,0 +1,41 @@
+name: "deploy template"
+on:
+  workflow_call:
+    inputs:
+      project-location:
+        required: true
+        type: string
+        description: "Path to project files"
+      project-name:
+        required: true
+        type: string
+        description: "name of the project"
+    secrets:
+      docker-username:
+        required: true
+      docker-token:
+        required: true
+
+jobs:
+  create-upload-docker:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: "checkout project code"
+        uses: actions/checkout@v2
+
+      - name: Setup docker
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.docker-username }}
+          password: ${{ secrets.docker-token }}
+
+      - name: build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: ${{ inputs.project-location }}
+          file: Dockerfile
+          push: true
+          tags: ${{ secrets.docker-username }}/${{ inputs.project-name }}:latest

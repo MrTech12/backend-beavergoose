@@ -28,6 +28,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
+      
       - name: "Run Sonarcloud analysis"
         uses: highbyte/sonarscan-dotnet@v2.1.2
         with: 
@@ -37,4 +38,3 @@ jobs:
           dotnetBuildArguments: ${{ inputs.project-location }}
           dotnetTestArguments: ${{ inputs.test-location }} --logger trx --collect:"XPlat Code Coverage"
           sonarBeginArguments: /d:sonar.cs.opencover.reportsPaths="${{ inputs.test-location }}/TestResults/**/coverage.opencover.xml"  -d:sonar.cs.vstest.reportsPaths="${{ inputs.test-location }}/TestResults/*.trx"
-          # /d:sonar.cs.opencover.reportsPaths="**/TestResults/coverage.opencover.xml" -d:sonar.cs.xunit.reportsPaths="**/TestResults/*.trx"
