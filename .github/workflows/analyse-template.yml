@@ -32,6 +32,6 @@ jobs:
           sonarProjectName:  backend-beavergoose
           sonarOrganization: mrtech12
           dotnetBuildArguments: ${{ inputs.project-location }}
-          dotnetTestArguments: --logger trx --collect:"XPlat Code Coverage"
+          dotnetTestArguments: ${{ inputs.test-location }} --logger trx --collect:"XPlat Code Coverage"
           sonarBeginArguments: /d:sonar.cs.opencover.reportsPaths="${{ inputs.test-location }}/TestResults/**/coverage.opencover.xml"  -d:sonar.cs.xunit.reportsPaths="${{ inputs.test-location }}/TestResults/*.trx"
           # /d:sonar.cs.opencover.reportsPaths="**/TestResults/coverage.opencover.xml" -d:sonar.cs.vstest.reportsPaths="**/TestResults/*.trx"
