@@ -44,7 +44,7 @@ jobs:
         run: ls ${{ inputs.test-location }}/TestResults
 
       - name: list content 2
-        run: ls ${{ inputs.test-location }}/TestResults/**/
+        run: ls ${{ inputs.test-location }}/TestResults/**/In/**/
 
       # - name: "Copy coverage report to convenient location"
       #   run: cp ${{ inputs.test-location }}/TestResults/*/coverage.cobertura.xml TestResults/coverage.cobertura.xml
