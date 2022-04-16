@@ -1,4 +1,4 @@
-name: "build, test & analyse template"
+name: "build & test template"
 on:
   workflow_call:
     inputs:
@@ -12,7 +12,7 @@ on:
         description: "Path to test files"
 
 jobs:
-  build-test-analyse:
+  build-test:
     runs-on: ubuntu-20.04
     steps:
       - name: "checkout project code"
@@ -36,6 +36,6 @@ jobs:
         uses: dorny/test-reporter@v1
         if: success() # run this step even if previous step failed
         with:
-          name: "Tests results" # Name of the check run which will be created
+          name: "Test results" # Name of the check run which will be created
           path: ${{ inputs.test-location }}/TestResults/test-results.trx # Path to test results
           reporter: dotnet-trx

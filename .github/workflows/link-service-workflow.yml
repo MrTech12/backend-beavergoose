@@ -19,8 +19,13 @@ on:
       - ".github/workflows/link-service-workflow.yml"
 
 jobs:
-  link-build-test-analyse:
-    uses: "./.github/workflows/build-test-analyse-template.yml"
+  link-testing:
+    uses: "./.github/workflows/build-test-template.yml"
+    with:
+      project-location: "src/Services/LinkService"
+      test-location: "tests/LinkService.BTest"
+  link-analysis:
+    uses: "./.github/workflows/analyse-template.yml"
     with:
       project-location: "src/Services/LinkService"
       test-location: "tests/LinkService.BTest"
