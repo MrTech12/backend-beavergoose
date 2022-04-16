@@ -3,8 +3,6 @@ on:
   push:
     branches:
       - "release-**"
-    paths:
-      - "src/Services/LinkService/**"
 
 jobs:
   link-docker-kubernetes:
