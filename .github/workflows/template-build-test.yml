@@ -30,12 +30,31 @@ jobs:
         run: dotnet build ${{ inputs.project-location }} --no-restore --configuration Release 
       
       - name: "Run test on project"
-        run: dotnet test ${{ inputs.test-location }} --logger "trx;LogFileName=test-results.trx"
+        run: dotnet test ${{ inputs.test-location }} --logger "trx;LogFileName=test-results.trx" --collect:"XPlat Code Coverage"
 
-      - name: 'Test Report'
+      - name: "Create Test Report"
         uses: dorny/test-reporter@v1
         if: success() # run this step even if previous step failed
         with:
           name: "Test results" # Name of the check run which will be created
           path: ${{ inputs.test-location }}/TestResults/test-results.trx # Path to test results
           reporter: dotnet-trx
+
+      - name: "Copy coverage report to convenient location"
+        run: cp ${{ inputs.test-location }}/TestResults/*/coverage.cobertura.xml TestResults/coverage.cobertura.xml
+
+      - name: "Create Coverage Summary Report"
+        uses: irongut/CodeCoverageSummary@v1.0.2
+        with:
+          filename: TestResults/coverage.cobertura.xml
+          badge: true
+          format: 'markdown'
+          output: 'both'
+          thresholds: '55 80'
+
+      - name: "Add Coverage Summary as a PR comment"
+        uses: marocchino/sticky-pull-request-comment@v2
+        if: github.event_name == 'pull_request'
+        with:
+          recreate: true
+          path: code-coverage-results.md

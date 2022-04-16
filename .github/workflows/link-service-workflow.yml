@@ -20,12 +20,12 @@ on:
 
 jobs:
   link-testing:
-    uses: "./.github/workflows/build-test-template.yml"
+    uses: "./.github/workflows/template-build-test.yml"
     with:
       project-location: "src/Services/LinkService"
       test-location: "tests/LinkService.BTest"
   link-analysis:
-    uses: "./.github/workflows/analyse-template.yml"
+    uses: "./.github/workflows/template-analyse.yml"
     with:
       project-location: "src/Services/LinkService"
       test-location: "tests/LinkService.BTest"
