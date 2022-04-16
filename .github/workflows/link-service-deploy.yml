@@ -15,3 +15,5 @@ jobs:
     secrets:
       docker-username: ${{ secrets.DOCKER_USERNAME }}
       docker-token: ${{ secrets.DOCKER_TOKEN }}
+      digitalocean-access-token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      digitalocean-cluster-name: ${{ secrets.DIGITALOCEAN_CLUSTER_NAME }}

@@ -15,6 +15,10 @@ on:
         required: true
       docker-token:
         required: true
+      digitalocean-access-token:
+        required: true
+      digitalocean-cluster-name:
+        required: true
 
 jobs:
   create-upload-docker:
@@ -38,4 +42,21 @@ jobs:
           context: ${{ inputs.project-location }}
           file: Dockerfile
           push: true
-          tags: ${{ secrets.docker-username }}/${{ inputs.project-name }}:${GITHUB_REF_NAME}
+          tags: ${{ secrets.docker-username }}/${{ inputs.project-name }}:${ GITHUB_REF_NAME }
+  deploy-kubernetes:
+    runs-on: ubuntu-20.04
+    needs: create-upload-docker
+    steps:
+    - name: Install doctl
+      uses: digitalocean/action-doctl@v2
+      with:
+        token: ${{ secrets.digitalocean-access-token }}
+    
+    - name: Save DigitalOcean kubeconfig with short-lived credentials
+      run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 ${{ secrets.digitalocean-cluster-name }}
+    
+    - name: Deploy to DigitalOcean's Kubernetes cluster
+      run: kubectl apply -f deploy/projects/${{ inputs.project-name }}-deployment.yml
+    
+    - name: Verify deployment
+      run: kubectl rollout status deployment/${{ inputs.project-name }}-deployment
