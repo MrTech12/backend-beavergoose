@@ -30,4 +30,4 @@ jobs:
       project-location: "src/Services/LinkService"
       test-location: "tests/LinkService.BTest"
     secrets:
-      sonar-token: ${{ secrets.sonar-token }}
+      sonar-token: ${{ secrets.SONAR_TOKEN }}
