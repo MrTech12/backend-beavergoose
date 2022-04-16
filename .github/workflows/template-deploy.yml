@@ -38,4 +38,4 @@ jobs:
           context: ${{ inputs.project-location }}
           file: Dockerfile
           push: true
-          tags: ${{ secrets.docker-username }}/${{ inputs.project-name }}:latest
+          tags: ${{ secrets.docker-username }}/${{ inputs.project-name }}:${GITHUB_REF_NAME}

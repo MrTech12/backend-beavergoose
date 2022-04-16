@@ -58,6 +58,3 @@ jobs:
         with:
           recreate: true
           path: code-coverage-results.md
-
-      - name: "get branch name"
-        run: echo ${GITHUB_REF_NAME}
