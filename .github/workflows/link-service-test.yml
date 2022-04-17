@@ -1,4 +1,4 @@
-name: "link service - build, test & anaylse"
+name: "link service - build, test & analyse"
 on:
   push:
     branches:
@@ -24,7 +24,7 @@ jobs:
     with:
       project-location: "src/Services/LinkService"
       test-location: "tests/LinkService.BTest"
-  link-analysis:
+  link-analyse:
     uses: "./.github/workflows/template-analyse.yml"
     with:
       project-location: "src/Services/LinkService"
