@@ -8,9 +8,34 @@ namespace FileMicroservice.Data
 {
 	public class DigitalOceanFileProvider : IFileProvider
 	{
-		public Task<byte[]> DownloadFileAsync(string fileName, DigitalOceanDataConfiguration DODataConfiguration)
+		public async Task<byte[]> DownloadFileAsync(string fileName, DigitalOceanDataConfiguration DODataConfiguration)
 		{
-			throw new NotImplementedException();
+			var s3ClientConfig = new AmazonS3Config { ServiceURL = DODataConfiguration.DOServiceURL };
+			IAmazonS3 _awsS3Client = new AmazonS3Client(DODataConfiguration.DOAccessKey, DODataConfiguration.DOSecretAccessKey, s3ClientConfig);
+
+			MemoryStream memoryStream = null;
+
+			try
+			{
+				GetObjectRequest getRequest = new GetObjectRequest
+				{
+					BucketName = DODataConfiguration.DOBucketName,
+					Key = fileName // Keys are the full filename, including the file extension.
+				};
+				var response = await _awsS3Client.GetObjectAsync(getRequest);
+
+				using (memoryStream = new MemoryStream())
+				{
+					await response.ResponseStream.CopyToAsync(memoryStream);
+				}
+
+				return memoryStream.ToArray();
+			}
+			catch (Exception exception)
+			{
+				Console.WriteLine("Unknown encountered on server. Message:'{0}' when looking up a file", exception.Message);
+				throw;
+			}
 		}
 
         public async Task UploadFileAsync(IFormFile file, DigitalOceanDataConfiguration DODataConfiguration)
@@ -28,7 +53,7 @@ namespace FileMicroservice.Data
 					var uploadRequest = new TransferUtilityUploadRequest
 					{
 						InputStream = newMemoryStream,
-						Key = file.FileName,
+						Key = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName),
 						BucketName = DODataConfiguration.DOBucketName,
 						ContentType = file.ContentType,
 						CannedACL = S3CannedACL.Private

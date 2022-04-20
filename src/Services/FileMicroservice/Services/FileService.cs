@@ -23,10 +23,11 @@ namespace FileMicroservice.Services
                 DOAccessKey = this._configuration["DigitalOcean:AccessKey"],
                 DOSecretAccessKey = this._configuration["DigitalOcean:SecretAccessKey"]
             };
+
             await this._fileProvider.UploadFileAsync(file, DODataConfiguration);
         }
 
-        public async Task<byte[]> RetrieveFile(string fileName)
+        public async Task<byte[]?> RetrieveFile(string fileName)
         {
             DigitalOceanDataConfiguration DODataConfiguration = new DigitalOceanDataConfiguration()
             {
@@ -35,7 +36,12 @@ namespace FileMicroservice.Services
                 DOAccessKey = this._configuration["DigitalOcean:AccessKey"],
                 DOSecretAccessKey = this._configuration["DigitalOcean:SecretAccessKey"]
             };
-            return await this._fileProvider.DownloadFileAsync(fileName, DODataConfiguration);
+            bool presence = await this._fileProvider.FindFileAsync(fileName, DODataConfiguration);
+            if (presence)
+            {
+                return await this._fileProvider.DownloadFileAsync(fileName, DODataConfiguration);
+            }
+            return null;
         }
 
         public async Task<bool> CheckPresenceOfFile(string fileName)
