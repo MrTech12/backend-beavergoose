@@ -13,7 +13,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{62D0B0BA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkService", "Services\LinkService\LinkService.csproj", "{B095914B-C0A2-4D36-A1F1-063FAD02CCA2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkService.BTest", "..\tests\LinkService.BTest\LinkService.BTest.csproj", "{66A5A530-127C-4346-B2F5-5C49EEB06E8E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkService.BTest", "..\tests\LinkService.BTest\LinkService.BTest.csproj", "{66A5A530-127C-4346-B2F5-5C49EEB06E8E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileMicroservice", "Services\FileMicroservice\FileMicroservice.csproj", "{0D91012D-200E-4C72-97C2-DD815CCFCF75}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{66A5A530-127C-4346-B2F5-5C49EEB06E8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{66A5A530-127C-4346-B2F5-5C49EEB06E8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{66A5A530-127C-4346-B2F5-5C49EEB06E8E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D91012D-200E-4C72-97C2-DD815CCFCF75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D91012D-200E-4C72-97C2-DD815CCFCF75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D91012D-200E-4C72-97C2-DD815CCFCF75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D91012D-200E-4C72-97C2-DD815CCFCF75}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -41,6 +47,7 @@ Global
 		{F32C96A4-7766-4013-9769-8213F73F594A} = {0B2C9C90-EB13-419A-A987-85B1987005ED}
 		{B095914B-C0A2-4D36-A1F1-063FAD02CCA2} = {320C3EB0-923F-4E3F-8F71-E3A25E271535}
 		{66A5A530-127C-4346-B2F5-5C49EEB06E8E} = {62D0B0BA-DE04-4643-A4B8-08D2ABC613E1}
+		{0D91012D-200E-4C72-97C2-DD815CCFCF75} = {320C3EB0-923F-4E3F-8F71-E3A25E271535}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B955A228-4EFA-487D-B88E-033A796387B6}
