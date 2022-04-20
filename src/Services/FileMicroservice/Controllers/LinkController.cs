@@ -14,10 +14,13 @@ namespace FileMicroservice.Controllers
         private readonly IFileProvider _fileProvider;
         private FileService _fileService;
 
-        public LinkController(IConfiguration configuration, IFileProvider fileProvider)
+        private readonly ILogger<LinkController> _logger;
+
+        public LinkController(IConfiguration configuration, IFileProvider fileProvider, ILogger<LinkController> logger)
         {
             this._configuration = configuration;
             this._fileProvider = fileProvider;
+            this._logger = logger;
         }
 
         /// <summary>
@@ -33,6 +36,27 @@ namespace FileMicroservice.Controllers
             _fileService = new FileService(this._configuration, this._fileProvider);
             await this._fileService.SaveFile(file);
             return Created(",", new { output = "file Created!" });
+        }
+
+        /// <summary>
+        /// Lookup the presence of a file.
+        /// </summary>
+        /// <response code="200">File available</response>
+        /// <response code="404">File not found</response>
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> FindFile(string fileName)
+        {
+            this._logger.LogInformation(fileName);
+            _fileService = new FileService(this._configuration, this._fileProvider);
+            var presence = await this._fileService.CheckPresenceOfFile(fileName);
+
+            if (presence)
+            {
+                return Ok();
+            }
+            return NotFound();
         }
     }
 }

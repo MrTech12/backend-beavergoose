@@ -1,4 +1,5 @@
 ﻿using Amazon.S3;
+using Amazon.S3.Model;
 using Amazon.S3.Transfer;
 using FileMicroservice.DTOs;
 using FileMicroservice.Interfaces;
@@ -7,12 +8,12 @@ namespace FileMicroservice.Data
 {
 	public class DigitalOceanFileProvider : IFileProvider
 	{
-		public Task<byte[]> DownloadFileAsync(string file, DigitalOceanDataConfiguration DODataConfiguration)
+		public Task<byte[]> DownloadFileAsync(string fileName, DigitalOceanDataConfiguration DODataConfiguration)
 		{
 			throw new NotImplementedException();
 		}
 
-		public async Task UploadFileAsync(IFormFile file, DigitalOceanDataConfiguration DODataConfiguration)
+        public async Task UploadFileAsync(IFormFile file, DigitalOceanDataConfiguration DODataConfiguration)
 		{
 			var s3ClientConfig = new AmazonS3Config { ServiceURL = DODataConfiguration.DOServiceURL };
 			IAmazonS3 _awsS3Client = new AmazonS3Client(DODataConfiguration.DOAccessKey, DODataConfiguration.DOSecretAccessKey, s3ClientConfig);
@@ -45,6 +46,38 @@ namespace FileMicroservice.Data
 			catch (Exception e)
 			{
 				Console.WriteLine("Unknown encountered on server. Message:'{0}' when writing a file", e.Message);
+			}
+		}
+
+		public async Task<bool> FindFileAsync(string fileName, DigitalOceanDataConfiguration DODataConfiguration)
+		{
+			var s3ClientConfig = new AmazonS3Config { ServiceURL = DODataConfiguration.DOServiceURL };
+			IAmazonS3 _awsS3Client = new AmazonS3Client(DODataConfiguration.DOAccessKey, DODataConfiguration.DOSecretAccessKey, s3ClientConfig);
+
+            try
+            {
+                GetObjectRequest getRequest = new GetObjectRequest
+                {
+                    BucketName = DODataConfiguration.DOBucketName,
+                    Key = fileName // Keys are the full filename, including the file extension.
+				};
+                var respone = await _awsS3Client.GetObjectAsync(getRequest);
+                return true;
+            }
+            catch (Exception exception)
+			{
+				if (exception.InnerException != null)
+				{
+					if (exception.Message.Contains("NoSuchBucket")) {
+						return false;
+					}
+
+					else if (exception.Message.Contains("NoSuchKey")) {
+						return false;
+					}
+				}
+				Console.WriteLine("Unknown encountered on server. Message:'{0}' when looking up a file", exception.Message);
+				throw;
 			}
 		}
 	}

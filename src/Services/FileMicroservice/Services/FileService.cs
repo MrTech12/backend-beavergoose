@@ -37,5 +37,17 @@ namespace FileMicroservice.Services
             };
             return await this._fileProvider.DownloadFileAsync(fileName, DODataConfiguration);
         }
+
+        public async Task<bool> CheckPresenceOfFile(string fileName)
+        {
+            DigitalOceanDataConfiguration DODataConfiguration = new DigitalOceanDataConfiguration()
+            {
+                DOServiceURL = this._configuration["DigitalOcean:ServiceURL"],
+                DOBucketName = this._configuration["DigitalOcean:BucketName"],
+                DOAccessKey = this._configuration["DigitalOcean:AccessKey"],
+                DOSecretAccessKey = this._configuration["DigitalOcean:SecretAccessKey"]
+            };
+            return await this._fileProvider.FindFileAsync(fileName, DODataConfiguration);
+        }
     }
 }
