@@ -43,7 +43,7 @@ namespace FileMicroservice.Controllers
         /// </summary>
         /// <response code="200">File available</response>
         /// <response code="404">File not found</response>
-        [HttpGet]
+        [HttpGet("presence/{fileName}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> FindFile(string fileName)
