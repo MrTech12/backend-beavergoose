@@ -1,0 +1,34 @@
+name: "file service - build, test & analyse"
+on:
+  push:
+    branches:
+      - "main"
+      - "development"
+      - "feature-**"
+    paths:
+      - "src/Services/FileMicroservice/**"
+      - "tests/FileMicroservice/FileMicroservice.UnitTests/**"
+      - ".github/workflows/file-service-workflow.yml"
+  pull_request:
+    branches:
+      - "main"
+      - "development"
+    paths:
+      - "src/Services/FileMicroservice/**"
+      - "tests/FileMicroservice/FileMicroservice.UnitTests/**"
+      - ".github/workflows/file-service-workflow.yml"
+
+jobs:
+  link-testing:
+    uses: "./.github/workflows/template-build-test.yml"
+    with:
+      project-location: "src/Services/FileMicroservice"
+      test-location: "tests/FileMicroservice/FileMicroservice.UnitTests"
+  link-analyse:
+    uses: "./.github/workflows/template-analyse.yml"
+    with:
+      project-location: "src/Services/FileMicroservice"
+      test-location: "tests/FileMicroservice/FileMicroservice.UnitTests"
+    secrets:
+      sonar-token: ${{ secrets.SONAR_TOKEN }}
+      github-token: ${{ secrets.GITHUB_TOKEN }}

@@ -8,8 +8,8 @@ jobs:
   link-docker-kubernetes:
     uses: "./.github/workflows/template-deploy.yml"
     with:
-      project-location: "src/Services/LinkMicroservice"
-      project-name: "LinkMicroservice"
+      project-location: "src/Services/FileMicroservice"
+      project-name: "FileMicroservice"
     secrets:
       docker-username: ${{ secrets.DOCKER_USERNAME }}
       docker-token: ${{ secrets.DOCKER_TOKEN }}

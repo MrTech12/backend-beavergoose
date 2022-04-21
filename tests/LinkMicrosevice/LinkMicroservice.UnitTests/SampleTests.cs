@@ -1,9 +1,9 @@
-using LinkService.Services;
+using LinkMicroservice.Services;
 using Xunit;
 
-namespace LinkService.BTest
+namespace LinkMicroservice.UnitTests
 {
-    public class UnitTest1
+    public class SampleTests
     {
         [Fact]
         public void ReturningResult12()

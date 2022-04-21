@@ -1,4 +1,4 @@
-namespace LinkService.Entities
+namespace LinkMicroservice.Entities
 {
     public class WeatherForecast
     {

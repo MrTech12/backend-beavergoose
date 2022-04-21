@@ -1,4 +1,4 @@
-﻿namespace LinkService.Services
+﻿namespace LinkMicroservice.Services
 {
     public class CreationService
     {

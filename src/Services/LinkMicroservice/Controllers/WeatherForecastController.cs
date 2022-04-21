@@ -1,7 +1,7 @@
+using LinkMicroservice.Entities;
 using Microsoft.AspNetCore.Mvc;
-using LinkService.Entities;
 
-namespace LinkService.Controllers
+namespace LinkMicroservice.Controllers
 {
     [ApiController]
     [Route("api/v{version:apiVersion}/[controller]")]
