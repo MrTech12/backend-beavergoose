@@ -1,6 +1,6 @@
 ﻿namespace FileMicroservice.DTOs
 {
-    public class DigitalOceanDataConfiguration
+    public class DigitalOceanDataConfigurationDTO
     {
         public string DOServiceURL { get; set; }
         public string DOBucketName { get; set; }

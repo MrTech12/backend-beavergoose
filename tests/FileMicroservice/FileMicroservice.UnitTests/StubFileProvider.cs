@@ -9,23 +9,23 @@ namespace FileMicroservice.UnitTests
 {
     internal class StubFileProvider : IFileProvider
     {
-        public Task<byte[]> DownloadFileAsync(string fileName, DigitalOceanDataConfiguration DODataConfiguration)
+        public async Task<byte[]> DownloadFileAsync(string fileName, DigitalOceanDataConfigurationDTO DODataConfigurationDTO)
         {
-            throw new NotImplementedException();
+            return await File.ReadAllBytesAsync(Path.GetTempPath() + fileName);
         }
 
-        public Task<bool> FindFileAsync(string fileName, DigitalOceanDataConfiguration DODataConfiguration)
+        public Task<bool> FindFileAsync(string fileName, DigitalOceanDataConfigurationDTO DODataConfigurationDTO)
         {
-            if (fileName != "dummy.txt")
+            if (!File.Exists(Path.GetTempPath() + fileName))
             {
                 return Task.FromResult(false);
             }
             return Task.FromResult(true);
         }
 
-        public async Task UploadFileAsync(IFormFile file, DigitalOceanDataConfiguration DODataConfiguration)
+        public async Task UploadFileAsync(IFormFile file, DigitalOceanDataConfigurationDTO DODataConfigurationDTO, FileDTO fileDTO)
         {
-            var saveToPath = Path.Combine(Path.GetTempPath(), file.FileName);
+            var saveToPath = Path.Combine(Path.GetTempPath(), fileDTO.FileName + fileDTO.FileExtension);
 
             using (var targetStream = File.Create(saveToPath))
             {

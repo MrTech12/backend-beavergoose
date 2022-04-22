@@ -13,14 +13,14 @@ namespace FileMicroservice.UnitTests
         private FileService fileService;
         private readonly TestConfiguration _fixture;
         private readonly IConfiguration _configuration;
-        DigitalOceanDataConfiguration StubDataConfiguration;
+        DigitalOceanDataConfigurationDTO StubDataConfigurationDTO;
 
         public FileServiceTest(TestConfiguration fixture)
         {
             this._fixture = fixture;
             this._configuration = _fixture.GetTestDataConfiguration();
 
-            StubDataConfiguration = new DigitalOceanDataConfiguration()
+            StubDataConfigurationDTO = new DigitalOceanDataConfigurationDTO()
             {
                 DOServiceURL = this._configuration["DigitalOcean:ServiceURL"],
                 DOBucketName = this._configuration["DigitalOcean:BucketName"],
@@ -30,30 +30,118 @@ namespace FileMicroservice.UnitTests
         }
 
         [Fact]
-        public async void SaveFile()
+        public async void SaveFileWithExtension()
         {
             // Arrange
+            string fileName = "dummy.txt";
             var bytes = Encoding.UTF8.GetBytes("This is a dummy file");
-            IFormFile stubFile = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "Data", "dummy.txt");
+
+            IFormFile stubFile = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "Data", fileName);
             
             fileService = new FileService(this._configuration, new StubFileProvider());
 
             // Act
-            await fileService.SaveFile(stubFile);
+            var newFileName = await fileService.SaveFile(stubFile);
 
             // Assert
-            var presence = await fileService.CheckPresenceOfFile("dummy.txt");
+            var presence = await fileService.CheckPresenceOfFile(newFileName);
             Assert.True(presence);
         }
 
-        // Test where no file extension is present.
+        [Fact]
+        public async void SaveFileWithoutExtension()
+        {
+            // Arrange
+            string fileName = "qwerty";
+            var bytes = Encoding.UTF8.GetBytes("This is a qwerty file");
 
-        // Test to check if the available file is present
+            IFormFile stubFile = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "Data", fileName);
 
-        // Test to check if the unavailable file is not present
+            fileService = new FileService(this._configuration, new StubFileProvider());
 
-        // Test to download a present file.
+            // Act
+            var newFileName = await fileService.SaveFile(stubFile);
 
-        // Test to download a non-present file.
+            // Assert
+            var presence = await fileService.CheckPresenceOfFile(newFileName);
+            Assert.True(presence);
+        }
+
+        [Fact]
+        public async void CheckIfFilePresent()
+        {
+            // Arrange
+            // Arrange
+            string fileName = "dummy.txt";
+            var bytes = Encoding.UTF8.GetBytes("This is a qwerty file");
+
+            IFormFile stubFile = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "Data", fileName);
+
+            fileService = new FileService(this._configuration, new StubFileProvider());
+            var newFileName = await fileService.SaveFile(stubFile);
+
+            // Act
+            var presence = await fileService.CheckPresenceOfFile("dummy.txt");
+
+            // Assert
+            Assert.True(presence);
+        }
+
+        [Fact]
+        public async void CheckIfFileNotPresent()
+        {
+            // Arrange
+            string fileName = "qwerty.pdf";
+            var bytes = Encoding.UTF8.GetBytes("This is a qwerty file");
+
+            IFormFile stubFile = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "Data", fileName);
+
+            fileService = new FileService(this._configuration, new StubFileProvider());
+            var newFileName = await fileService.SaveFile(stubFile);
+
+            // Act
+            var presence = await fileService.CheckPresenceOfFile("qwerty.txt");
+
+            // Assert
+            Assert.False(presence);
+        }
+
+        [Fact]
+        public async void DownloadPresentFile()
+        {
+            // Arrange
+            string fileName = "qwerty.pdf";
+            var bytes = Encoding.UTF8.GetBytes("This is a qwerty file");
+
+            IFormFile stubFile = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "Data", fileName);
+
+            fileService = new FileService(this._configuration, new StubFileProvider());
+            var newFileName = await fileService.SaveFile(stubFile);
+
+            // Act
+            byte[]? fileBytes = await fileService.RetrieveFile(newFileName);
+
+            // Assert
+            Assert.NotEqual(0, fileBytes.Length);
+        }
+
+        [Fact]
+        public async void DownloadNonPresentFile()
+        {
+            // Arrange
+            string fileName = "qwerty.pdf";
+            var bytes = Encoding.UTF8.GetBytes("This is a qwerty file");
+
+            IFormFile stubFile = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "Data", fileName);
+
+            fileService = new FileService(this._configuration, new StubFileProvider());
+            var newFileName = await fileService.SaveFile(stubFile);
+
+            // Act
+            byte[]? fileBytes = await fileService.RetrieveFile(newFileName);
+
+            // Assert
+            Assert.Equal(21, fileBytes.Length);
+        }
     }
 }

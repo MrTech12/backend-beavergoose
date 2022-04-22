@@ -8,10 +8,10 @@ namespace FileMicroservice.Data
 {
 	public class DigitalOceanFileProvider : IFileProvider
 	{
-		public async Task<byte[]> DownloadFileAsync(string fileName, DigitalOceanDataConfiguration DODataConfiguration)
+		public async Task<byte[]> DownloadFileAsync(string fileName, DigitalOceanDataConfigurationDTO DODataConfigurationDTO)
 		{
-			var s3ClientConfig = new AmazonS3Config { ServiceURL = DODataConfiguration.DOServiceURL };
-			IAmazonS3 _awsS3Client = new AmazonS3Client(DODataConfiguration.DOAccessKey, DODataConfiguration.DOSecretAccessKey, s3ClientConfig);
+			var s3ClientConfig = new AmazonS3Config { ServiceURL = DODataConfigurationDTO.DOServiceURL };
+			IAmazonS3 _awsS3Client = new AmazonS3Client(DODataConfigurationDTO.DOAccessKey, DODataConfigurationDTO.DOSecretAccessKey, s3ClientConfig);
 
 			MemoryStream memoryStream = null;
 
@@ -19,7 +19,7 @@ namespace FileMicroservice.Data
 			{
 				GetObjectRequest getRequest = new GetObjectRequest
 				{
-					BucketName = DODataConfiguration.DOBucketName,
+					BucketName = DODataConfigurationDTO.DOBucketName,
 					Key = fileName // Keys are the full filename, including the file extension.
 				};
 				var response = await _awsS3Client.GetObjectAsync(getRequest);
@@ -38,10 +38,10 @@ namespace FileMicroservice.Data
 			}
 		}
 
-        public async Task UploadFileAsync(IFormFile file, DigitalOceanDataConfiguration DODataConfiguration)
+        public async Task UploadFileAsync(IFormFile file, DigitalOceanDataConfigurationDTO DODataConfigurationDTO, FileDTO fileDTO)
 		{
-			var s3ClientConfig = new AmazonS3Config { ServiceURL = DODataConfiguration.DOServiceURL };
-			IAmazonS3 _awsS3Client = new AmazonS3Client(DODataConfiguration.DOAccessKey, DODataConfiguration.DOSecretAccessKey, s3ClientConfig);
+			var s3ClientConfig = new AmazonS3Config { ServiceURL = DODataConfigurationDTO.DOServiceURL };
+			IAmazonS3 _awsS3Client = new AmazonS3Client(DODataConfigurationDTO.DOAccessKey, DODataConfigurationDTO.DOSecretAccessKey, s3ClientConfig);
 
 			try
 			{
@@ -53,8 +53,9 @@ namespace FileMicroservice.Data
 					var uploadRequest = new TransferUtilityUploadRequest
 					{
 						InputStream = newMemoryStream,
-						Key = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName),
-						BucketName = DODataConfiguration.DOBucketName,
+						//Key = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName),
+						Key = fileDTO.FileName + fileDTO.FileExtension,
+						BucketName = DODataConfigurationDTO.DOBucketName,
 						ContentType = file.ContentType,
 						CannedACL = S3CannedACL.Private
 					};
@@ -74,16 +75,16 @@ namespace FileMicroservice.Data
 			}
 		}
 
-		public async Task<bool> FindFileAsync(string fileName, DigitalOceanDataConfiguration DODataConfiguration)
+		public async Task<bool> FindFileAsync(string fileName, DigitalOceanDataConfigurationDTO DODataConfigurationDTO)
 		{
-			var s3ClientConfig = new AmazonS3Config { ServiceURL = DODataConfiguration.DOServiceURL };
-			IAmazonS3 _awsS3Client = new AmazonS3Client(DODataConfiguration.DOAccessKey, DODataConfiguration.DOSecretAccessKey, s3ClientConfig);
+			var s3ClientConfig = new AmazonS3Config { ServiceURL = DODataConfigurationDTO.DOServiceURL };
+			IAmazonS3 _awsS3Client = new AmazonS3Client(DODataConfigurationDTO.DOAccessKey, DODataConfigurationDTO.DOSecretAccessKey, s3ClientConfig);
 
             try
             {
                 GetObjectRequest getRequest = new GetObjectRequest
                 {
-                    BucketName = DODataConfiguration.DOBucketName,
+                    BucketName = DODataConfigurationDTO.DOBucketName,
                     Key = fileName // Keys are the full filename, including the file extension.
 				};
                 var respone = await _awsS3Client.GetObjectAsync(getRequest);
