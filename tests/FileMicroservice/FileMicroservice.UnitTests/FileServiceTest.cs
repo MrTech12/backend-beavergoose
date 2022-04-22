@@ -71,7 +71,6 @@ namespace FileMicroservice.UnitTests
         public async void CheckIfFilePresent()
         {
             // Arrange
-            // Arrange
             string fileName = "dummy.txt";
             var bytes = Encoding.UTF8.GetBytes("This is a qwerty file");
 
@@ -81,7 +80,7 @@ namespace FileMicroservice.UnitTests
             var newFileName = await fileService.SaveFile(stubFile);
 
             // Act
-            var presence = await fileService.CheckPresenceOfFile("dummy.txt");
+            var presence = await fileService.CheckPresenceOfFile(newFileName);
 
             // Assert
             Assert.True(presence);
