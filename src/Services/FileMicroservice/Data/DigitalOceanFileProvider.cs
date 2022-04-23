@@ -53,7 +53,7 @@ namespace FileMicroservice.Data
 					var uploadRequest = new TransferUtilityUploadRequest
 					{
 						InputStream = newMemoryStream,
-						Key = fileDto.FileName + fileDto.FileExtension,
+						Key = fileDto.FileName,
 						BucketName = DODataConfigurationDTO.DOBucketName,
 						ContentType = file.ContentType,
 						CannedACL = S3CannedACL.Private

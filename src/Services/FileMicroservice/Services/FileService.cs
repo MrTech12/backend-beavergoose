@@ -30,15 +30,15 @@ namespace FileMicroservice.Services
             string fileExtension = Path.GetExtension(file.FileName);
             if (fileExtension == "")
             {
-                fileDto.FileExtension = ".txt";
+                fileDto.FileName += ".txt";
             } else {
-                fileDto.FileExtension = fileExtension;
+                fileDto.FileName = fileExtension;
             }
 
             await this._fileProvider.UploadFileAsync(file, DODataConfiguration, fileDto);
             this._messagingProducer.SendMessage(fileDto, "create");
 
-            return fileDto.FileName + fileDto.FileExtension;
+            return fileDto.FileName;
         }
 
         public async Task<byte[]?> RetrieveFile(string fileName)

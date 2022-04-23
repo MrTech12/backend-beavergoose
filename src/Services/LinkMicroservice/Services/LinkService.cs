@@ -17,9 +17,10 @@ namespace LinkMicroservice.Services
             Link link = new Link()
             {
                 Address = Guid.NewGuid().ToString(),
-                FileName = fileDto.FileName + fileDto.FileExtension,
+                FileName = fileDto.FileName,
                 SenderID = fileDto.SenderID,
-                ReceiverID = fileDto.ReceiverID
+                ReceiverID = fileDto.ReceiverID,
+                AllowedDownloads = fileDto.AllowedDownloads
             };
             await this._linkRepository.SaveLink(link);
         }
@@ -36,8 +37,7 @@ namespace LinkMicroservice.Services
 
         public async Task RemoveLink(FileDTO fileDto)
         {
-            string fileName = fileDto.FileName + fileDto.FileExtension;
-            var link = await this._linkRepository.RetrieveLink(fileName);
+            var link = await this._linkRepository.RetrieveLink(fileDto.FileName);
             await this._linkRepository.DeleteLink(link);
         }
     }

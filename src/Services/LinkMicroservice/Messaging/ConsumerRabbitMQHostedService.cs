@@ -47,6 +47,7 @@ namespace LinkMicroservice.Messaging
             foreach (var routingKey in routingKeys)
             {
                 this._channel.QueueBind(queue: queueName, exchange: exchangeName, routingKey: routingKey);
+                //TODO: remove this
                 //this._channel.QueueBind(queue: queueName, exchange: exchangeName, routingKey: routingKey, arguments: null);
             }
 
