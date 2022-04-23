@@ -32,7 +32,7 @@ namespace FileMicroservice.Services
             {
                 fileDto.FileName += ".txt";
             } else {
-                fileDto.FileName = fileExtension;
+                fileDto.FileName += fileExtension;
             }
 
             await this._fileProvider.UploadFileAsync(file, DODataConfiguration, fileDto);

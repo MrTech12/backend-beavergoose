@@ -9,7 +9,7 @@ namespace FileMicroservice.UnitTests.Stubs
 {
     public class StubMessagingProducer : IMessagingProducer
     {
-        public void SendMessage<T>(T message)
+        public void SendMessage<T>(T message, string routingKey)
         {
             //throw new NotImplementedException();
         }

@@ -1,7 +1,6 @@
 using LinkMicroservice.Data;
 using LinkMicroservice.Interfaces;
 using LinkMicroservice.Messaging;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 
@@ -40,12 +39,11 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddHostedService<ConsumerRabbitMQHostedService>();
-builder.Services.AddScoped<ILinkRepository, LinkRepository>();
 
-string connectionString = builder.Configuration.GetConnectionString("LinkContext");
-builder.Services.AddDbContext<LinkContext>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
-    .EnableSensitiveDataLogging()
-    .EnableDetailedErrors());
+//builder.Services.AddDbContext<LinkContext>();
+builder.Services.AddSingleton<LinkContext>();
+builder.Services.AddTransient<ILinkRepository, LinkRepository>();
+
 
 var app = builder.Build();
 
