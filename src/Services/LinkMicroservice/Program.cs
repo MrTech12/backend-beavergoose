@@ -1,3 +1,4 @@
+using LinkMicroservice.Messaging;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 
@@ -34,6 +35,8 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddHostedService<ConsumerRabbitMQHostedService>();
 
 var app = builder.Build();
 
