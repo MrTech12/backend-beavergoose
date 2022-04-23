@@ -53,14 +53,17 @@ namespace LinkMicroservice.Messaging
             consumer.Received += async (model, ea) =>
             {
                 var content = Encoding.UTF8.GetString(ea.Body.ToArray());
-                _logger.LogInformation($"Message received: '{content}'.");
+                this._logger.LogInformation($"Message received: {content}.");
                 var fileDiscoveryDto = JsonSerializer.Deserialize<FileDTO>(content);
 
-                await HandleMessage();
-                _channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false); // Letting RabbitMQ know that the message had been received.
+                //await HandleMessage();
+                await Task.Delay(2000);
+
+                // Manual acknowledgments do not remove message so automatic for the time being.
+                //this._channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false); // Letting RabbitMQ know that the message had been received.
             };
-            this._channel.BasicConsume(queue: queueName, autoAck: false, consumer: consumer);
-            
+            this._channel.BasicConsume(queue: queueName, autoAck: true, consumer: consumer);
+
             await Task.CompletedTask;
         }
 

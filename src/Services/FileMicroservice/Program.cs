@@ -1,6 +1,7 @@
 using FileMicroservice.Data;
 using FileMicroservice.DTOs;
 using FileMicroservice.Interfaces;
+using FileMicroservice.Messaging;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 
@@ -35,6 +36,7 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IFileProvider, DigitalOceanFileProvider>();
+builder.Services.AddScoped<IMessagingProducer, RabbitMQProducer>();
 
 var app = builder.Build();
 
