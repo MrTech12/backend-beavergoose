@@ -1,4 +1,6 @@
 ﻿using LinkMicroservice.DTOs;
+using LinkMicroservice.Interfaces;
+using LinkMicroservice.Services;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
@@ -15,11 +17,13 @@ namespace LinkMicroservice.Messaging
         private const string exchangeName = "link-exchange";
         private const string queueName = "link.creation";
         private readonly IConfiguration _configuration;
+        private readonly ILinkRepository _linkRepository;
 
-        public ConsumerRabbitMQHostedService(IConfiguration configuration, ILogger<ConsumerRabbitMQHostedService> logger)
+        public ConsumerRabbitMQHostedService(IConfiguration configuration, ILogger<ConsumerRabbitMQHostedService> logger, ILinkRepository linkRepository)
         {
             this._configuration = configuration;
             this._logger = logger;
+            this._linkRepository = linkRepository;
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)
@@ -54,10 +58,9 @@ namespace LinkMicroservice.Messaging
             {
                 var content = Encoding.UTF8.GetString(ea.Body.ToArray());
                 this._logger.LogInformation($"Message received: {content}.");
-                var fileDiscoveryDto = JsonSerializer.Deserialize<FileDTO>(content);
+                var fileDto = JsonSerializer.Deserialize<FileDTO>(content);
 
-                //await HandleMessage();
-                await Task.Delay(2000);
+                await HandleMessage(fileDto);
 
                 // Manual acknowledgments do not remove message so automatic for the time being.
                 //this._channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false); // Letting RabbitMQ know that the message had been received.
@@ -67,9 +70,18 @@ namespace LinkMicroservice.Messaging
             await Task.CompletedTask;
         }
 
-        public async Task HandleMessage()
+        public async Task HandleMessage(FileDTO fileDto)
         {
-
+            if (fileDto.Action == "create")
+            {
+                LinkService linkService = new LinkService(this._linkRepository);
+                await linkService.CreateSaveLink(fileDto);
+            }
+            else if (fileDto.Action == "delete")
+            {
+                LinkService linkService = new LinkService(this._linkRepository);
+                await linkService.RemoveLink(fileDto);
+            }
         }
 
         public override async Task StopAsync(CancellationToken cancellationToken)

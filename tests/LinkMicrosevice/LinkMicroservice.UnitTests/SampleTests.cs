@@ -8,7 +8,7 @@ namespace LinkMicroservice.UnitTests
         [Fact]
         public void ReturningResult12()
         {
-            CreationService creationService = new CreationService();
+            LinkService creationService = new LinkService();
 
             var result = creationService.AddNumbers(6, 6);
 
@@ -18,7 +18,7 @@ namespace LinkMicroservice.UnitTests
         [Fact]
         public void ReturningResult36()
         {
-            CreationService creationService = new CreationService();
+            LinkService creationService = new LinkService();
 
             var result = creationService.AddNumbers(12, 24);
 
