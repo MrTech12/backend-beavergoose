@@ -1,5 +1,6 @@
 using FileMicroservice.DTOs;
 using FileMicroservice.Services;
+using FileMicroservice.UnitTests.Stubs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System.IO;
@@ -33,15 +34,16 @@ namespace FileMicroservice.UnitTests
         public async void SaveFileWithExtension()
         {
             // Arrange
+            FileDTO fileDto = new FileDTO() { ReceiverID = "12", SenderID = "24" };
+
             string fileName = "dummy.txt";
             var bytes = Encoding.UTF8.GetBytes("This is a dummy file");
-
             IFormFile stubFile = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "Data", fileName);
-            
-            fileService = new FileService(this._configuration, new StubFileProvider());
+
+            fileService = new FileService(this._configuration, new StubFileProvider(), new StubMessagingProducer());
 
             // Act
-            var newFileName = await fileService.SaveFile(stubFile);
+            var newFileName = await fileService.SaveFile(stubFile, fileDto);
 
             // Assert
             var presence = await fileService.CheckPresenceOfFile(newFileName);
@@ -52,15 +54,16 @@ namespace FileMicroservice.UnitTests
         public async void SaveFileWithoutExtension()
         {
             // Arrange
+            FileDTO fileDto = new FileDTO() { ReceiverID = "12", SenderID = "24" };
+
             string fileName = "qwerty";
             var bytes = Encoding.UTF8.GetBytes("This is a qwerty file");
-
             IFormFile stubFile = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "Data", fileName);
 
-            fileService = new FileService(this._configuration, new StubFileProvider());
+            fileService = new FileService(this._configuration, new StubFileProvider(), new StubMessagingProducer());
 
             // Act
-            var newFileName = await fileService.SaveFile(stubFile);
+            var newFileName = await fileService.SaveFile(stubFile, fileDto);
 
             // Assert
             var presence = await fileService.CheckPresenceOfFile(newFileName);
@@ -71,13 +74,14 @@ namespace FileMicroservice.UnitTests
         public async void CheckIfFilePresent()
         {
             // Arrange
+            FileDTO fileDto = new FileDTO() { ReceiverID = "12", SenderID = "24" };
+
             string fileName = "dummy.txt";
             var bytes = Encoding.UTF8.GetBytes("This is a qwerty file");
-
             IFormFile stubFile = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "Data", fileName);
 
-            fileService = new FileService(this._configuration, new StubFileProvider());
-            var newFileName = await fileService.SaveFile(stubFile);
+            fileService = new FileService(this._configuration, new StubFileProvider(), new StubMessagingProducer());
+            var newFileName = await fileService.SaveFile(stubFile, fileDto);
 
             // Act
             var presence = await fileService.CheckPresenceOfFile(newFileName);
@@ -90,13 +94,14 @@ namespace FileMicroservice.UnitTests
         public async void CheckIfFileNotPresent()
         {
             // Arrange
+            FileDTO fileDto = new FileDTO() { ReceiverID = "12", SenderID = "24" };
+
             string fileName = "qwerty.pdf";
             var bytes = Encoding.UTF8.GetBytes("This is a qwerty file");
-
             IFormFile stubFile = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "Data", fileName);
 
-            fileService = new FileService(this._configuration, new StubFileProvider());
-            var newFileName = await fileService.SaveFile(stubFile);
+            fileService = new FileService(this._configuration, new StubFileProvider(), new StubMessagingProducer());
+            var newFileName = await fileService.SaveFile(stubFile, fileDto);
 
             // Act
             var presence = await fileService.CheckPresenceOfFile("qwerty.txt");
@@ -109,13 +114,14 @@ namespace FileMicroservice.UnitTests
         public async void DownloadPresentFile()
         {
             // Arrange
+            FileDTO fileDto = new FileDTO() { ReceiverID = "12", SenderID = "24" };
+
             string fileName = "qwerty.pdf";
             var bytes = Encoding.UTF8.GetBytes("This is a qwerty file");
-
             IFormFile stubFile = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "Data", fileName);
 
-            fileService = new FileService(this._configuration, new StubFileProvider());
-            var newFileName = await fileService.SaveFile(stubFile);
+            fileService = new FileService(this._configuration, new StubFileProvider(), new StubMessagingProducer());
+            var newFileName = await fileService.SaveFile(stubFile, fileDto);
 
             // Act
             byte[]? fileBytes = await fileService.RetrieveFile(newFileName);
@@ -128,13 +134,14 @@ namespace FileMicroservice.UnitTests
         public async void DownloadNonPresentFile()
         {
             // Arrange
+            FileDTO fileDto = new FileDTO() { ReceiverID = "12", SenderID = "24" };
+
             string fileName = "qwerty.pdf";
             var bytes = Encoding.UTF8.GetBytes("This is a qwerty file");
-
             IFormFile stubFile = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "Data", fileName);
 
-            fileService = new FileService(this._configuration, new StubFileProvider());
-            var newFileName = await fileService.SaveFile(stubFile);
+            fileService = new FileService(this._configuration, new StubFileProvider(), new StubMessagingProducer());
+            var newFileName = await fileService.SaveFile(stubFile, fileDto);
 
             // Act
             byte[]? fileBytes = await fileService.RetrieveFile(newFileName);

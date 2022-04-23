@@ -1,4 +1,6 @@
-﻿using FileMicroservice.Interfaces;
+﻿using FileMicroservice.DTOs;
+using FileMicroservice.Entities;
+using FileMicroservice.Interfaces;
 using FileMicroservice.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,15 +14,17 @@ namespace FileMicroservice.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly IFileProvider _fileProvider;
+        private readonly IMessagingProducer _messagingProducer;
         private FileService _fileService;
 
         private readonly ILogger<LinkController> _logger;
 
-        public LinkController(IConfiguration configuration, IFileProvider fileProvider, ILogger<LinkController> logger)
+        public LinkController(IConfiguration configuration, IFileProvider fileProvider, ILogger<LinkController> logger, IMessagingProducer messagingProducer)
         {
             this._configuration = configuration;
             this._fileProvider = fileProvider;
             this._logger = logger;
+            this._messagingProducer = messagingProducer;
         }
 
         /// <summary>
@@ -33,7 +37,7 @@ namespace FileMicroservice.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DownloadFile(string fileName)
         {
-            _fileService = new FileService(this._configuration, this._fileProvider);
+            _fileService = new FileService(this._configuration, this._fileProvider, this._messagingProducer);
             var file = await this._fileService.RetrieveFile(fileName);
 
             if (file == null)
@@ -53,7 +57,7 @@ namespace FileMicroservice.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> FindFile(string fileName)
         {
-            _fileService = new FileService(this._configuration, this._fileProvider);
+            _fileService = new FileService(this._configuration, this._fileProvider, this._messagingProducer);
             var presence = await this._fileService.CheckPresenceOfFile(fileName);
 
             if (presence)
@@ -71,11 +75,13 @@ namespace FileMicroservice.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> UploadFile(IFormFile file)
+        public async Task<IActionResult> UploadFile(IFormFile file, People people)
         {
-            _fileService = new FileService(this._configuration, this._fileProvider);
-            await this._fileService.SaveFile(file);
-            return Created("", new { output = "file Created!" });
+            _fileService = new FileService(this._configuration, this._fileProvider, this._messagingProducer);
+            FileDTO fileDto = new FileDTO() { SenderID = people.SenderID, ReceiverID = people.ReceiverID };
+            
+            await this._fileService.SaveFile(file, fileDto);
+            return Created("", new { response = "file Created!" });
         }
     }
 }

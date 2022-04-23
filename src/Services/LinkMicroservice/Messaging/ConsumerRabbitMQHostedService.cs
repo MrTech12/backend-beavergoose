@@ -12,8 +12,8 @@ namespace LinkMicroservice.Messaging
         private ConnectionFactory _connectionFactory;
         private IConnection _connection;
         private IModel _channel;
-        private const string queueName = "link.creation";
         private const string exchangeName = "link-exchange";
+        private const string queueName = "link.creation";
         private readonly IConfiguration _configuration;
 
         public ConsumerRabbitMQHostedService(IConfiguration configuration, ILogger<ConsumerRabbitMQHostedService> logger)
@@ -33,8 +33,8 @@ namespace LinkMicroservice.Messaging
             this._connection = _connectionFactory.CreateConnection();
             this._channel = _connection.CreateModel();
 
-            this._channel.ExchangeDeclare(exchangeName, ExchangeType.Topic);
-            this._channel.QueueDeclare(queue: queueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
+            this._channel.ExchangeDeclare(exchange: exchangeName, type: ExchangeType.Topic);
+            this._channel.QueueDeclare(queue: queueName, durable: true, exclusive: false, autoDelete: false, arguments: null);
             this._channel.QueueBind(queue: queueName, exchange: exchangeName, routingKey: "link.*", arguments: null);
 
             var properties = this._channel.CreateBasicProperties();
@@ -54,13 +54,11 @@ namespace LinkMicroservice.Messaging
             {
                 var content = Encoding.UTF8.GetString(ea.Body.ToArray());
                 _logger.LogInformation($"Message received: '{content}'.");
-                var fileDiscoveryDto = JsonSerializer.Deserialize<FileDiscoveryDTO>(content);
+                var fileDiscoveryDto = JsonSerializer.Deserialize<FileDTO>(content);
 
                 await HandleMessage();
                 _channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false); // Letting RabbitMQ know that the message had been received.
             };
-
-
             this._channel.BasicConsume(queue: queueName, autoAck: false, consumer: consumer);
             
             await Task.CompletedTask;

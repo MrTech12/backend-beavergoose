@@ -38,7 +38,7 @@ namespace FileMicroservice.Data
 			}
 		}
 
-        public async Task UploadFileAsync(IFormFile file, DigitalOceanDataConfigurationDTO DODataConfigurationDTO, FileDTO fileDTO)
+        public async Task UploadFileAsync(IFormFile file, DigitalOceanDataConfigurationDTO DODataConfigurationDTO, FileDTO fileDto)
 		{
 			var s3ClientConfig = new AmazonS3Config { ServiceURL = DODataConfigurationDTO.DOServiceURL };
 			IAmazonS3 _awsS3Client = new AmazonS3Client(DODataConfigurationDTO.DOAccessKey, DODataConfigurationDTO.DOSecretAccessKey, s3ClientConfig);
@@ -53,15 +53,14 @@ namespace FileMicroservice.Data
 					var uploadRequest = new TransferUtilityUploadRequest
 					{
 						InputStream = newMemoryStream,
-						//Key = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName),
-						Key = fileDTO.FileName + fileDTO.FileExtension,
+						Key = fileDto.FileName + fileDto.FileExtension,
 						BucketName = DODataConfigurationDTO.DOBucketName,
 						ContentType = file.ContentType,
 						CannedACL = S3CannedACL.Private
 					};
 
-					uploadRequest.Metadata.Add("sender", "Jan");
-					uploadRequest.Metadata.Add("receiver", "Bert");
+					uploadRequest.Metadata.Add("sender", fileDto.SenderID);
+					uploadRequest.Metadata.Add("receiver", fileDto.ReceiverID);
 					await fileTransferUtility.UploadAsync(uploadRequest);
 				}
 			}

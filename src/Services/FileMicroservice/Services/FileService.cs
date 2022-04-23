@@ -7,14 +7,16 @@ namespace FileMicroservice.Services
     {
         private readonly IFileProvider _fileProvider;
         private readonly IConfiguration _configuration;
+        private readonly IMessagingProducer _messagingProducer;
 
-        public FileService(IConfiguration configuration, IFileProvider fileProvider)
+        public FileService(IConfiguration configuration, IFileProvider fileProvider, IMessagingProducer _messagingProducer)
         {
             this._configuration = configuration;
             this._fileProvider = fileProvider;
+            this._messagingProducer = _messagingProducer;
         }
 
-        public async Task<string> SaveFile(IFormFile file)
+        public async Task<string> SaveFile(IFormFile file, FileDTO fileDto)
         {
             DigitalOceanDataConfigurationDTO DODataConfiguration = new DigitalOceanDataConfigurationDTO()
             {
@@ -24,18 +26,19 @@ namespace FileMicroservice.Services
                 DOSecretAccessKey = this._configuration["DigitalOcean:SecretAccessKey"]
             };
 
-            FileDTO fileDTO = new FileDTO();
-            fileDTO.FileName = Guid.NewGuid().ToString();
+            fileDto.FileName = Guid.NewGuid().ToString();
             string fileExtension = Path.GetExtension(file.FileName);
             if (fileExtension == "")
             {
-                fileDTO.FileExtension = ".txt";
+                fileDto.FileExtension = ".txt";
             } else {
-                fileDTO.FileExtension = fileExtension;
+                fileDto.FileExtension = fileExtension;
             }
 
-            await this._fileProvider.UploadFileAsync(file, DODataConfiguration, fileDTO);
-            return fileDTO.FileName + fileDTO.FileExtension;
+            await this._fileProvider.UploadFileAsync(file, DODataConfiguration, fileDto);
+            this._messagingProducer.SendMessage(fileDto);
+
+            return fileDto.FileName + fileDto.FileExtension;
         }
 
         public async Task<byte[]?> RetrieveFile(string fileName)

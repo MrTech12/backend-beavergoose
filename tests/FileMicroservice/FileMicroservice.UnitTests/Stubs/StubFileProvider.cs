@@ -5,7 +5,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace FileMicroservice.UnitTests
+namespace FileMicroservice.UnitTests.Stubs
 {
     internal class StubFileProvider : IFileProvider
     {
