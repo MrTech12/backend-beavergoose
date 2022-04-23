@@ -36,7 +36,7 @@ namespace FileMicroservice.Services
             }
 
             await this._fileProvider.UploadFileAsync(file, DODataConfiguration, fileDto);
-            this._messagingProducer.SendMessage(fileDto);
+            this._messagingProducer.SendMessage(fileDto, "create");
 
             return fileDto.FileName + fileDto.FileExtension;
         }
@@ -54,7 +54,10 @@ namespace FileMicroservice.Services
             bool presence = await this._fileProvider.FindFileAsync(fileName, DODataConfiguration);
             if (presence)
             {
-                return await this._fileProvider.DownloadFileAsync(fileName, DODataConfiguration);
+                var file = await this._fileProvider.DownloadFileAsync(fileName, DODataConfiguration);
+                FileDTO fileDto = new FileDTO() { FileName = fileName };
+                this._messagingProducer.SendMessage(fileDto, "delete");
+                return file;
             }
             return null;
         }
@@ -69,6 +72,18 @@ namespace FileMicroservice.Services
                 DOSecretAccessKey = this._configuration["DigitalOcean:SecretAccessKey"]
             };
             return await this._fileProvider.FindFileAsync(fileName, DODataConfiguration);
+        }
+
+        public async Task RemoveFile(string fileName)
+        {
+            DigitalOceanDataConfigurationDTO DODataConfiguration = new DigitalOceanDataConfigurationDTO()
+            {
+                DOServiceURL = this._configuration["DigitalOcean:ServiceURL"],
+                DOBucketName = this._configuration["DigitalOcean:BucketName"],
+                DOAccessKey = this._configuration["DigitalOcean:AccessKey"],
+                DOSecretAccessKey = this._configuration["DigitalOcean:SecretAccessKey"]
+            };
+            await this._fileProvider.DeleteFileAsync(fileName, DODataConfiguration);
         }
     }
 }

@@ -6,7 +6,5 @@
         public string FileExtension { get; set; }
         public string SenderID { get; set; }
         public string ReceiverID { get; set; }
-
-        public string Action { get; set; }
     }
 }

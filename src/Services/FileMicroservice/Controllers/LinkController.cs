@@ -1,6 +1,6 @@
 ﻿using FileMicroservice.DTOs;
-using FileMicroservice.Entities;
 using FileMicroservice.Interfaces;
+using FileMicroservice.Models;
 using FileMicroservice.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -75,10 +75,10 @@ namespace FileMicroservice.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> UploadFile(IFormFile file, People people)
+        public async Task<IActionResult> UploadFile(IFormFile file, FileDetailsModel fileDetailsModel)
         {
             _fileService = new FileService(this._configuration, this._fileProvider, this._messagingProducer);
-            FileDTO fileDto = new FileDTO() { SenderID = people.SenderID, ReceiverID = people.ReceiverID };
+            FileDTO fileDto = new FileDTO() { SenderID = fileDetailsModel.SenderID, ReceiverID = fileDetailsModel.ReceiverID, AllowedDownloads = fileDetailsModel.AllowedDownloads };
             
             await this._fileService.SaveFile(file, fileDto);
             return Created("", new { response = "file Created!" });

@@ -11,7 +11,7 @@ namespace FileMicroservice.Messaging
         private readonly ILogger<RabbitMQProducer> _logger;
         private readonly IConfiguration _configuration;
         private const string exchangeName = "link-exchange";
-        private const string queueName = "link.creation";
+        private const string queueName = "link.managing";
 
         public RabbitMQProducer(IConfiguration configuration, ILogger<RabbitMQProducer> logger)
         {
@@ -19,7 +19,7 @@ namespace FileMicroservice.Messaging
             this._logger = logger;
         }
 
-        public void SendMessage<T>(T message)
+        public void SendMessage<T>(T message, string routingKey)
         {
             _logger.LogInformation($"Sending message {message}");
 
@@ -31,9 +31,9 @@ namespace FileMicroservice.Messaging
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
             {
-                channel.ExchangeDeclare(exchange: exchangeName, type: ExchangeType.Topic);
+                channel.ExchangeDeclare(exchange: exchangeName, type: ExchangeType.Direct);
                 channel.QueueDeclare(queue: queueName, durable: true, exclusive: false, autoDelete: false, arguments: null);
-                channel.QueueBind(queue: queueName, exchange: exchangeName, routingKey: "link.*", arguments: null);
+                channel.QueueBind(queue: queueName, exchange: exchangeName, routingKey: routingKey, arguments: null);
 
                 var properties = channel.CreateBasicProperties();
                 properties.Persistent = true; // Declaring the message as persistent
@@ -42,7 +42,7 @@ namespace FileMicroservice.Messaging
                 string messageBody = JsonConvert.SerializeObject(message);
                 byte[] body = Encoding.UTF8.GetBytes(messageBody);
 
-                channel.BasicPublish(exchange: "link-exchange", routingKey: "link.*", basicProperties: null, body: body);
+                channel.BasicPublish(exchange: exchangeName, routingKey: routingKey, basicProperties: null, body: body);
             }
         }
     }

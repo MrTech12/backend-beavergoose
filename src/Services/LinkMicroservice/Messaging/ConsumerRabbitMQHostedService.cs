@@ -15,7 +15,7 @@ namespace LinkMicroservice.Messaging
         private IConnection _connection;
         private IModel _channel;
         private const string exchangeName = "link-exchange";
-        private const string queueName = "link.creation";
+        private const string queueName = "link.managing";
         private readonly IConfiguration _configuration;
         private readonly ILinkRepository _linkRepository;
 
@@ -28,6 +28,10 @@ namespace LinkMicroservice.Messaging
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
+            List<string> routingKeys = new List<string>();
+            routingKeys.Add("create");
+            routingKeys.Add("delete");
+
             this._connectionFactory = new ConnectionFactory
             {
                 HostName = this._configuration["RabbitMQ:HostName"],
@@ -37,9 +41,14 @@ namespace LinkMicroservice.Messaging
             this._connection = _connectionFactory.CreateConnection();
             this._channel = _connection.CreateModel();
 
-            this._channel.ExchangeDeclare(exchange: exchangeName, type: ExchangeType.Topic);
+            this._channel.ExchangeDeclare(exchange: exchangeName, type: ExchangeType.Direct);
             this._channel.QueueDeclare(queue: queueName, durable: true, exclusive: false, autoDelete: false, arguments: null);
-            this._channel.QueueBind(queue: queueName, exchange: exchangeName, routingKey: "link.*", arguments: null);
+
+            foreach (var routingKey in routingKeys)
+            {
+                this._channel.QueueBind(queue: queueName, exchange: exchangeName, routingKey: routingKey);
+                //this._channel.QueueBind(queue: queueName, exchange: exchangeName, routingKey: routingKey, arguments: null);
+            }
 
             var properties = this._channel.CreateBasicProperties();
             properties.Persistent = true; // Declaring the message as persistent
@@ -60,9 +69,9 @@ namespace LinkMicroservice.Messaging
                 this._logger.LogInformation($"Message received: {content}.");
                 var fileDto = JsonSerializer.Deserialize<FileDTO>(content);
 
-                await HandleMessage(fileDto);
+                await HandleMessage(fileDto, ea.RoutingKey);
 
-                // Manual acknowledgments do not remove message so automatic for the time being.
+                // Manual acknowledgments do not remove message from queue so automatic for the time being.
                 //this._channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false); // Letting RabbitMQ know that the message had been received.
             };
             this._channel.BasicConsume(queue: queueName, autoAck: true, consumer: consumer);
@@ -70,14 +79,14 @@ namespace LinkMicroservice.Messaging
             await Task.CompletedTask;
         }
 
-        public async Task HandleMessage(FileDTO fileDto)
+        public async Task HandleMessage(FileDTO fileDto, string routingKey)
         {
-            if (fileDto.Action == "create")
+            if (routingKey == "create")
             {
                 LinkService linkService = new LinkService(this._linkRepository);
                 await linkService.CreateSaveLink(fileDto);
             }
-            else if (fileDto.Action == "delete")
+            else if (routingKey == "delete")
             {
                 LinkService linkService = new LinkService(this._linkRepository);
                 await linkService.RemoveLink(fileDto);
