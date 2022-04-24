@@ -10,7 +10,7 @@
 printf "Executing helper script for running Integration tests. \n"
 printf "\n"
 
-printf "Going to the working directory of the Integration tests. \n"
+printf "Going to the working directory of the Integration tests."
 cd $1
 printf '\n'
 
@@ -19,11 +19,11 @@ echo $PWD
 printf '\n'
 
 printf "Running Docker compose file to pull up & boot up Localstack container. \n"
-printf "Command that is executed: 'docker-compose up' \n"
+printf "Command that is executed: 'docker-compose up -d' \n"
 docker-compose up -d
 printf "\n"
 
-printf "Waiting for Localstack to be pulled down & to boot up, for 4 minutes \n"
+printf "Waiting for Localstack to be pulled down & to boot up, for 4.5 minutes \n"
 printf "Command that is executed: 'sleep 4.5m' \n"
 sleep 4.5m
 printf "\n"
@@ -38,9 +38,9 @@ fi
 printf "\n"
 
 printf "Configuring the AWS CLI with dummy data. \n"
-printf "Command one that is executed: aws configure set aws_access_key_id AAAAA"
-printf "Command two that is executed: aws configure set aws_secret_access_key AAAAA"
-printf "Command three that is executed: aws configure set default.region us-west-2"
+printf "Command one that is executed: aws configure set aws_access_key_id AAAAA \n"
+printf "Command two that is executed: aws configure set aws_secret_access_key AAAAA \n"
+printf "Command three that is executed: aws configure set default.region us-west-2 \n"
 aws configure set aws_access_key_id AAAAA
 aws configure set aws_secret_access_key AAAAA
 aws configure set default.region us-west-2

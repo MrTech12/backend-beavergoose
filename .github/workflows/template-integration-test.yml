@@ -26,7 +26,7 @@ jobs:
         uses: dorny/test-reporter@v1
         if: success() # run this step even if previous step failed
         with:
-          name: "Test results" # Name of the check run which will be created
+          name: "Test results of Integration tests" # Name of the check run which will be created
           path: ${{ inputs.test-location }}/TestResults/test-results.trx # Path to test results
           reporter: dotnet-trx
 
