@@ -35,7 +35,7 @@ namespace LinkMicroservice.Controllers
             var fileName = await linkService.RetrieveFileName(address);
             if (fileName == null)
             {
-                return NotFound();
+                return NotFound(new { message = "Filename not found."});
             }
             return Ok(fileName);
         }
