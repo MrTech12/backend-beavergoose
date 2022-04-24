@@ -93,7 +93,7 @@ namespace FileMicroservice.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> UploadFile(IFormFile file, FileDetailsModel fileDetailsModel)
         {
-            if (fileDetailsModel.SenderID == null || fileDetailsModel.ReceiverID == null)
+            if (fileDetailsModel.SenderID == null || fileDetailsModel == null || fileDetailsModel.ReceiverID == null || fileDetailsModel.SenderID == null)
             {
                 return BadRequest(new { message = "Information not provided" });
             }
