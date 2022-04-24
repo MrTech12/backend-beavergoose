@@ -455,3 +455,6 @@ $RECYCLE.BIN/
 
 # Configuration
 appsettings.json
+
+# Integration tests
+.localstack

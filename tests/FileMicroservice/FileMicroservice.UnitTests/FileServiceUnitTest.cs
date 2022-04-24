@@ -9,13 +9,13 @@ using Xunit;
 
 namespace FileMicroservice.UnitTests
 {
-    public class FileServiceTest : IClassFixture<TestConfiguration>
+    public class FileServiceUnitTest : IClassFixture<TestConfiguration>
     {
         private FileService fileService;
         private readonly TestConfiguration _fixture;
         private readonly IConfiguration _configuration;
 
-        public FileServiceTest(TestConfiguration fixture)
+        public FileServiceUnitTest(TestConfiguration fixture)
         {
             this._fixture = fixture;
             this._configuration = _fixture.GetTestDataConfiguration();

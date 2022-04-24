@@ -19,12 +19,12 @@ on:
       - ".github/workflows/file-service-workflow.yml"
 
 jobs:
-  link-testing:
+  file-testing:
     uses: "./.github/workflows/template-build-test.yml"
     with:
       project-location: "src/Services/FileMicroservice"
       test-location: "tests/FileMicroservice/FileMicroservice.UnitTests"
-  link-analyse:
+  file-analyse:
     uses: "./.github/workflows/template-analyse.yml"
     with:
       project-location: "src/Services/FileMicroservice"
