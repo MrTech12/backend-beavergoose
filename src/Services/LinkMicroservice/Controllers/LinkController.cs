@@ -11,12 +11,10 @@ namespace LinkMicroservice.Controllers
     [ApiVersion("1.0")]
     public class LinkController : ControllerBase
     {
-        private readonly ILogger<LinkController> _logger;
         private readonly ILinkRepository _linkRepository;
 
-        public LinkController(ILogger<LinkController> logger, ILinkRepository linkRepository)
+        public LinkController(ILinkRepository linkRepository)
         {
-            this._logger = logger;
             this._linkRepository = linkRepository;
         }
 

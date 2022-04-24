@@ -6,12 +6,7 @@ using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add logging
-builder.Logging.ClearProviders();
-builder.Logging.AddConsole();
-
 // Add services to the container.
-
 builder.Services.AddControllers();
 
 builder.Services.AddApiVersioning(options =>
@@ -32,7 +27,6 @@ builder.Services.AddSwaggerGen(options =>
         Description = "API Documentation of the LinkService API which creates, retrieves and deletes links."
     });
 
-    // using System.Reflection;
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
@@ -40,7 +34,6 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddHostedService<ConsumerRabbitMQHostedService>();
 
-//builder.Services.AddDbContext<LinkContext>();
 builder.Services.AddSingleton<LinkContext>();
 builder.Services.AddTransient<ILinkRepository, LinkRepository>();
 

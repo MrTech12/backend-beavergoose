@@ -49,8 +49,6 @@ namespace LinkMicroservice.Messaging
             foreach (var routingKey in routingKeys)
             {
                 this._channel.QueueBind(queue: queueName, exchange: exchangeName, routingKey: routingKey);
-                //TODO: remove this
-                //this._channel.QueueBind(queue: queueName, exchange: exchangeName, routingKey: routingKey, arguments: null);
             }
 
             var properties = this._channel.CreateBasicProperties();
@@ -69,7 +67,7 @@ namespace LinkMicroservice.Messaging
             consumer.Received += async (model, ea) =>
             {
                 var content = Encoding.UTF8.GetString(ea.Body.ToArray());
-                this._logger.LogInformation($"Message received: {content}.");
+                this._logger.LogInformation($"Message received with content: [{content}].");
                 var fileDto = JsonSerializer.Deserialize<FileDTO>(content);
 
                 if (fileDto != null)
