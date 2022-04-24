@@ -59,9 +59,9 @@ namespace FileMicroservice.Data
 						CannedACL = S3CannedACL.Private
 					};
 
-					uploadRequest.Metadata.Add("sender", fileDto.SenderID);
-					uploadRequest.Metadata.Add("receiver", fileDto.ReceiverID);
-					uploadRequest.Metadata.Add("allowedDownloads", Convert.ToString(fileDto.AllowedDownloads));
+					uploadRequest.Metadata.Add("senderid", fileDto.SenderID);
+					uploadRequest.Metadata.Add("receiverid", fileDto.ReceiverID);
+					uploadRequest.Metadata.Add("alloweddownloads", Convert.ToString(fileDto.AllowedDownloads));
 					await fileTransferUtility.UploadAsync(uploadRequest);
 				}
 			}
