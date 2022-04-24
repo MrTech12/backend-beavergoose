@@ -20,12 +20,12 @@ printf '\n'
 
 printf "Running Docker compose file to pull up & boot up Localstack container. \n"
 printf "Command that is executed: 'docker-compose up' \n"
-docker-compose up
+docker-compose up -d
 printf "\n"
 
 printf "Waiting for Localstack to be pulled down & to boot up, for 4 minutes \n"
-printf "Command that is executed: 'sleep 4m' \n"
-sleep 4m
+printf "Command that is executed: 'sleep 4.5m' \n"
+sleep 4.5m
 printf "\n"
 
 printf "Making HTTP requests to check the status of Localstack.\n"
