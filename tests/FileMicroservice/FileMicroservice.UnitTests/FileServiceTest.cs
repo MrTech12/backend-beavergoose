@@ -37,7 +37,7 @@ namespace FileMicroservice.UnitTests
             FileDTO fileDto = new FileDTO() { ReceiverID = "12", SenderID = "24" };
 
             string fileName = "dummy.txt";
-            var bytes = Encoding.UTF8.GetBytes("This is a dummy file");
+            var bytes = Encoding.UTF8.GetBytes("This is a dummy text file");
             IFormFile stubFile = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "Data", fileName);
 
             fileService = new FileService(this._configuration, new StubFileProvider(), new StubMessagingProducer());
@@ -57,7 +57,7 @@ namespace FileMicroservice.UnitTests
             FileDTO fileDto = new FileDTO() { ReceiverID = "12", SenderID = "24" };
 
             string fileName = "qwerty";
-            var bytes = Encoding.UTF8.GetBytes("This is a qwerty file");
+            var bytes = Encoding.UTF8.GetBytes("This is a qwerty file wih no extension");
             IFormFile stubFile = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "Data", fileName);
 
             fileService = new FileService(this._configuration, new StubFileProvider(), new StubMessagingProducer());
@@ -77,7 +77,7 @@ namespace FileMicroservice.UnitTests
             FileDTO fileDto = new FileDTO() { ReceiverID = "12", SenderID = "24" };
 
             string fileName = "dummy.txt";
-            var bytes = Encoding.UTF8.GetBytes("This is a qwerty file");
+            var bytes = Encoding.UTF8.GetBytes("This is a dummy text file");
             IFormFile stubFile = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "Data", fileName);
 
             fileService = new FileService(this._configuration, new StubFileProvider(), new StubMessagingProducer());
@@ -96,8 +96,8 @@ namespace FileMicroservice.UnitTests
             // Arrange
             FileDTO fileDto = new FileDTO() { ReceiverID = "12", SenderID = "24" };
 
-            string fileName = "qwerty.pdf";
-            var bytes = Encoding.UTF8.GetBytes("This is a qwerty file");
+            string fileName = "azerty.pdf";
+            var bytes = Encoding.UTF8.GetBytes("This is a azerty PDF");
             IFormFile stubFile = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "Data", fileName);
 
             fileService = new FileService(this._configuration, new StubFileProvider(), new StubMessagingProducer());
@@ -136,8 +136,8 @@ namespace FileMicroservice.UnitTests
             // Arrange
             FileDTO fileDto = new FileDTO() { ReceiverID = "12", SenderID = "24" };
 
-            string fileName = "qwerty.pdf";
-            var bytes = Encoding.UTF8.GetBytes("This is a qwerty file");
+            string fileName = "pineapple.pdf";
+            var bytes = Encoding.UTF8.GetBytes("This is a pineapple PDF");
             IFormFile stubFile = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "Data", fileName);
 
             fileService = new FileService(this._configuration, new StubFileProvider(), new StubMessagingProducer());
@@ -147,7 +147,29 @@ namespace FileMicroservice.UnitTests
             byte[]? fileBytes = await fileService.RetrieveFile(newFileName);
 
             // Assert
-            Assert.Equal(21, fileBytes.Length);
+            Assert.Equal(23, fileBytes.Length);
+        }
+
+        [Fact]
+        public async void RemoveFile()
+        {
+            // Arrange
+            FileDTO fileDto = new FileDTO() { ReceiverID = "12", SenderID = "24" };
+
+            string fileName = "qwerty.docx";
+            var bytes = Encoding.UTF8.GetBytes("This is a qwerty document");
+            IFormFile stubFile = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "Data", fileName);
+
+            fileService = new FileService(this._configuration, new StubFileProvider(), new StubMessagingProducer());
+            var newFileName = await fileService.SaveFile(stubFile, fileDto);
+
+            // Act
+            await fileService.RemoveFile(newFileName);
+
+            // Assert
+            bool present = await fileService.CheckPresenceOfFile(newFileName);
+
+            Assert.False(present);
         }
     }
 }

@@ -11,8 +11,8 @@ namespace FileMicroservice.UnitTests.Stubs
     {
         public Task DeleteFileAsync(string fileName, DigitalOceanDataConfigurationDTO DODataConfigurationDTO)
         {
-            File.Delete(fileName);
-            return Task.FromResult(1);
+            File.Delete(Path.GetTempPath() + fileName);
+            return Task.CompletedTask;
         }
 
         public async Task<byte[]> DownloadFileAsync(string fileName, DigitalOceanDataConfigurationDTO DODataConfigurationDTO)
