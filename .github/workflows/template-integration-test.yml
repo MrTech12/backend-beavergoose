@@ -1,4 +1,4 @@
-name: "unit test template"
+name: "Integration test template"
 on:
   workflow_call:
     inputs:
@@ -8,7 +8,7 @@ on:
         description: "Path to test files"
 
 jobs:
-  unit-test:
+  integration-test:
     runs-on: ubuntu-20.04
     steps:
       - name: "checkout project code"
@@ -18,12 +18,9 @@ jobs:
         uses: actions/setup-dotnet@v2
         with:
           dotnet-version: '6.0.x'
-      
-      - name: "Restore Nuget dependencies on project"
-        run: dotnet restore ${{ inputs.project-location }}
 
       - name: "Running helper script for for running Integration tests"
-        run: bash ${{ inputs.test-location }}/run-integration-tests.sh
+        run: bash ${{ inputs.test-location }}/run-integration-tests.sh ${{ inputs.test-location }}
 
       - name: "Create Test Report"
         uses: dorny/test-reporter@v1

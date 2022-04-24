@@ -8,6 +8,7 @@ on:
     paths:
       - "src/Services/FileMicroservice/**"
       - "tests/FileMicroservice/FileMicroservice.UnitTests/**"
+      - "tests/FileMicroservice/FileMicroservice.IntegrationTests/**"
       - ".github/workflows/file-service-workflow.yml"
   pull_request:
     branches:
@@ -16,14 +17,19 @@ on:
     paths:
       - "src/Services/FileMicroservice/**"
       - "tests/FileMicroservice/FileMicroservice.UnitTests/**"
+      - "tests/FileMicroservice/FileMicroservice.IntegrationTests/**"
       - ".github/workflows/file-service-workflow.yml"
 
 jobs:
-  file-testing:
+  file-build-unit-testing:
     uses: "./.github/workflows/template-build-test.yml"
     with:
       project-location: "src/Services/FileMicroservice"
       test-location: "tests/FileMicroservice/FileMicroservice.UnitTests"
+  file-integration-testing:
+    uses: "./.github/workflows/template-integration-test.yml"
+    with:
+      test-location: "tests/FileMicroservice/FileMicroservice.IntegrationTests"
   file-analyse:
     uses: "./.github/workflows/template-analyse.yml"
     with:
