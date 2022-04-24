@@ -103,10 +103,10 @@ namespace FileMicroservice.Controllers
             }
 
             _fileService = new FileService(this._configuration, this._fileProvider, this._messagingProducer);
-            FileDTO fileDto = new FileDTO() { SenderID = fileDetailsModel.SenderID, ReceiverID = fileDetailsModel.ReceiverID, AllowedDownloads = fileDetailsModel.AllowedDownloads };
+            var fileDto = new FileDTO() { SenderID = fileDetailsModel.SenderID, ReceiverID = fileDetailsModel.ReceiverID, AllowedDownloads = fileDetailsModel.AllowedDownloads };
             
             await this._fileService.SaveFile(file, fileDto);
-            return Created("", new { message = "file saved!" });
+            return Created(String.Empty, new { message = "file saved!" });
         }
     }
 }

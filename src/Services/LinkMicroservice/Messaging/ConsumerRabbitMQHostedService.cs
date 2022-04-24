@@ -28,9 +28,11 @@ namespace LinkMicroservice.Messaging
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            List<string> routingKeys = new List<string>();
-            routingKeys.Add("create");
-            routingKeys.Add("delete");
+            var routingKeys = new List<string>()
+            {
+                "create",
+                "delete"
+            };
 
             this._connectionFactory = new ConnectionFactory
             {
@@ -70,7 +72,10 @@ namespace LinkMicroservice.Messaging
                 this._logger.LogInformation($"Message received: {content}.");
                 var fileDto = JsonSerializer.Deserialize<FileDTO>(content);
 
-                await HandleMessage(fileDto, ea.RoutingKey);
+                if (fileDto != null)
+                {
+                    await HandleMessage(fileDto, ea.RoutingKey);
+                }
 
                 // Manual acknowledgments do not remove message from queue so automatic for the time being.
                 //this._channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false); // Letting RabbitMQ know that the message had been received.
@@ -84,12 +89,12 @@ namespace LinkMicroservice.Messaging
         {
             if (routingKey == "create")
             {
-                LinkService linkService = new LinkService(this._linkRepository);
+                var linkService = new LinkService(this._linkRepository);
                 await linkService.CreateSaveLink(fileDto);
             }
             else if (routingKey == "delete")
             {
-                LinkService linkService = new LinkService(this._linkRepository);
+                var linkService = new LinkService(this._linkRepository);
                 await linkService.RemoveLink(fileDto);
             }
         }

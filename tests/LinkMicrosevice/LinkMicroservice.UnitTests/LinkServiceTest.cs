@@ -20,7 +20,7 @@ namespace LinkMicroservice.UnitTests
         {
             // Arrange
             linkService = new LinkService(new StubLinkRepository());
-            FileDTO fileDto = new FileDTO() { FileName = "qwerty.txt", SenderID = "qw", ReceiverID = "we", AllowedDownloads = 1 };
+            var fileDto = new FileDTO() { FileName = "qwerty.txt", SenderID = "qw", ReceiverID = "we", AllowedDownloads = 1 };
 
             // Act
             await linkService.CreateSaveLink(fileDto);
@@ -35,7 +35,7 @@ namespace LinkMicroservice.UnitTests
         {
             // Arrange
             linkService = new LinkService(new StubLinkRepository());
-            FileDTO fileDto = new FileDTO() { FileName = "azerty.txt", SenderID = "qw", ReceiverID = "we", AllowedDownloads = 1 };
+            var fileDto = new FileDTO() { FileName = "azerty.txt", SenderID = "qw", ReceiverID = "we", AllowedDownloads = 1 };
             await linkService.CreateSaveLink(fileDto);
 
             // Act
@@ -50,14 +50,14 @@ namespace LinkMicroservice.UnitTests
         {
             // Arrange
             linkService = new LinkService(new StubLinkRepository());
-            FileDTO fileDto = new FileDTO() { FileName = "serty.txt", SenderID = "qw", ReceiverID = "we", AllowedDownloads = 1 };
+            var fileDto = new FileDTO() { FileName = "serty.txt", SenderID = "qw", ReceiverID = "we", AllowedDownloads = 1 };
             await linkService.CreateSaveLink(fileDto);
 
             // Act
             var link = await linkService.RetrieveFileName("apples");
 
             // Assert
-            Assert.Null(link);
+            Assert.Equal(String.Empty, link);
         }
 
         [Fact]
@@ -65,7 +65,7 @@ namespace LinkMicroservice.UnitTests
         {
             // Arrange
             linkService = new LinkService(new StubLinkRepository());
-            FileDTO fileDto = new FileDTO() { FileName = "sandcat.txt", SenderID = "qw", ReceiverID = "we", AllowedDownloads = 1 };
+            var fileDto = new FileDTO() { FileName = "sandcat.txt", SenderID = "qw", ReceiverID = "we", AllowedDownloads = 1 };
             await linkService.CreateSaveLink(fileDto);
 
             // Act
@@ -73,7 +73,7 @@ namespace LinkMicroservice.UnitTests
 
             // Assert
             var link = await linkService.RetrieveFileName("qwerty145");
-            Assert.Null(link);
+            Assert.Equal(String.Empty, link);
         }
     }
 }

@@ -18,7 +18,7 @@ namespace FileMicroservice.Services
 
         public async Task<string> SaveFile(IFormFile file, FileDTO fileDto)
         {
-            DigitalOceanDataConfigurationDTO DODataConfiguration = new DigitalOceanDataConfigurationDTO()
+            var DODataConfiguration = new DigitalOceanDataConfigurationDTO()
             {
                 DOServiceURL = this._configuration["DigitalOcean:ServiceURL"],
                 DOBucketName = this._configuration["DigitalOcean:BucketName"],
@@ -28,7 +28,7 @@ namespace FileMicroservice.Services
 
             fileDto.FileName = Guid.NewGuid().ToString();
             string fileExtension = Path.GetExtension(file.FileName);
-            if (fileExtension == "")
+            if (fileExtension == String.Empty)
             {
                 fileDto.FileName += ".txt";
             } else {
@@ -43,7 +43,7 @@ namespace FileMicroservice.Services
 
         public async Task<byte[]?> RetrieveFile(string fileName)
         {
-            DigitalOceanDataConfigurationDTO DODataConfiguration = new DigitalOceanDataConfigurationDTO()
+            var DODataConfiguration = new DigitalOceanDataConfigurationDTO()
             {
                 DOServiceURL = this._configuration["DigitalOcean:ServiceURL"],
                 DOBucketName = this._configuration["DigitalOcean:BucketName"],
@@ -55,7 +55,8 @@ namespace FileMicroservice.Services
             if (presence)
             {
                 var file = await this._fileProvider.DownloadFileAsync(fileName, DODataConfiguration);
-                FileDTO fileDto = new FileDTO() { FileName = fileName };
+                
+                var fileDto = new FileDTO() { FileName = fileName };
                 this._messagingProducer.SendMessage(fileDto, "delete");
                 return file;
             }
@@ -64,7 +65,7 @@ namespace FileMicroservice.Services
 
         public async Task<bool> CheckPresenceOfFile(string fileName)
         {
-            DigitalOceanDataConfigurationDTO DODataConfiguration = new DigitalOceanDataConfigurationDTO()
+            var DODataConfiguration = new DigitalOceanDataConfigurationDTO()
             {
                 DOServiceURL = this._configuration["DigitalOcean:ServiceURL"],
                 DOBucketName = this._configuration["DigitalOcean:BucketName"],
@@ -76,7 +77,7 @@ namespace FileMicroservice.Services
 
         public async Task RemoveFile(string fileName)
         {
-            DigitalOceanDataConfigurationDTO DODataConfiguration = new DigitalOceanDataConfigurationDTO()
+            var DODataConfiguration = new DigitalOceanDataConfigurationDTO()
             {
                 DOServiceURL = this._configuration["DigitalOcean:ServiceURL"],
                 DOBucketName = this._configuration["DigitalOcean:BucketName"],

@@ -33,7 +33,7 @@ namespace LinkMicroservice.Controllers
         {
             LinkService linkService = new LinkService(this._linkRepository);
             var fileName = await linkService.RetrieveFileName(address);
-            if (fileName == null)
+            if (fileName == String.Empty)
             {
                 return NotFound(new { message = "Filename not found."});
             }

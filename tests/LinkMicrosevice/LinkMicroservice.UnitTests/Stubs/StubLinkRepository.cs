@@ -20,7 +20,7 @@ namespace LinkMicroservice.UnitTests.Stubs
         {
             if (address == "azerty145" || address == "oranges")
             {
-                Link link1 = new Link() { FileName = "qwerty145" };
+                var link1 = new Link() { FileName = "qwerty145" };
                 return Task.FromResult(link1);
             }
             var link = new Link();
@@ -31,7 +31,7 @@ namespace LinkMicroservice.UnitTests.Stubs
         {
             if (fileName == "sandcat.txt")
             {
-                Link link1 = new Link();
+                var link1 = new Link();
                 return Task.FromResult(link1);
             }
             var link = new Link();

@@ -13,12 +13,12 @@ namespace FileMicroservice.Data
 			var s3ClientConfig = new AmazonS3Config { ServiceURL = DODataConfigurationDTO.DOServiceURL };
 			IAmazonS3 _awsS3Client = new AmazonS3Client(DODataConfigurationDTO.DOAccessKey, DODataConfigurationDTO.DOSecretAccessKey, s3ClientConfig);
 
-			MemoryStream memoryStream = null;
+			MemoryStream memoryStream;
 
 			try
 			{
-				GetObjectRequest getRequest = new GetObjectRequest
-				{
+				var getRequest = new GetObjectRequest()
+                {
 					BucketName = DODataConfigurationDTO.DOBucketName,
 					Key = fileName // Keys are the full filename, including the file extension.
 				};
@@ -82,7 +82,7 @@ namespace FileMicroservice.Data
 
             try
             {
-                GetObjectRequest getRequest = new GetObjectRequest
+                var getRequest = new GetObjectRequest()
                 {
                     BucketName = DODataConfigurationDTO.DOBucketName,
                     Key = fileName // Keys are the full filename, including the file extension.

@@ -14,7 +14,7 @@ namespace LinkMicroservice.Services
 
         public async Task CreateSaveLink(FileDTO fileDto)
         {
-            Link link = new Link()
+            var link = new Link()
             {
                 Address = Guid.NewGuid().ToString(),
                 FileName = fileDto.FileName,
