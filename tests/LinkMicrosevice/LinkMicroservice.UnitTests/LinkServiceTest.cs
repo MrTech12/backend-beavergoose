@@ -1,23 +1,79 @@
-﻿using LinkMicroservice.Services;
+﻿using LinkMicroservice.DTOs;
+using LinkMicroservice.Services;
+using LinkMicroservice.UnitTests.Stubs;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace LinkMicroservice.UnitTests
 {
-    internal class LinkServiceTest
+    public class LinkServiceTest
     {
         private LinkService linkService;
-        private readonly TestConfiguration _fixture;
-        private readonly IConfiguration _configuration;
 
-        public LinkServiceTest(TestConfiguration fixture)
+        [Fact]
+        public async Task CreateFile()
         {
-            this._fixture = fixture;
-            this._configuration = _fixture.GetTestDataConfiguration();
+            // Arrange
+            linkService = new LinkService(new StubLinkRepository());
+            FileDTO fileDto = new FileDTO() { FileName = "qwerty.txt", SenderID = "qw", ReceiverID = "we", AllowedDownloads = 1 };
+
+            // Act
+            await linkService.CreateSaveLink(fileDto);
+
+            // Assert
+            var link = await linkService.RetrieveFileName("azerty145");
+            Assert.NotNull(link);
+        }
+
+        [Fact]
+        public async Task CheckIfFilePresent()
+        {
+            // Arrange
+            linkService = new LinkService(new StubLinkRepository());
+            FileDTO fileDto = new FileDTO() { FileName = "azerty.txt", SenderID = "qw", ReceiverID = "we", AllowedDownloads = 1 };
+            await linkService.CreateSaveLink(fileDto);
+
+            // Act
+            var link = await linkService.RetrieveFileName("oranges");
+
+            // Assert
+            Assert.NotNull(link);
+        }
+
+        [Fact]
+        public async Task CheckIfFileNotPresent()
+        {
+            // Arrange
+            linkService = new LinkService(new StubLinkRepository());
+            FileDTO fileDto = new FileDTO() { FileName = "serty.txt", SenderID = "qw", ReceiverID = "we", AllowedDownloads = 1 };
+            await linkService.CreateSaveLink(fileDto);
+
+            // Act
+            var link = await linkService.RetrieveFileName("apples");
+
+            // Assert
+            Assert.Null(link);
+        }
+
+        [Fact]
+        public async Task RemoveLink()
+        {
+            // Arrange
+            linkService = new LinkService(new StubLinkRepository());
+            FileDTO fileDto = new FileDTO() { FileName = "sandcat.txt", SenderID = "qw", ReceiverID = "we", AllowedDownloads = 1 };
+            await linkService.CreateSaveLink(fileDto);
+
+            // Act
+            await linkService.RemoveLink(fileDto);
+
+            // Assert
+            var link = await linkService.RetrieveFileName("qwerty145");
+            Assert.Null(link);
         }
     }
 }

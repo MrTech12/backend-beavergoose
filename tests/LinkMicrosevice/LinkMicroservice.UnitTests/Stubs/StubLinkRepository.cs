@@ -2,6 +2,7 @@
 using LinkMicroservice.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,22 +13,34 @@ namespace LinkMicroservice.UnitTests.Stubs
     {
         public Task DeleteLink(Link linkEntity)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         public Task<Link> RetrieveFileName(string address)
         {
-            throw new NotImplementedException();
+            if (address == "azerty145" || address == "oranges")
+            {
+                Link link1 = new Link() { FileName = "qwerty145" };
+                return Task.FromResult(link1);
+            }
+            var link = new Link();
+            return Task.FromResult<Link>(link);
         }
 
         public Task<Link> RetrieveLink(string fileName)
         {
-            throw new NotImplementedException();
+            if (fileName == "sandcat.txt")
+            {
+                Link link1 = new Link();
+                return Task.FromResult(link1);
+            }
+            var link = new Link();
+            return Task.FromResult<Link>(link);
         }
 
         public Task SaveLink(Link linkEntity)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
     }
 }

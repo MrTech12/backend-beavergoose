@@ -38,7 +38,10 @@ namespace LinkMicroservice.Services
         public async Task RemoveLink(FileDTO fileDto)
         {
             var link = await this._linkRepository.RetrieveLink(fileDto.FileName);
-            await this._linkRepository.DeleteLink(link);
+            if (link != null)
+            {
+                await this._linkRepository.DeleteLink(link);
+            }
         }
     }
 }

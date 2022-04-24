@@ -107,6 +107,7 @@ namespace FileMicroservice.UnitTests
             var presence = await fileService.CheckPresenceOfFile("qwerty.txt");
 
             // Assert
+            File.Delete(Path.GetTempPath() + newFileName);
             Assert.False(presence);
         }
 
@@ -127,6 +128,7 @@ namespace FileMicroservice.UnitTests
             byte[]? fileBytes = await fileService.RetrieveFile(newFileName);
 
             // Assert
+            File.Delete(Path.GetTempPath() + newFileName);
             Assert.NotEqual(0, fileBytes.Length);
         }
 
@@ -147,6 +149,7 @@ namespace FileMicroservice.UnitTests
             byte[]? fileBytes = await fileService.RetrieveFile(newFileName);
 
             // Assert
+            File.Delete(Path.GetTempPath() + newFileName);
             Assert.Equal(23, fileBytes.Length);
         }
 
@@ -167,8 +170,8 @@ namespace FileMicroservice.UnitTests
             await fileService.RemoveFile(newFileName);
 
             // Assert
+            File.Delete(Path.GetTempPath() + newFileName);
             bool present = await fileService.CheckPresenceOfFile(newFileName);
-
             Assert.False(present);
         }
     }
