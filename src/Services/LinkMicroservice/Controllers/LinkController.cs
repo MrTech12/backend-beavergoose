@@ -21,7 +21,7 @@ namespace LinkMicroservice.Controllers
         /// <summary>
         /// Retrieve the filename that is associated with the link address.
         /// </summary>
-        /// <param name="address"> The generated link</param>
+        /// <param name="address">The generated link</param>
         /// <response code="200">FileName located</response>
         /// <response code="404">Address not found</response>
         [HttpGet]

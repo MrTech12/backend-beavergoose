@@ -30,6 +30,7 @@ namespace FileMicroservice.Controllers
         /// <summary>
         /// Downloading the file from the file storage.
         /// </summary>
+        /// <param name="fileName">The complete filename</param>
         /// <response code="200">File downloaded</response>
         /// <response code="400">Filename not specified</response>
         /// <response code="404">File not found</response>
@@ -57,6 +58,8 @@ namespace FileMicroservice.Controllers
         /// <summary>
         /// Upload a file during the upload phase from the frontend.
         /// </summary>
+        /// <param name="file">The uploaded file</param>
+        /// <param name="fileDetailsModel">Extra details of the file, like sender and received ID</param>
         /// <response code="201">File successfully saved</response>
         /// <response code="400">Information not provided</response>
         /// <response code="500">Problem with saving the file</response>
