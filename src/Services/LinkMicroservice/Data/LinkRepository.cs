@@ -34,5 +34,10 @@ namespace LinkMicroservice.Data
             this._context.Links.Remove(linkEntity);
             await this._context.SaveChangesAsync();
         }
+
+        public async Task<List<Link>> RetrieveLinks(string receiverID)
+        {
+            return await this._context.Links.Where(link => link.ReceiverID == receiverID).ToListAsync();
+        }
     }
 }

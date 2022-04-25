@@ -16,7 +16,7 @@ namespace LinkMicroservice.UnitTests
         private LinkService linkService;
 
         [Fact]
-        public async Task CreateFile()
+        public async Task CreateLink()
         {
             // Arrange
             linkService = new LinkService(new StubLinkRepository());
@@ -31,7 +31,7 @@ namespace LinkMicroservice.UnitTests
         }
 
         [Fact]
-        public async Task CheckIfFilePresent()
+        public async Task CheckIfLinkPresent()
         {
             // Arrange
             linkService = new LinkService(new StubLinkRepository());
@@ -46,7 +46,7 @@ namespace LinkMicroservice.UnitTests
         }
 
         [Fact]
-        public async Task CheckIfFileNotPresent()
+        public async Task CheckIfLinkNotPresent()
         {
             // Arrange
             linkService = new LinkService(new StubLinkRepository());
@@ -74,6 +74,34 @@ namespace LinkMicroservice.UnitTests
             // Assert
             var link = await linkService.RetrieveFileName("qwerty145");
             Assert.Equal(String.Empty, link);
+        }
+
+        [Fact]
+        public async Task RetrieveLinksByKnownReceiverID()
+        {
+            // Arrange
+            linkService = new LinkService(new StubLinkRepository());
+
+            // Act
+            var links = await linkService.RetrieveLinks("Flamingo");
+
+            // Assert
+            Assert.NotEmpty(links);
+        }
+
+        [Fact]
+        public async Task RetrieveLinksByUNknownReceiverID()
+        {
+            // Arrange
+            linkService = new LinkService(new StubLinkRepository());
+            var fileDto = new FileDTO() { FileName = "sandcat.txt", SenderID = "qw", ReceiverID = "we", AllowedDownloads = 1 };
+            await linkService.CreateSaveLink(fileDto);
+
+            // Act
+            var links = await linkService.RetrieveLinks("Qwerty");
+
+            // Assert
+            Assert.Empty(links);
         }
     }
 }

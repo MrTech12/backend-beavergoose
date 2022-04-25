@@ -38,6 +38,17 @@ namespace LinkMicroservice.UnitTests.Stubs
             return Task.FromResult<Link>(link);
         }
 
+        public Task<List<Link>> RetrieveLinks(string receiverID)
+        {
+            var links = new List<Link>();
+            if (receiverID == "Flamingo")
+            {
+                links.Add(new Link() { Address = "A", ReceiverID = "AA"});
+                links.Add(new Link() { Address = "B", ReceiverID = "BB" });
+            }
+            return Task.FromResult(links);
+        }
+
         public Task SaveLink(Link linkEntity)
         {
             return Task.CompletedTask;
