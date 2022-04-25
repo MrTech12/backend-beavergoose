@@ -42,8 +42,8 @@ namespace FileMicroservice.IntegrationTests
             var newFileName = await fileService.SaveFile(stubFile, fileDto);
 
             // Assert
-            var presence = await fileService.CheckPresenceOfFile(newFileName);
-            Assert.True(presence);
+            var savedFile = await fileService.RetrieveFile(newFileName);
+            Assert.NotNull(savedFile);
         }
 
         //TODO: tests to change
@@ -67,12 +67,12 @@ namespace FileMicroservice.IntegrationTests
             var newFileName = await fileService.SaveFile(stubFile, fileDto);
 
             // Assert
-            var presence = await fileService.CheckPresenceOfFile(newFileName);
-            Assert.True(presence);
+            var savedFile = await fileService.RetrieveFile(newFileName);
+            Assert.NotNull(savedFile);
         }
 
         [Fact]
-        public async void CheckIfFilePresent()
+        public async void CheckIfSavedFilePresent()
         {
             // Arrange
             var fileDto = new FileDTO() { ReceiverID = "12", SenderID = "24" };
@@ -88,14 +88,14 @@ namespace FileMicroservice.IntegrationTests
             var newFileName = await fileService.SaveFile(stubFile, fileDto);
 
             // Act
-            var presence = await fileService.CheckPresenceOfFile(newFileName);
+            var savedFile = await fileService.RetrieveFile(newFileName);
 
             // Assert
-            Assert.True(presence);
+            Assert.NotNull(savedFile);
         }
 
         [Fact]
-        public async void CheckIfFileNotPresent()
+        public async void CheckIfUnsavedFilePresent()
         {
             // Arrange
             var fileDto = new FileDTO() { ReceiverID = "12", SenderID = "24" };
@@ -111,10 +111,10 @@ namespace FileMicroservice.IntegrationTests
             var newFileName = await fileService.SaveFile(stubFile, fileDto);
 
             // Act
-            var presence = await fileService.CheckPresenceOfFile("qwerty.txt");
+            var savedFile = await fileService.RetrieveFile("qwerty.txt");
 
             // Assert
-            Assert.False(presence);
+            Assert.Null(savedFile);
         }
 
         [Fact]
@@ -183,8 +183,8 @@ namespace FileMicroservice.IntegrationTests
             await fileService.RemoveFile(newFileName);
 
             // Assert
-            bool present = await fileService.CheckPresenceOfFile(newFileName);
-            Assert.False(present);
+            var deletedFile = await fileService.RetrieveFile(newFileName);
+            Assert.Null(deletedFile);
         }
     }
 }

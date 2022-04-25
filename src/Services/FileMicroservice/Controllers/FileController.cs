@@ -33,7 +33,7 @@ namespace FileMicroservice.Controllers
         /// <response code="200">File downloaded</response>
         /// <response code="400">Filename not specified</response>
         /// <response code="404">File not found</response>
-        [HttpGet("{fileName}")]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -52,33 +52,6 @@ namespace FileMicroservice.Controllers
                 return NotFound(new { message = "No file found."});
             }
             return File(file, "application/octet-stream", fileName);
-        }
-
-        /// <summary>
-        /// Lookup the presence of a file.
-        /// </summary>
-        /// <response code="200">File available</response>
-        /// <response code="400">Filename not specified</response>
-        /// <response code="404">File not found</response>
-        [HttpGet("presence/{fileName}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> FindFile([FromQuery] string fileName)
-        {
-            if (fileName == null)
-            {
-                return BadRequest(new { message = "No filename specified." });
-            }
-
-            _fileService = new FileService(this._configuration, this._fileProvider, this._messagingProducer);
-            var presence = await this._fileService.CheckPresenceOfFile(fileName);
-
-            if (!presence)
-            {
-                return NotFound(new { message = "No file found." });
-            }
-            return Ok(new { message = "File available" });
         }
 
         /// <summary>

@@ -13,7 +13,7 @@
       "UpstreamHttpMethod": [ "Get" ]
     },
     {
-      "DownstreamPathTemplate": "/api/v1/File/{fileName}",
+      "DownstreamPathTemplate": "/api/v1/File?fileName={fileName}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -21,19 +21,7 @@
           "Port": 5200
         }
       ],
-      "UpstreamPathTemplate": "/gateway/file/{fileName}",
-      "UpstreamHttpMethod": [ "Get" ]
-    },
-    {
-      "DownstreamPathTemplate": "/api/v1/File/presence/{fileName}",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 5200
-        }
-      ],
-      "UpstreamPathTemplate": "/gateway/file/presence/{fileName}",
+      "UpstreamPathTemplate": "/gateway/file?fileName={fileName}",
       "UpstreamHttpMethod": [ "Get" ]
     },
     {

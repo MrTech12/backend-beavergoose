@@ -63,18 +63,6 @@ namespace FileMicroservice.Services
             return null;
         }
 
-        public async Task<bool> CheckPresenceOfFile(string fileName)
-        {
-            var DODataConfiguration = new DigitalOceanDataConfigurationDTO()
-            {
-                DOServiceURL = this._configuration["DigitalOcean:ServiceURL"],
-                DOBucketName = this._configuration["DigitalOcean:BucketName"],
-                DOAccessKey = this._configuration["DigitalOcean:AccessKey"],
-                DOSecretAccessKey = this._configuration["DigitalOcean:SecretAccessKey"]
-            };
-            return await this._fileProvider.FindFileAsync(fileName, DODataConfiguration);
-        }
-
         public async Task RemoveFile(string fileName)
         {
             var DODataConfiguration = new DigitalOceanDataConfigurationDTO()

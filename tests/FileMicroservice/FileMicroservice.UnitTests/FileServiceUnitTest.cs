@@ -37,8 +37,8 @@ namespace FileMicroservice.UnitTests
             var newFileName = await fileService.SaveFile(stubFile, fileDto);
 
             // Assert
-            var presence = await fileService.CheckPresenceOfFile(newFileName);
-            Assert.True(presence);
+            var savedFile = await fileService.RetrieveFile(newFileName);
+            Assert.NotNull(savedFile);
         }
 
         [Fact]
@@ -57,12 +57,12 @@ namespace FileMicroservice.UnitTests
             var newFileName = await fileService.SaveFile(stubFile, fileDto);
 
             // Assert
-            var presence = await fileService.CheckPresenceOfFile(newFileName);
-            Assert.True(presence);
+            var savedFile = await fileService.RetrieveFile(newFileName);
+            Assert.NotNull(savedFile);
         }
 
         [Fact]
-        public async void CheckIfFilePresent()
+        public async void CheckIfSavedFilePresent()
         {
             // Arrange
             var fileDto = new FileDTO() { ReceiverID = "12", SenderID = "24" };
@@ -75,14 +75,14 @@ namespace FileMicroservice.UnitTests
             var newFileName = await fileService.SaveFile(stubFile, fileDto);
 
             // Act
-            var presence = await fileService.CheckPresenceOfFile(newFileName);
+            var savedFile = await fileService.RetrieveFile(newFileName);
 
             // Assert
-            Assert.True(presence);
+            Assert.NotNull(savedFile);
         }
 
         [Fact]
-        public async void CheckIfFileNotPresent()
+        public async void CheckIfUnsavedFilePresent()
         {
             // Arrange
             var fileDto = new FileDTO() { ReceiverID = "12", SenderID = "24" };
@@ -95,11 +95,11 @@ namespace FileMicroservice.UnitTests
             var newFileName = await fileService.SaveFile(stubFile, fileDto);
 
             // Act
-            var presence = await fileService.CheckPresenceOfFile("qwerty.txt");
+            var savedFile = await fileService.RetrieveFile("qwerty.txt");
 
             // Assert
             File.Delete(Path.GetTempPath() + newFileName);
-            Assert.False(presence);
+            Assert.Null(savedFile);
         }
 
         [Fact]
@@ -162,8 +162,8 @@ namespace FileMicroservice.UnitTests
 
             // Assert
             File.Delete(Path.GetTempPath() + newFileName);
-            bool present = await fileService.CheckPresenceOfFile(newFileName);
-            Assert.False(present);
+            var deletedFile = await fileService.RetrieveFile(newFileName);
+            Assert.Null(deletedFile);
         }
     }
 }
