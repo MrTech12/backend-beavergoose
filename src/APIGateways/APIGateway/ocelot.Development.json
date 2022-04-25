@@ -9,7 +9,7 @@
           "Port": 5100
         }
       ],
-      "UpstreamPathTemplate": "/gateway/link/{address}",
+      "UpstreamPathTemplate": "/gateway/link?address={address}",
       "UpstreamHttpMethod": [ "Get" ]
     },
     {
@@ -37,7 +37,7 @@
       "UpstreamHttpMethod": [ "Get" ]
     },
     {
-      "DownstreamPathTemplate": "/api/v1/File?SenderID={SenderID}&ReceiverID={ReceiverID}&AllowedDownloads={AllowedDownloads}",
+      "DownstreamPathTemplate": "/api/v1/File",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -45,7 +45,7 @@
           "Port": 5200
         }
       ],
-      "UpstreamPathTemplate": "/gateway/file?SenderID={SenderID}&ReceiverID={ReceiverID}&AllowedDownloads={AllowedDownloads}",
+      "UpstreamPathTemplate": "/gateway/file",
       "UpstreamHttpMethod": [ "Post" ]
     }
   ],

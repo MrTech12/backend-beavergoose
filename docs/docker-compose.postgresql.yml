@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  postgresql-db:
+    image: postgres:14.2
+    container_name: postgresql-db
+    environment:
+      - POSTGRES_USER=sina
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_DB=beavergoose
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgresqldatabeaver:/var/lib/postgresql/data
+volumes:
+  postgresqldatabeaver:

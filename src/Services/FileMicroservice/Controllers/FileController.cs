@@ -64,7 +64,7 @@ namespace FileMicroservice.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> FindFile(string fileName)
+        public async Task<IActionResult> FindFile([FromQuery] string fileName)
         {
             if (fileName == null)
             {
@@ -91,15 +91,15 @@ namespace FileMicroservice.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> UploadFile(IFormFile file, FileDetailsModel fileDetailsModel)
+        public async Task<IActionResult> UploadFile(IFormFile file, [FromHeader] FileDetailsModel fileDetailsModel)
         {
-            if (fileDetailsModel.SenderID == null || fileDetailsModel == null || fileDetailsModel.ReceiverID == null || fileDetailsModel.SenderID == null)
+            if (fileDetailsModel.SenderID == null || fileDetailsModel.ReceiverID == null || fileDetailsModel.AllowedDownloads == 0)
             {
-                return BadRequest(new { message = "Information not provided" });
+                return BadRequest(new { message = "File information not provided" });
             }
             else if (file == null)
             {
-                return BadRequest(new { message = "Information not provided" });
+                return BadRequest(new { message = "File not provided" });
             }
 
             _fileService = new FileService(this._configuration, this._fileProvider, this._messagingProducer);
