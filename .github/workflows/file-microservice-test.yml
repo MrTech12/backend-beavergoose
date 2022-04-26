@@ -9,7 +9,7 @@ on:
       - "src/Services/FileMicroservice/**"
       - "tests/FileMicroservice/FileMicroservice.UnitTests/**"
       - "tests/FileMicroservice/FileMicroservice.IntegrationTests/**"
-      - ".github/workflows/file-service-workflow.yml"
+      - ".github/workflows/file-microservice-test.yml"
   pull_request:
     branches:
       - "main"
@@ -18,7 +18,7 @@ on:
       - "src/Services/FileMicroservice/**"
       - "tests/FileMicroservice/FileMicroservice.UnitTests/**"
       - "tests/FileMicroservice/FileMicroservice.IntegrationTests/**"
-      - ".github/workflows/file-service-workflow.yml"
+      - ".github/workflows/file-microservice-test.yml"
 
 jobs:
   file-build-unit-testing:

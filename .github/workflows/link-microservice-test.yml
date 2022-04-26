@@ -8,7 +8,7 @@ on:
     paths:
       - "src/Services/LinkMicroservice/**"
       - "tests/LinkMicrosevice/LinkMicroservice.UnitTests/**"
-      - ".github/workflows/link-service-test.yml"
+      - ".github/workflows/link-microservice-test.yml"
   pull_request:
     branches:
       - "main"
@@ -16,7 +16,7 @@ on:
     paths:
       - "src/Services/LinkMicroservice/**"
       - "tests/LinkMicrosevice/LinkMicroservice.UnitTests/**"
-      - ".github/workflows/link-service-test.yml"
+      - ".github/workflows/link-microservice-test.yml"
 
 jobs:
   link-testing:
@@ -30,7 +30,6 @@ jobs:
     with:
       project-location: "src/Services/LinkMicroservice"
       test-location: "tests/LinkMicrosevice/LinkMicroservice.UnitTests"
-      project-name: "LinkMicrosevice"
     secrets:
       sonar-token: ${{ secrets.SONAR_TOKEN }}
       github-token: ${{ secrets.GITHUB_TOKEN }}
