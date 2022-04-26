@@ -9,8 +9,7 @@
 * To run this app, one must create an `appsettings.json` file and place the required credentails inside it.
 
 ## Deployment
-* The project will need to retrieve the values of the `appsettings.json` file, when it is used in a deployment environment.
-* The retrieval of the database string, for the `LinkContext`, MUST CHANGE before creating a deployment variant of the program.
+* The project read config information from the environment values of the machine, when the environment type is set to `Release`.
 
 ## Using Entity Framework CLI
 

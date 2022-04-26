@@ -10,4 +10,4 @@
 
 
 ## Deployment
-* The project will need to retrieve the values of the `appsettings.json` file, when it is used in a deployment environment.
+* The project read config information from the environment values of the machine, when the environment type is set to `Release`.
