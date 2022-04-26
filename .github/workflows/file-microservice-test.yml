@@ -26,10 +26,12 @@ jobs:
     with:
       project-location: "src/Services/FileMicroservice"
       test-location: "tests/FileMicroservice/FileMicroservice.UnitTests"
+      project-name: "FileMicroservice"
   file-integration-testing:
     uses: "./.github/workflows/template-integration-test.yml"
     with:
       test-location: "tests/FileMicroservice/FileMicroservice.IntegrationTests"
+      project-name: "FileMicroservice"
   file-analyse:
     uses: "./.github/workflows/template-analyse.yml"
     with:

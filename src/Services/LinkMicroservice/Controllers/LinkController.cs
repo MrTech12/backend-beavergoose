@@ -12,10 +12,12 @@ namespace LinkMicroservice.Controllers
     public class LinkController : ControllerBase
     {
         private readonly ILinkRepository _linkRepository;
+        private LinkService _linkService;
 
         public LinkController(ILinkRepository linkRepository)
         {
             this._linkRepository = linkRepository;
+            this._linkService = new LinkService(this._linkRepository);
         }
 
         /// <summary>
@@ -29,8 +31,7 @@ namespace LinkMicroservice.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> RetrieveFileName(string address)
         {
-            LinkService linkService = new LinkService(this._linkRepository);
-            var fileName = await linkService.RetrieveFileName(address);
+            var fileName = await this._linkService.RetrieveFileName(address);
             if (fileName == null)
             {
                 return NotFound(new { message = "Filename not found."});
@@ -49,8 +50,7 @@ namespace LinkMicroservice.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> RetrieveLinks(string receiverID)
         {
-            LinkService linkService = new LinkService(this._linkRepository);
-            var links = await linkService.RetrieveLinks(receiverID);
+            var links = await this._linkService.RetrieveLinks(receiverID);
             if (links.Count == 0)
             {
                 return NotFound(new { message = "No links found." });

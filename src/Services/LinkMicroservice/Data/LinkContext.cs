@@ -1,4 +1,5 @@
 ﻿using LinkMicroservice.Entities;
+using LinkMicroservice.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace LinkMicroservice.Data
@@ -26,8 +27,7 @@ namespace LinkMicroservice.Data
         {
             if (!optionsBuilder.IsConfigured)
             {
-                IConfiguration conf = (new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json").Build());
-                string connectionString = conf.GetConnectionString("LinkContext");
+                string connectionString = RetrieveConnectionStringHelper.GetConnectionString();
 
                 optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
                 .EnableSensitiveDataLogging()

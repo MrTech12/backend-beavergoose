@@ -24,11 +24,13 @@ jobs:
     with:
       project-location: "src/Services/LinkMicroservice"
       test-location: "tests/LinkMicrosevice/LinkMicroservice.UnitTests"
+      project-name: "LinkMicrosevice"
   link-analyse:
     uses: "./.github/workflows/template-analyse.yml"
     with:
       project-location: "src/Services/LinkMicroservice"
       test-location: "tests/LinkMicrosevice/LinkMicroservice.UnitTests"
+      project-name: "LinkMicrosevice"
     secrets:
       sonar-token: ${{ secrets.SONAR_TOKEN }}
       github-token: ${{ secrets.GITHUB_TOKEN }}
