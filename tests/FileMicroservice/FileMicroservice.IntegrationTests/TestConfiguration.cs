@@ -12,6 +12,7 @@ namespace FileMicroservice.IntegrationTests
     {
         public IConfigurationRoot GetTestDataConfiguration()
         {
+            Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Development");
             return new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.test.json", optional: false, reloadOnChange: false)

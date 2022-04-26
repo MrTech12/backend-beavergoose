@@ -3,7 +3,6 @@ using FileMicroservice.IntegrationTests.Stubs;
 using FileMicroservice.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
-using Moq;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,6 +20,7 @@ namespace FileMicroservice.IntegrationTests
         {
             this._fixture = fixture;
             this._configuration = _fixture.GetTestDataConfiguration();
+            this.fileService = new FileService(this._configuration, new LocalstackFileProvider(), new StubMessagingProducer());
         }
 
         [Fact]
@@ -35,8 +35,6 @@ namespace FileMicroservice.IntegrationTests
                 Headers = new HeaderDictionary(),
                 ContentType = "text/plain"
             };
-
-            fileService = new FileService(this._configuration, new LocalstackFileProvider(), new StubMessagingProducer());
 
             // Act
             var newFileName = await fileService.SaveFile(stubFile, fileDto);
@@ -59,8 +57,6 @@ namespace FileMicroservice.IntegrationTests
                 ContentType = "text/plain"
             };
 
-            fileService = new FileService(this._configuration, new LocalstackFileProvider(), new StubMessagingProducer());
-
             // Act
             var newFileName = await fileService.SaveFile(stubFile, fileDto);
 
@@ -82,7 +78,6 @@ namespace FileMicroservice.IntegrationTests
                 ContentType = "text/plain"
             };
 
-            fileService = new FileService(this._configuration, new LocalstackFileProvider(), new StubMessagingProducer());
             var newFileName = await fileService.SaveFile(stubFile, fileDto);
 
             // Act
@@ -105,7 +100,6 @@ namespace FileMicroservice.IntegrationTests
                 ContentType = "application/pdf"
             };
 
-            fileService = new FileService(this._configuration, new LocalstackFileProvider(), new StubMessagingProducer());
             var newFileName = await fileService.SaveFile(stubFile, fileDto);
 
             // Act
@@ -128,7 +122,6 @@ namespace FileMicroservice.IntegrationTests
                 ContentType = "application/pdf"
             };
 
-            fileService = new FileService(this._configuration, new LocalstackFileProvider(), new StubMessagingProducer());
             var newFileName = await fileService.SaveFile(stubFile, fileDto);
 
             // Act
@@ -151,7 +144,6 @@ namespace FileMicroservice.IntegrationTests
                 ContentType = "application/pdf"
             };
 
-            fileService = new FileService(this._configuration, new LocalstackFileProvider(), new StubMessagingProducer());
             var newFileName = await fileService.SaveFile(stubFile, fileDto);
 
             // Act
@@ -174,7 +166,6 @@ namespace FileMicroservice.IntegrationTests
                 ContentType = "application/pdf"
             };
 
-            fileService = new FileService(this._configuration, new LocalstackFileProvider(), new StubMessagingProducer());
             var newFileName = await fileService.SaveFile(stubFile, fileDto);
 
             // Act

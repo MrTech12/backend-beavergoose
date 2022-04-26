@@ -19,6 +19,7 @@ namespace FileMicroservice.UnitTests
         {
             this._fixture = fixture;
             this._configuration = _fixture.GetTestDataConfiguration();
+            this.fileService = new FileService(this._configuration, new StubFileProvider(), new StubMessagingProducer());
         }
 
         [Fact]
@@ -30,8 +31,6 @@ namespace FileMicroservice.UnitTests
             string fileName = "dummy.txt";
             var bytes = Encoding.UTF8.GetBytes("This is a dummy text file");
             IFormFile stubFile = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "Data", fileName);
-
-            fileService = new FileService(this._configuration, new StubFileProvider(), new StubMessagingProducer());
 
             // Act
             var newFileName = await fileService.SaveFile(stubFile, fileDto);
@@ -51,8 +50,6 @@ namespace FileMicroservice.UnitTests
             var bytes = Encoding.UTF8.GetBytes("This is a qwerty file wih no extension");
             IFormFile stubFile = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "Data", fileName);
 
-            fileService = new FileService(this._configuration, new StubFileProvider(), new StubMessagingProducer());
-
             // Act
             var newFileName = await fileService.SaveFile(stubFile, fileDto);
 
@@ -70,8 +67,6 @@ namespace FileMicroservice.UnitTests
             string fileName = "dummy.txt";
             var bytes = Encoding.UTF8.GetBytes("This is a dummy text file");
             IFormFile stubFile = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "Data", fileName);
-
-            fileService = new FileService(this._configuration, new StubFileProvider(), new StubMessagingProducer());
             var newFileName = await fileService.SaveFile(stubFile, fileDto);
 
             // Act
@@ -91,7 +86,6 @@ namespace FileMicroservice.UnitTests
             var bytes = Encoding.UTF8.GetBytes("This is a azerty PDF");
             IFormFile stubFile = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "Data", fileName);
 
-            fileService = new FileService(this._configuration, new StubFileProvider(), new StubMessagingProducer());
             var newFileName = await fileService.SaveFile(stubFile, fileDto);
 
             // Act
@@ -112,7 +106,6 @@ namespace FileMicroservice.UnitTests
             var bytes = Encoding.UTF8.GetBytes("This is a qwerty file");
             IFormFile stubFile = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "Data", fileName);
 
-            fileService = new FileService(this._configuration, new StubFileProvider(), new StubMessagingProducer());
             var newFileName = await fileService.SaveFile(stubFile, fileDto);
 
             // Act
@@ -133,7 +126,6 @@ namespace FileMicroservice.UnitTests
             var bytes = Encoding.UTF8.GetBytes("This is a pineapple PDF");
             IFormFile stubFile = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "Data", fileName);
 
-            fileService = new FileService(this._configuration, new StubFileProvider(), new StubMessagingProducer());
             var newFileName = await fileService.SaveFile(stubFile, fileDto);
 
             // Act
@@ -154,7 +146,6 @@ namespace FileMicroservice.UnitTests
             var bytes = Encoding.UTF8.GetBytes("This is a qwerty document");
             IFormFile stubFile = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "Data", fileName);
 
-            fileService = new FileService(this._configuration, new StubFileProvider(), new StubMessagingProducer());
             var newFileName = await fileService.SaveFile(stubFile, fileDto);
 
             // Act

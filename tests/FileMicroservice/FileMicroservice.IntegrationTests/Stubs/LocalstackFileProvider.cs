@@ -15,16 +15,15 @@ namespace FileMicroservice.IntegrationTests.Stubs
 {
     public class LocalstackFileProvider : IFileProvider
     {
-        public async Task DeleteFileAsync(string fileName, DigitalOceanDataConfigDTO DODataConfigurationDTO)
+        public async Task DeleteFileAsync(string fileName, DigitalOceanDataConfigDTO DODataConfigDto)
         {
-			var s3ClientConfig = new AmazonS3Config { ServiceURL = DODataConfigurationDTO.DOServiceURL, ForcePathStyle = true };
-			IAmazonS3 _awsS3Client = new AmazonS3Client(DODataConfigurationDTO.DOAccessKey, DODataConfigurationDTO.DOSecretAccessKey, s3ClientConfig);
-			
+			var _awsS3Client = CreateAWSS3Client(DODataConfigDto);
+
 			try
 			{
 				var deleteObjectRequest = new DeleteObjectRequest
 				{
-					BucketName = DODataConfigurationDTO.DOBucketName,
+					BucketName = DODataConfigDto.DOBucketName,
 					Key = fileName // Keys are the full filename, including the file extension.
 				};
 				await _awsS3Client.DeleteObjectAsync(deleteObjectRequest);
@@ -36,10 +35,9 @@ namespace FileMicroservice.IntegrationTests.Stubs
 			}
 		}
 
-        public async Task<byte[]> DownloadFileAsync(string fileName, DigitalOceanDataConfigDTO DODataConfigurationDTO)
+        public async Task<byte[]> DownloadFileAsync(string fileName, DigitalOceanDataConfigDTO DODataConfigDto)
         {
-			var s3ClientConfig = new AmazonS3Config { ServiceURL = DODataConfigurationDTO.DOServiceURL, ForcePathStyle = true };
-			IAmazonS3 _awsS3Client = new AmazonS3Client(DODataConfigurationDTO.DOAccessKey, DODataConfigurationDTO.DOSecretAccessKey, s3ClientConfig);
+			var _awsS3Client = CreateAWSS3Client(DODataConfigDto);
 
 			MemoryStream memoryStream;
 
@@ -47,7 +45,7 @@ namespace FileMicroservice.IntegrationTests.Stubs
 			{
 				var getRequest = new GetObjectRequest()
 				{
-					BucketName = DODataConfigurationDTO.DOBucketName,
+					BucketName = DODataConfigDto.DOBucketName,
 					Key = fileName // Keys are the full filename, including the file extension.
 				};
 				var response = await _awsS3Client.GetObjectAsync(getRequest);
@@ -66,16 +64,15 @@ namespace FileMicroservice.IntegrationTests.Stubs
 			}
 		}
 
-        public async Task<bool> FindFileAsync(string fileName, DigitalOceanDataConfigDTO DODataConfigurationDTO)
+        public async Task<bool> FindFileAsync(string fileName, DigitalOceanDataConfigDTO DODataConfigDto)
         {
-			var s3ClientConfig = new AmazonS3Config { ServiceURL = DODataConfigurationDTO.DOServiceURL, ForcePathStyle = true };
-			IAmazonS3 _awsS3Client = new AmazonS3Client(DODataConfigurationDTO.DOAccessKey, DODataConfigurationDTO.DOSecretAccessKey, s3ClientConfig);
+			var _awsS3Client = CreateAWSS3Client(DODataConfigDto);
 
 			try
 			{
 				var getRequest = new GetObjectRequest()
 				{
-					BucketName = DODataConfigurationDTO.DOBucketName,
+					BucketName = DODataConfigDto.DOBucketName,
 					Key = fileName // Keys are the full filename, including the file extension.
 				};
 				await _awsS3Client.GetObjectAsync(getRequest);
@@ -100,10 +97,9 @@ namespace FileMicroservice.IntegrationTests.Stubs
 			}
 		}
 
-        public async Task UploadFileAsync(IFormFile file, DigitalOceanDataConfigDTO DODataConfigurationDTO, FileDTO fileDto)
+        public async Task UploadFileAsync(IFormFile file, DigitalOceanDataConfigDTO DODataConfigDto, FileDTO fileDto)
         {
-			var s3ClientConfig = new AmazonS3Config { ServiceURL = DODataConfigurationDTO.DOServiceURL, ForcePathStyle = true };
-			IAmazonS3 _awsS3Client = new AmazonS3Client(DODataConfigurationDTO.DOAccessKey, DODataConfigurationDTO.DOSecretAccessKey, s3ClientConfig);
+			var _awsS3Client = CreateAWSS3Client(DODataConfigDto);
 
 			try
 			{
@@ -116,7 +112,7 @@ namespace FileMicroservice.IntegrationTests.Stubs
 					{
 						InputStream = newMemoryStream,
 						Key = fileDto.FileName,
-						BucketName = DODataConfigurationDTO.DOBucketName,
+						BucketName = DODataConfigDto.DOBucketName,
 						ContentType = file.ContentType,
 						CannedACL = S3CannedACL.Private
 					};
@@ -136,5 +132,12 @@ namespace FileMicroservice.IntegrationTests.Stubs
 				Console.WriteLine("Unknown encountered on server. Message:'{0}' when writing a file", e.Message);
 			}
 		}
-    }
+
+		internal IAmazonS3 CreateAWSS3Client(DigitalOceanDataConfigDTO DODataConfigDto)
+		{
+			var s3ClientConfig = new AmazonS3Config { ServiceURL = DODataConfigDto.DOServiceURL, ForcePathStyle = true };
+			IAmazonS3 _awsS3Client = new AmazonS3Client(DODataConfigDto.DOAccessKey, DODataConfigDto.DOSecretAccessKey, s3ClientConfig);
+			return _awsS3Client;
+		}
+	}
 }
