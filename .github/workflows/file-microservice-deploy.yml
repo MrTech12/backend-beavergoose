@@ -9,7 +9,7 @@ jobs:
     uses: "./.github/workflows/template-deploy.yml"
     with:
       project-location: "src/Services/FileMicroservice"
-      project-name: "FileMicroservice"
+      project-name: "filemicroservice"
     secrets:
       docker-username: ${{ secrets.DOCKER_USERNAME }}
       docker-token: ${{ secrets.DOCKER_TOKEN }}

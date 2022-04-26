@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: linkmicroservice-deployment
+  labels:
+    app: linkmicroservice
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: linkmicroservice
+  template:
+    metadata:
+      labels:
+        app: linkmicroservice
+    spec:
+      containers:
+      - name: linkmicroservice
+        image: mrtech12/linkmicroservice:release-1.0.0
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "128m"
+          limits:
+            memory: "640Mi"
+            cpu: "256m"
+
+---
+apiVersion: v1
+Kind: Service
+metadata:
+  name: linkmicroservice-service
+spec:
+  selector:
+    app: linkmicroservice
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80

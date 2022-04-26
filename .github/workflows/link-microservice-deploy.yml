@@ -9,7 +9,7 @@ jobs:
     uses: "./.github/workflows/template-deploy.yml"
     with:
       project-location: "src/Services/LinkMicroservice"
-      project-name: "LinkMicroservice"
+      project-name: "linkmicroservice"
     secrets:
       docker-username: ${{ secrets.DOCKER_USERNAME }}
       docker-token: ${{ secrets.DOCKER_TOKEN }}

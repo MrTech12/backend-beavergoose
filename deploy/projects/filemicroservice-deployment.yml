@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: filemicroservice-deployment
+  labels:
+    app: filemicroservice
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: filemicroservice
+  template:
+    metadata:
+      labels:
+        app: filemicroservice
+    spec:
+      containers:
+      - name: filemicroservice
+        image: mrtech12/filemicroservice:release-1.0.0
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "128m"
+          limits:
+            memory: "640Mi"
+            cpu: "256m"
+
+---
+apiVersion: v1
+Kind: Service
+metadata:
+  name: filemicroservice-service
+spec:
+  selector:
+    app: filemicroservice
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
