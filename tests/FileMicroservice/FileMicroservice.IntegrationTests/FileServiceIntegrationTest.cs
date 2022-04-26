@@ -37,10 +37,10 @@ namespace FileMicroservice.IntegrationTests
             };
 
             // Act
-            var newFileName = await fileService.SaveFile(stubFile, fileDto);
+            var newFileName = await this.fileService.SaveFile(stubFile, fileDto);
 
             // Assert
-            var savedFile = await fileService.RetrieveFile(newFileName);
+            var savedFile = await this.fileService.RetrieveFile(newFileName);
             Assert.NotNull(savedFile);
         }
 
@@ -58,10 +58,10 @@ namespace FileMicroservice.IntegrationTests
             };
 
             // Act
-            var newFileName = await fileService.SaveFile(stubFile, fileDto);
+            var newFileName = await this.fileService.SaveFile(stubFile, fileDto);
 
             // Assert
-            var savedFile = await fileService.RetrieveFile(newFileName);
+            var savedFile = await this.fileService.RetrieveFile(newFileName);
             Assert.NotNull(savedFile);
         }
 
@@ -78,10 +78,10 @@ namespace FileMicroservice.IntegrationTests
                 ContentType = "text/plain"
             };
 
-            var newFileName = await fileService.SaveFile(stubFile, fileDto);
+            var newFileName = await this.fileService.SaveFile(stubFile, fileDto);
 
             // Act
-            var savedFile = await fileService.RetrieveFile(newFileName);
+            var savedFile = await this.fileService.RetrieveFile(newFileName);
 
             // Assert
             Assert.NotNull(savedFile);
@@ -100,10 +100,10 @@ namespace FileMicroservice.IntegrationTests
                 ContentType = "application/pdf"
             };
 
-            var newFileName = await fileService.SaveFile(stubFile, fileDto);
+            var newFileName = await this.fileService.SaveFile(stubFile, fileDto);
 
             // Act
-            var savedFile = await fileService.RetrieveFile("qwerty.txt");
+            var savedFile = await this.fileService.RetrieveFile("qwerty.txt");
 
             // Assert
             Assert.Null(savedFile);
@@ -122,10 +122,10 @@ namespace FileMicroservice.IntegrationTests
                 ContentType = "application/pdf"
             };
 
-            var newFileName = await fileService.SaveFile(stubFile, fileDto);
+            var newFileName = await this.fileService.SaveFile(stubFile, fileDto);
 
             // Act
-            byte[]? fileBytes = await fileService.RetrieveFile(newFileName);
+            byte[]? fileBytes = await this.fileService.RetrieveFile(newFileName);
 
             // Assert
             Assert.NotEmpty(fileBytes);
@@ -144,10 +144,10 @@ namespace FileMicroservice.IntegrationTests
                 ContentType = "application/pdf"
             };
 
-            var newFileName = await fileService.SaveFile(stubFile, fileDto);
+            var newFileName = await this.fileService.SaveFile(stubFile, fileDto);
 
             // Act
-            byte[]? fileBytes = await fileService.RetrieveFile(newFileName);
+            byte[]? fileBytes = await this.fileService.RetrieveFile(newFileName);
 
             // Assert
             Assert.Equal(23, fileBytes.Length);
@@ -166,13 +166,13 @@ namespace FileMicroservice.IntegrationTests
                 ContentType = "application/pdf"
             };
 
-            var newFileName = await fileService.SaveFile(stubFile, fileDto);
+            var newFileName = await this.fileService.SaveFile(stubFile, fileDto);
 
             // Act
-            await fileService.RemoveFile(newFileName);
+            await this.fileService.RemoveFile(newFileName);
 
             // Assert
-            var deletedFile = await fileService.RetrieveFile(newFileName);
+            var deletedFile = await this.fileService.RetrieveFile(newFileName);
             Assert.Null(deletedFile);
         }
     }

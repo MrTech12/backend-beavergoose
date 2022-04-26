@@ -15,18 +15,22 @@ namespace LinkMicroservice.UnitTests
     {
         private LinkService linkService;
 
+        public LinkServiceTest()
+        {
+            this.linkService = new LinkService(new StubLinkRepository());
+        }
+
         [Fact]
         public async Task CreateLink()
         {
             // Arrange
-            linkService = new LinkService(new StubLinkRepository());
             var fileDto = new FileDTO() { FileName = "qwerty.txt", SenderID = "qw", ReceiverID = "we", AllowedDownloads = 1 };
 
             // Act
-            await linkService.CreateSaveLink(fileDto);
+            await this.linkService.CreateSaveLink(fileDto);
 
             // Assert
-            var link = await linkService.RetrieveFileName("azerty145");
+            var link = await this.linkService.RetrieveFileName("azerty145");
             Assert.NotNull(link);
         }
 
@@ -34,12 +38,11 @@ namespace LinkMicroservice.UnitTests
         public async Task CheckIfLinkPresent()
         {
             // Arrange
-            linkService = new LinkService(new StubLinkRepository());
             var fileDto = new FileDTO() { FileName = "azerty.txt", SenderID = "qw", ReceiverID = "we", AllowedDownloads = 1 };
-            await linkService.CreateSaveLink(fileDto);
+            await this.linkService.CreateSaveLink(fileDto);
 
             // Act
-            var link = await linkService.RetrieveFileName("oranges");
+            var link = await this.linkService.RetrieveFileName("oranges");
 
             // Assert
             Assert.NotNull(link);
@@ -49,12 +52,11 @@ namespace LinkMicroservice.UnitTests
         public async Task CheckIfLinkNotPresent()
         {
             // Arrange
-            linkService = new LinkService(new StubLinkRepository());
             var fileDto = new FileDTO() { FileName = "serty.txt", SenderID = "qw", ReceiverID = "we", AllowedDownloads = 1 };
-            await linkService.CreateSaveLink(fileDto);
+            await this.linkService.CreateSaveLink(fileDto);
 
             // Act
-            var link = await linkService.RetrieveFileName("apples");
+            var link = await this.linkService.RetrieveFileName("apples");
 
             // Assert
             Assert.Equal(String.Empty, link);
@@ -64,15 +66,14 @@ namespace LinkMicroservice.UnitTests
         public async Task RemoveLink()
         {
             // Arrange
-            linkService = new LinkService(new StubLinkRepository());
             var fileDto = new FileDTO() { FileName = "sandcat.txt", SenderID = "qw", ReceiverID = "we", AllowedDownloads = 1 };
-            await linkService.CreateSaveLink(fileDto);
+            await this.linkService.CreateSaveLink(fileDto);
 
             // Act
-            await linkService.RemoveLink(fileDto);
+            await this.linkService.RemoveLink(fileDto);
 
             // Assert
-            var link = await linkService.RetrieveFileName("qwerty145");
+            var link = await this.linkService.RetrieveFileName("qwerty145");
             Assert.Equal(String.Empty, link);
         }
 
@@ -80,10 +81,9 @@ namespace LinkMicroservice.UnitTests
         public async Task RetrieveLinksByKnownReceiverID()
         {
             // Arrange
-            linkService = new LinkService(new StubLinkRepository());
 
             // Act
-            var links = await linkService.RetrieveLinks("Flamingo");
+            var links = await this.linkService.RetrieveLinks("Flamingo");
 
             // Assert
             Assert.NotEmpty(links);
@@ -93,12 +93,11 @@ namespace LinkMicroservice.UnitTests
         public async Task RetrieveLinksByUNknownReceiverID()
         {
             // Arrange
-            linkService = new LinkService(new StubLinkRepository());
             var fileDto = new FileDTO() { FileName = "sandcat.txt", SenderID = "qw", ReceiverID = "we", AllowedDownloads = 1 };
-            await linkService.CreateSaveLink(fileDto);
+            await this.linkService.CreateSaveLink(fileDto);
 
             // Act
-            var links = await linkService.RetrieveLinks("Qwerty");
+            var links = await this.linkService.RetrieveLinks("Qwerty");
 
             // Assert
             Assert.Empty(links);

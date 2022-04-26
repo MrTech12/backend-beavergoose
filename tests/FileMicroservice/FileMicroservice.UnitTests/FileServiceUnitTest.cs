@@ -33,10 +33,10 @@ namespace FileMicroservice.UnitTests
             IFormFile stubFile = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "Data", fileName);
 
             // Act
-            var newFileName = await fileService.SaveFile(stubFile, fileDto);
+            var newFileName = await this.fileService.SaveFile(stubFile, fileDto);
 
             // Assert
-            var savedFile = await fileService.RetrieveFile(newFileName);
+            var savedFile = await this.fileService.RetrieveFile(newFileName);
             Assert.NotNull(savedFile);
         }
 
@@ -51,10 +51,10 @@ namespace FileMicroservice.UnitTests
             IFormFile stubFile = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "Data", fileName);
 
             // Act
-            var newFileName = await fileService.SaveFile(stubFile, fileDto);
+            var newFileName = await this.fileService.SaveFile(stubFile, fileDto);
 
             // Assert
-            var savedFile = await fileService.RetrieveFile(newFileName);
+            var savedFile = await this.fileService.RetrieveFile(newFileName);
             Assert.NotNull(savedFile);
         }
 
@@ -67,10 +67,10 @@ namespace FileMicroservice.UnitTests
             string fileName = "dummy.txt";
             var bytes = Encoding.UTF8.GetBytes("This is a dummy text file");
             IFormFile stubFile = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "Data", fileName);
-            var newFileName = await fileService.SaveFile(stubFile, fileDto);
+            var newFileName = await this.fileService.SaveFile(stubFile, fileDto);
 
             // Act
-            var savedFile = await fileService.RetrieveFile(newFileName);
+            var savedFile = await this.fileService.RetrieveFile(newFileName);
 
             // Assert
             Assert.NotNull(savedFile);
@@ -86,10 +86,10 @@ namespace FileMicroservice.UnitTests
             var bytes = Encoding.UTF8.GetBytes("This is a azerty PDF");
             IFormFile stubFile = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "Data", fileName);
 
-            var newFileName = await fileService.SaveFile(stubFile, fileDto);
+            var newFileName = await this.fileService.SaveFile(stubFile, fileDto);
 
             // Act
-            var savedFile = await fileService.RetrieveFile("qwerty.txt");
+            var savedFile = await this.fileService.RetrieveFile("qwerty.txt");
 
             // Assert
             File.Delete(Path.GetTempPath() + newFileName);
@@ -106,10 +106,10 @@ namespace FileMicroservice.UnitTests
             var bytes = Encoding.UTF8.GetBytes("This is a qwerty file");
             IFormFile stubFile = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "Data", fileName);
 
-            var newFileName = await fileService.SaveFile(stubFile, fileDto);
+            var newFileName = await this.fileService.SaveFile(stubFile, fileDto);
 
             // Act
-            byte[]? fileBytes = await fileService.RetrieveFile(newFileName);
+            byte[]? fileBytes = await this.fileService.RetrieveFile(newFileName);
 
             // Assert
             File.Delete(Path.GetTempPath() + newFileName);
@@ -126,10 +126,10 @@ namespace FileMicroservice.UnitTests
             var bytes = Encoding.UTF8.GetBytes("This is a pineapple PDF");
             IFormFile stubFile = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "Data", fileName);
 
-            var newFileName = await fileService.SaveFile(stubFile, fileDto);
+            var newFileName = await this.fileService.SaveFile(stubFile, fileDto);
 
             // Act
-            byte[]? fileBytes = await fileService.RetrieveFile(newFileName);
+            byte[]? fileBytes = await this.fileService.RetrieveFile(newFileName);
 
             // Assert
             File.Delete(Path.GetTempPath() + newFileName);
@@ -146,14 +146,14 @@ namespace FileMicroservice.UnitTests
             var bytes = Encoding.UTF8.GetBytes("This is a qwerty document");
             IFormFile stubFile = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "Data", fileName);
 
-            var newFileName = await fileService.SaveFile(stubFile, fileDto);
+            var newFileName = await this.fileService.SaveFile(stubFile, fileDto);
 
             // Act
-            await fileService.RemoveFile(newFileName);
+            await this.fileService.RemoveFile(newFileName);
 
             // Assert
             File.Delete(Path.GetTempPath() + newFileName);
-            var deletedFile = await fileService.RetrieveFile(newFileName);
+            var deletedFile = await this.fileService.RetrieveFile(newFileName);
             Assert.Null(deletedFile);
         }
     }
