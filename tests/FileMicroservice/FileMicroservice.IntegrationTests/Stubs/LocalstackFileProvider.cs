@@ -15,7 +15,7 @@ namespace FileMicroservice.IntegrationTests.Stubs
 {
     public class LocalstackFileProvider : IFileProvider
     {
-        public async Task DeleteFileAsync(string fileName, DigitalOceanDataConfigurationDTO DODataConfigurationDTO)
+        public async Task DeleteFileAsync(string fileName, DigitalOceanDataConfigDTO DODataConfigurationDTO)
         {
 			var s3ClientConfig = new AmazonS3Config { ServiceURL = DODataConfigurationDTO.DOServiceURL, ForcePathStyle = true };
 			IAmazonS3 _awsS3Client = new AmazonS3Client(DODataConfigurationDTO.DOAccessKey, DODataConfigurationDTO.DOSecretAccessKey, s3ClientConfig);
@@ -36,7 +36,7 @@ namespace FileMicroservice.IntegrationTests.Stubs
 			}
 		}
 
-        public async Task<byte[]> DownloadFileAsync(string fileName, DigitalOceanDataConfigurationDTO DODataConfigurationDTO)
+        public async Task<byte[]> DownloadFileAsync(string fileName, DigitalOceanDataConfigDTO DODataConfigurationDTO)
         {
 			var s3ClientConfig = new AmazonS3Config { ServiceURL = DODataConfigurationDTO.DOServiceURL, ForcePathStyle = true };
 			IAmazonS3 _awsS3Client = new AmazonS3Client(DODataConfigurationDTO.DOAccessKey, DODataConfigurationDTO.DOSecretAccessKey, s3ClientConfig);
@@ -66,7 +66,7 @@ namespace FileMicroservice.IntegrationTests.Stubs
 			}
 		}
 
-        public async Task<bool> FindFileAsync(string fileName, DigitalOceanDataConfigurationDTO DODataConfigurationDTO)
+        public async Task<bool> FindFileAsync(string fileName, DigitalOceanDataConfigDTO DODataConfigurationDTO)
         {
 			var s3ClientConfig = new AmazonS3Config { ServiceURL = DODataConfigurationDTO.DOServiceURL, ForcePathStyle = true };
 			IAmazonS3 _awsS3Client = new AmazonS3Client(DODataConfigurationDTO.DOAccessKey, DODataConfigurationDTO.DOSecretAccessKey, s3ClientConfig);
@@ -100,7 +100,7 @@ namespace FileMicroservice.IntegrationTests.Stubs
 			}
 		}
 
-        public async Task UploadFileAsync(IFormFile file, DigitalOceanDataConfigurationDTO DODataConfigurationDTO, FileDTO fileDto)
+        public async Task UploadFileAsync(IFormFile file, DigitalOceanDataConfigDTO DODataConfigurationDTO, FileDTO fileDto)
         {
 			var s3ClientConfig = new AmazonS3Config { ServiceURL = DODataConfigurationDTO.DOServiceURL, ForcePathStyle = true };
 			IAmazonS3 _awsS3Client = new AmazonS3Client(DODataConfigurationDTO.DOAccessKey, DODataConfigurationDTO.DOSecretAccessKey, s3ClientConfig);

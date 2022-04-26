@@ -9,18 +9,18 @@ namespace FileMicroservice.UnitTests.Stubs
 {
     internal class StubFileProvider : IFileProvider
     {
-        public Task DeleteFileAsync(string fileName, DigitalOceanDataConfigurationDTO DODataConfigurationDTO)
+        public Task DeleteFileAsync(string fileName, DigitalOceanDataConfigDTO DODataConfigurationDTO)
         {
             File.Delete(Path.GetTempPath() + fileName);
             return Task.CompletedTask;
         }
 
-        public async Task<byte[]> DownloadFileAsync(string fileName, DigitalOceanDataConfigurationDTO DODataConfigurationDTO)
+        public async Task<byte[]> DownloadFileAsync(string fileName, DigitalOceanDataConfigDTO DODataConfigurationDTO)
         {
             return await File.ReadAllBytesAsync(Path.GetTempPath() + fileName);
         }
 
-        public Task<bool> FindFileAsync(string fileName, DigitalOceanDataConfigurationDTO DODataConfigurationDTO)
+        public Task<bool> FindFileAsync(string fileName, DigitalOceanDataConfigDTO DODataConfigurationDTO)
         {
             if (!File.Exists(Path.GetTempPath() + fileName))
             {
@@ -29,7 +29,7 @@ namespace FileMicroservice.UnitTests.Stubs
             return Task.FromResult(true);
         }
 
-        public async Task UploadFileAsync(IFormFile file, DigitalOceanDataConfigurationDTO DODataConfigurationDTO, FileDTO fileDTO)
+        public async Task UploadFileAsync(IFormFile file, DigitalOceanDataConfigDTO DODataConfigurationDTO, FileDTO fileDTO)
         {
             var saveToPath = Path.Combine(Path.GetTempPath(), fileDTO.FileName);
 

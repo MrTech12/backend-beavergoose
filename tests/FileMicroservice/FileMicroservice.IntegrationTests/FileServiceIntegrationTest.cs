@@ -46,8 +46,6 @@ namespace FileMicroservice.IntegrationTests
             Assert.NotNull(savedFile);
         }
 
-        //TODO: tests to change
-
         [Fact]
         public async void SaveFileWithoutExtension()
         {

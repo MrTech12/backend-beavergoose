@@ -25,6 +25,7 @@ namespace FileMicroservice.Controllers
             this._fileProvider = fileProvider;
             this._logger = logger;
             this._messagingProducer = messagingProducer;
+            this._fileService = new FileService(this._configuration, this._fileProvider, this._messagingProducer);
         }
 
         /// <summary>
@@ -45,7 +46,6 @@ namespace FileMicroservice.Controllers
                 return BadRequest(new { message = "No filename specified." });
             }
 
-            _fileService = new FileService(this._configuration, this._fileProvider, this._messagingProducer);
             var file = await this._fileService.RetrieveFile(fileName);
 
             if (file == null)
@@ -78,7 +78,6 @@ namespace FileMicroservice.Controllers
                 return BadRequest(new { message = "File not provided" });
             }
 
-            _fileService = new FileService(this._configuration, this._fileProvider, this._messagingProducer);
             var fileDto = new FileDTO() { SenderID = fileDetailsModel.SenderID, ReceiverID = fileDetailsModel.ReceiverID, AllowedDownloads = fileDetailsModel.AllowedDownloads };
             
             await this._fileService.SaveFile(file, fileDto);

@@ -1,4 +1,5 @@
 ﻿using FileMicroservice.DTOs;
+using FileMicroservice.Helpers;
 using FileMicroservice.Interfaces;
 
 namespace FileMicroservice.Services
@@ -8,23 +9,19 @@ namespace FileMicroservice.Services
         private readonly IFileProvider _fileProvider;
         private readonly IConfiguration _configuration;
         private readonly IMessagingProducer _messagingProducer;
+        private readonly RetrieveConfigHelper _retrieveConfigHelper;
 
         public FileService(IConfiguration configuration, IFileProvider fileProvider, IMessagingProducer _messagingProducer)
         {
             this._configuration = configuration;
             this._fileProvider = fileProvider;
             this._messagingProducer = _messagingProducer;
+            this._retrieveConfigHelper = new RetrieveConfigHelper(this._configuration);
         }
 
         public async Task<string> SaveFile(IFormFile file, FileDTO fileDto)
         {
-            var DODataConfiguration = new DigitalOceanDataConfigurationDTO()
-            {
-                DOServiceURL = this._configuration["DigitalOcean:ServiceURL"],
-                DOBucketName = this._configuration["DigitalOcean:BucketName"],
-                DOAccessKey = this._configuration["DigitalOcean:AccessKey"],
-                DOSecretAccessKey = this._configuration["DigitalOcean:SecretAccessKey"]
-            };
+            var DODataConfig = retrieveDODataConfig();
 
             fileDto.FileName = Guid.NewGuid().ToString();
             string fileExtension = Path.GetExtension(file.FileName);
@@ -35,7 +32,7 @@ namespace FileMicroservice.Services
                 fileDto.FileName += fileExtension;
             }
 
-            await this._fileProvider.UploadFileAsync(file, DODataConfiguration, fileDto);
+            await this._fileProvider.UploadFileAsync(file, DODataConfig, fileDto);
             this._messagingProducer.SendMessage(fileDto, "create");
 
             return fileDto.FileName;
@@ -43,18 +40,12 @@ namespace FileMicroservice.Services
 
         public async Task<byte[]?> RetrieveFile(string fileName)
         {
-            var DODataConfiguration = new DigitalOceanDataConfigurationDTO()
-            {
-                DOServiceURL = this._configuration["DigitalOcean:ServiceURL"],
-                DOBucketName = this._configuration["DigitalOcean:BucketName"],
-                DOAccessKey = this._configuration["DigitalOcean:AccessKey"],
-                DOSecretAccessKey = this._configuration["DigitalOcean:SecretAccessKey"]
-            };
+            var DODataConfig = retrieveDODataConfig();
 
-            bool presence = await this._fileProvider.FindFileAsync(fileName, DODataConfiguration);
+            bool presence = await this._fileProvider.FindFileAsync(fileName, DODataConfig);
             if (presence)
             {
-                var file = await this._fileProvider.DownloadFileAsync(fileName, DODataConfiguration);
+                var file = await this._fileProvider.DownloadFileAsync(fileName, DODataConfig);
                 
                 var fileDto = new FileDTO() { FileName = fileName };
                 this._messagingProducer.SendMessage(fileDto, "delete");
@@ -65,14 +56,20 @@ namespace FileMicroservice.Services
 
         public async Task RemoveFile(string fileName)
         {
-            var DODataConfiguration = new DigitalOceanDataConfigurationDTO()
+            var DODataConfig = retrieveDODataConfig();
+            await this._fileProvider.DeleteFileAsync(fileName, DODataConfig);
+        }
+
+        internal DigitalOceanDataConfigDTO retrieveDODataConfig()
+        {
+            var EmptyDODataConfig = new DigitalOceanDataConfigDTO()
             {
-                DOServiceURL = this._configuration["DigitalOcean:ServiceURL"],
-                DOBucketName = this._configuration["DigitalOcean:BucketName"],
-                DOAccessKey = this._configuration["DigitalOcean:AccessKey"],
-                DOSecretAccessKey = this._configuration["DigitalOcean:SecretAccessKey"]
+                DOServiceURL = this._retrieveConfigHelper.GetConfigValue("DigitalOcean", "ServiceURL"),
+                DOBucketName = this._retrieveConfigHelper.GetConfigValue("DigitalOcean", "BucketName"),
+                DOAccessKey = this._retrieveConfigHelper.GetConfigValue("DigitalOcean", "AccessKey"),
+                DOSecretAccessKey = this._retrieveConfigHelper.GetConfigValue("DigitalOcean", "SecretAccessKey")
             };
-            await this._fileProvider.DeleteFileAsync(fileName, DODataConfiguration);
+            return EmptyDODataConfig;
         }
     }
 }

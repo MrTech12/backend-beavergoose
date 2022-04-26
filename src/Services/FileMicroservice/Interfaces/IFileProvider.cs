@@ -4,12 +4,12 @@ namespace FileMicroservice.Interfaces
 {
     public interface IFileProvider
     {
-        Task<byte[]> DownloadFileAsync(string fileName, DigitalOceanDataConfigurationDTO DODataConfigurationDTO);
+        Task<byte[]> DownloadFileAsync(string fileName, DigitalOceanDataConfigDTO DODataConfigDto);
 
-        Task UploadFileAsync(IFormFile file, DigitalOceanDataConfigurationDTO DODataConfigurationDTO, FileDTO fileDTO);
+        Task UploadFileAsync(IFormFile file, DigitalOceanDataConfigDTO DODataConfigDto, FileDTO fileDTO);
 
-        Task<bool> FindFileAsync(string fileName, DigitalOceanDataConfigurationDTO DODataConfigurationDTO);
+        Task<bool> FindFileAsync(string fileName, DigitalOceanDataConfigDTO DODataConfigDto);
 
-        Task DeleteFileAsync(string fileName, DigitalOceanDataConfigurationDTO DODataConfigurationDTO);
+        Task DeleteFileAsync(string fileName, DigitalOceanDataConfigDTO DODataConfigDto);
     }
 }
