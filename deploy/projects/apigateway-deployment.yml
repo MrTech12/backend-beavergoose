@@ -18,14 +18,11 @@ spec:
         - name: apigateway
           image: mrtech12/apigateway:release-1.0.0
           ports:
-            - containerPort: 80
-          env:
-            - name: ASPNETCORE_ENVIRONMENT
-              value: "Production"
+            - containerPort: 5000
           resources:
             requests:
               memory: "128Mi"
               cpu: "128m"
             limits:
-              memory: "640Mi"
+              memory: "512Mi"
               cpu: "256m"
