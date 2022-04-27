@@ -2,7 +2,7 @@
   "Routes": [
     {
       "DownstreamPathTemplate": "/api/v1/Link/address?address={address}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "linkmicroservice-service",
@@ -14,7 +14,7 @@
     },
     {
       "DownstreamPathTemplate": "/api/v1/Link/links?receiverID={receiverID}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "linkmicroservice-service",
@@ -26,7 +26,7 @@
     },
     {
       "DownstreamPathTemplate": "/api/v1/File?fileName={fileName}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "filemicroservice-service",
@@ -38,7 +38,7 @@
     },
     {
       "DownstreamPathTemplate": "/api/v1/File",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "filemicroservice-service",
