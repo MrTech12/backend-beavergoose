@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: filemicroservice-deployment
+  name: apigateway-deployment
   labels:
-    app: filemicroservice
+    app: apigateway
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: filemicroservice
+      app: apigateway
   template:
     metadata:
       labels:
-        app: filemicroservice
+        app: apigateway
     spec:
       containers:
-        - name: filemicroservice
-          image: mrtech12/filemicroservice:release-1.0.0
+        - name: apigateway
+          image: mrtech12/apigateway:release-1.0.0
           ports:
             - containerPort: 80
           resources:

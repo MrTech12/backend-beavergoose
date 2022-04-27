@@ -1,4 +1,4 @@
-name: "file service - build, test & analyse"
+name: "filemicroservice - build, test & analyse"
 on:
   push:
     branches:

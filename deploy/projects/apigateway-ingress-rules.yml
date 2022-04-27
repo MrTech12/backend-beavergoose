@@ -1,15 +1,15 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: linkmicroservice-ingress
+  name: apigateway-ingress
 spec:
   rules:
   - http:
       paths:
-      - path: /gateway
+      - path: /gateway/*
         pathType: Prefix
         backend:
           service:
-            name: linkmicroservice-service
+            name: apigateway-service
             port:
               number: 80

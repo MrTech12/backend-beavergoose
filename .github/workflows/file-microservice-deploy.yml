@@ -1,11 +1,11 @@
-name: "link service - deploy"
+name: "filemicroservice - deploy"
 on:
   push:
     branches:
       - "release-**"
 
 jobs:
-  link-docker-kubernetes:
+  file-docker-kubernetes:
     uses: "./.github/workflows/template-deploy.yml"
     with:
       project-location: "src/Services/FileMicroservice"

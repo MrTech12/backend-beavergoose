@@ -5,7 +5,7 @@ metadata:
   labels:
     app: linkmicroservice
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: linkmicroservice
@@ -15,27 +15,14 @@ spec:
         app: linkmicroservice
     spec:
       containers:
-      - name: linkmicroservice
-        image: mrtech12/linkmicroservice:release-1.0.0
-        ports:
-        - containerPort: 80
-        resources:
-          requests:
-            memory: "128Mi"
-            cpu: "128m"
-          limits:
-            memory: "640Mi"
-            cpu: "256m"
-
----
-apiVersion: v1
-Kind: Service
-metadata:
-  name: linkmicroservice-service
-spec:
-  selector:
-    app: linkmicroservice
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 80
+        - name: linkmicroservice
+          image: mrtech12/linkmicroservice:release-1.0.0
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "128m"
+            limits:
+              memory: "640Mi"
+              cpu: "256m"

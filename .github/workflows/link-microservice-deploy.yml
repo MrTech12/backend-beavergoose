@@ -1,4 +1,4 @@
-name: "link service - deploy"
+name: "linkmicroservice - deploy"
 on:
   push:
     branches:

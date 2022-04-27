@@ -1,4 +1,4 @@
-name: "link service - build, test & analyse"
+name: "linkmicroservice - build, test & analyse"
 on:
   push:
     branches:
@@ -23,13 +23,14 @@ jobs:
     uses: "./.github/workflows/template-build-test.yml"
     with:
       project-location: "src/Services/LinkMicroservice"
-      test-location: "tests/LinkMicrosevice/LinkMicroservice.UnitTests"
-      project-name: "LinkMicrosevice"
+      test-location: "tests/LinkMicroservice/LinkMicroservice.UnitTests"
+      project-name: "LinkMicroservice"
   link-analyse:
     uses: "./.github/workflows/template-analyse.yml"
     with:
       project-location: "src/Services/LinkMicroservice"
-      test-location: "tests/LinkMicrosevice/LinkMicroservice.UnitTests"
+      test-location: "tests/LinkMicroservice/LinkMicroservice.UnitTests"
+      project-name: "LinkMicroservice"
     secrets:
       sonar-token: ${{ secrets.SONAR_TOKEN }}
       github-token: ${{ secrets.GITHUB_TOKEN }}
