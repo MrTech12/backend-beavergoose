@@ -16,7 +16,7 @@
                 }
                 throw new MissingFieldException("Connectionstring in appsettings.json not set");
             }
-            else if (environmentType == "Release")
+            else if (environmentType == "Production")
             {
                 var connectionString = Environment.GetEnvironmentVariable($"ConnectionStrings_LinkContext");
                 if (!string.IsNullOrEmpty(connectionString))

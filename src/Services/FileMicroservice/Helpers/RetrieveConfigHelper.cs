@@ -22,7 +22,7 @@
                 }
                 throw new MissingFieldException("Configuration value not set");
             }
-            else if (environmentType == "Release")
+            else if (environmentType == "Production")
             {
                 var environmentValue = Environment.GetEnvironmentVariable($"{configurationSection}_{configurationKey}");
                 if (!string.IsNullOrEmpty(environmentValue))
