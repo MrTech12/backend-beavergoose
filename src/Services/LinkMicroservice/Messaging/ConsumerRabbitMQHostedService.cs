@@ -4,6 +4,7 @@ using LinkMicroservice.Interfaces;
 using LinkMicroservice.Services;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using RabbitMQ.Client.Exceptions;
 using System.Text;
 using System.Text.Json;
 
@@ -43,22 +44,30 @@ namespace LinkMicroservice.Messaging
                 Port = Convert.ToInt32(this._retrieveConfigHelper.GetConfigValue("RabbitMQ", "Port")),
                 DispatchConsumersAsync = true
             };
-            this._connection = _connectionFactory.CreateConnection();
-            this._channel = _connection.CreateModel();
-
-            this._channel.ExchangeDeclare(exchange: exchangeName, type: ExchangeType.Direct);
-            this._channel.QueueDeclare(queue: queueName, durable: true, exclusive: false, autoDelete: false, arguments: null);
-
-            foreach (var routingKey in routingKeys)
+            try
             {
-                this._channel.QueueBind(queue: queueName, exchange: exchangeName, routingKey: routingKey);
+                this._connection = _connectionFactory.CreateConnection();
+                this._channel = _connection.CreateModel();
+
+                this._channel.ExchangeDeclare(exchange: exchangeName, type: ExchangeType.Direct);
+                this._channel.QueueDeclare(queue: queueName, durable: true, exclusive: false, autoDelete: false, arguments: null);
+
+                foreach (var routingKey in routingKeys)
+                {
+                    this._channel.QueueBind(queue: queueName, exchange: exchangeName, routingKey: routingKey);
+                }
+
+                var properties = this._channel.CreateBasicProperties();
+                properties.Persistent = true; // Declaring the message as persistent
+                this._channel.BasicQos(0, 1, false); // Send messages to different workers based on received acknowledgment
+
+                this._logger.LogInformation($"Queue [{queueName}] is waiting for messages.");
             }
-
-            var properties = this._channel.CreateBasicProperties();
-            properties.Persistent = true; // Declaring the message as persistent
-            this._channel.BasicQos(0, 1, false); // Send messages to different workers based on received acknowledgment
-
-            this._logger.LogInformation($"Queue [{queueName}] is waiting for messages.");
+            catch (BrokerUnreachableException brokenUnreachable)
+            {
+                this._logger.LogError("Connection to RabbitMQ can't be established. Exception message: {0}.", brokenUnreachable.Message);
+                throw new BrokerUnreachableException(brokenUnreachable);
+            }
             return base.StartAsync(cancellationToken);
         }
 
