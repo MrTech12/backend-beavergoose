@@ -19,11 +19,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileMicroservice.UnitTests"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LinkMicrosevice", "LinkMicrosevice", "{3495DBB2-B1B0-4C60-9F31-7F8B45CA4E44}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkMicroservice.UnitTests", "..\tests\LinkMicrosevice\LinkMicroservice.UnitTests\LinkMicroservice.UnitTests.csproj", "{DF65AC59-3F19-4698-BBA7-E63EC0AC5000}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkMicroservice", "Services\LinkMicroservice\LinkMicroservice.csproj", "{2D3C76CC-D011-4B37-92A2-D5F1EA25DAD0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileMicroservice.IntegrationTests", "..\tests\FileMicroservice\FileMicroservice.IntegrationTests\FileMicroservice.IntegrationTests.csproj", "{760AFD36-685C-47E5-8394-13D056A6544C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileMicroservice.IntegrationTests", "..\tests\FileMicroservice\FileMicroservice.IntegrationTests\FileMicroservice.IntegrationTests.csproj", "{760AFD36-685C-47E5-8394-13D056A6544C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkMicroservice.UnitTests", "..\tests\LinkMicroservice\LinkMicroservice.UnitTests\LinkMicroservice.UnitTests.csproj", "{F4DD08E0-09FE-4848-B983-D47556B748F9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,10 +43,6 @@ Global
 		{ED1C1744-8847-4464-AE1A-5A44EE75D9EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ED1C1744-8847-4464-AE1A-5A44EE75D9EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ED1C1744-8847-4464-AE1A-5A44EE75D9EE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DF65AC59-3F19-4698-BBA7-E63EC0AC5000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DF65AC59-3F19-4698-BBA7-E63EC0AC5000}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DF65AC59-3F19-4698-BBA7-E63EC0AC5000}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DF65AC59-3F19-4698-BBA7-E63EC0AC5000}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2D3C76CC-D011-4B37-92A2-D5F1EA25DAD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2D3C76CC-D011-4B37-92A2-D5F1EA25DAD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2D3C76CC-D011-4B37-92A2-D5F1EA25DAD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -55,6 +51,10 @@ Global
 		{760AFD36-685C-47E5-8394-13D056A6544C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{760AFD36-685C-47E5-8394-13D056A6544C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{760AFD36-685C-47E5-8394-13D056A6544C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4DD08E0-09FE-4848-B983-D47556B748F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4DD08E0-09FE-4848-B983-D47556B748F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4DD08E0-09FE-4848-B983-D47556B748F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4DD08E0-09FE-4848-B983-D47556B748F9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -65,9 +65,9 @@ Global
 		{AD435ABF-9F5F-429E-9A76-C978F6800D77} = {62D0B0BA-DE04-4643-A4B8-08D2ABC613E1}
 		{ED1C1744-8847-4464-AE1A-5A44EE75D9EE} = {AD435ABF-9F5F-429E-9A76-C978F6800D77}
 		{3495DBB2-B1B0-4C60-9F31-7F8B45CA4E44} = {62D0B0BA-DE04-4643-A4B8-08D2ABC613E1}
-		{DF65AC59-3F19-4698-BBA7-E63EC0AC5000} = {3495DBB2-B1B0-4C60-9F31-7F8B45CA4E44}
 		{2D3C76CC-D011-4B37-92A2-D5F1EA25DAD0} = {320C3EB0-923F-4E3F-8F71-E3A25E271535}
 		{760AFD36-685C-47E5-8394-13D056A6544C} = {AD435ABF-9F5F-429E-9A76-C978F6800D77}
+		{F4DD08E0-09FE-4848-B983-D47556B748F9} = {3495DBB2-B1B0-4C60-9F31-7F8B45CA4E44}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B955A228-4EFA-487D-B88E-033A796387B6}

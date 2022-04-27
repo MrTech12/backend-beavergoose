@@ -25,7 +25,7 @@ jobs:
       run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 ${{ secrets.digitalocean-cluster-name }}
     
     - name: Update ingress rules on DigitalOcean's Kubernetes cluster
-      run: kubectl apply -f deploy/projects/${{ inputs.project-name }}-deployment.yml
+      run: kubectl apply -f deploy/projects/${{ inputs.project-name }}-ingress-rules.yml
     
     - name: Verify new ingress rules
       run: kubectl describe ingress ${{ inputs.project-name }}-ingress
