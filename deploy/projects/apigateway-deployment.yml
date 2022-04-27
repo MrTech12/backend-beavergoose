@@ -19,6 +19,9 @@ spec:
           image: mrtech12/apigateway:release-1.0.0
           ports:
             - containerPort: 80
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: "Production"
           resources:
             requests:
               memory: "128Mi"

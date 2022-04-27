@@ -19,6 +19,19 @@ spec:
           image: mrtech12/linkmicroservice:release-1.0.0
           ports:
             - containerPort: 80
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: "Production"
+            - name: "ConnectionStrings_LinkContext"
+              valueFrom:
+                secretKeyRef:
+                  name: linkmicroservice-dbconnectionstrings
+                  key: linkcontext
+                  optional: false
+            - name: "RabbitMQ_HostName"
+              value: "rabbitmq-service"
+            - name: "RabbitMQ_Port"
+              value: "5672"
           resources:
             requests:
               memory: "128Mi"

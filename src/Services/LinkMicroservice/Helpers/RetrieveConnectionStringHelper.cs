@@ -18,7 +18,7 @@
             }
             else if (environmentType == "Production")
             {
-                var connectionString = Environment.GetEnvironmentVariable($"ConnectionStrings_LinkContext");
+                var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings_LinkContext");
                 if (!string.IsNullOrEmpty(connectionString))
                 {
                     return connectionString;
