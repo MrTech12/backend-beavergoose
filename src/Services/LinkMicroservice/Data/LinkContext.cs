@@ -29,9 +29,7 @@ namespace LinkMicroservice.Data
             {
                 string connectionString = RetrieveConnectionStringHelper.GetConnectionString();
 
-                optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
-                .EnableSensitiveDataLogging()
-                .EnableDetailedErrors();
+                optionsBuilder.UseNpgsql(connectionString);
             }
             base.OnConfiguring(optionsBuilder);
         }

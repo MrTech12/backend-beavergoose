@@ -27,3 +27,13 @@ dotnet ef migrations remove
 ```
 dotnet ef database update name_of_migration
 ```
+
+* To create an SQL script of all the migrations, use this command with the name of the first migration:
+```
+dotnet ef migrations script name_of_first_migration --output schema.sql
+```
+
+* To get information about a DbContext:
+```
+dotnet ef dbcontext info
+```

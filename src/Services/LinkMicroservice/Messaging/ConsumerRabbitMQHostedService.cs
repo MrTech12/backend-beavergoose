@@ -66,7 +66,7 @@ namespace LinkMicroservice.Messaging
             catch (BrokerUnreachableException brokenUnreachable)
             {
                 this._logger.LogError("Connection to RabbitMQ can't be established. Exception message: {0}.", brokenUnreachable.Message);
-                throw new BrokerUnreachableException(brokenUnreachable);
+                throw;
             }
             return base.StartAsync(cancellationToken);
         }
