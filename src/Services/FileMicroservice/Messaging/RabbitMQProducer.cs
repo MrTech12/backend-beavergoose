@@ -24,7 +24,7 @@ namespace FileMicroservice.Messaging
 
         public void SendMessage<T>(T message, string routingKey)
         {
-            _logger.LogInformation($"Sending message {message}");
+            this._logger.LogInformation("Sending message {message}", message);
 
             var factory = new ConnectionFactory()
             {

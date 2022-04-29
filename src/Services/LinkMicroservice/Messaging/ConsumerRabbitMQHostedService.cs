@@ -61,11 +61,11 @@ namespace LinkMicroservice.Messaging
                 properties.Persistent = true; // Declaring the message as persistent
                 this._channel.BasicQos(0, 1, false); // Send messages to different workers based on received acknowledgment
 
-                this._logger.LogInformation($"Queue [{queueName}] is waiting for messages.");
+                this._logger.LogInformation("Queue [{queueName}] is waiting for messages.", queueName);
             }
             catch (BrokerUnreachableException brokenUnreachable)
             {
-                this._logger.LogError("Connection to RabbitMQ can't be established. Exception message: {0}.", brokenUnreachable.Message);
+                this._logger.LogError("Connection to RabbitMQ can't be established. Exception message: {ExceptionMessage}.", brokenUnreachable.Message);
                 throw;
             }
             return base.StartAsync(cancellationToken);
@@ -79,7 +79,7 @@ namespace LinkMicroservice.Messaging
             consumer.Received += async (model, ea) =>
             {
                 var content = Encoding.UTF8.GetString(ea.Body.ToArray());
-                this._logger.LogInformation($"Message received with content: [{content}].");
+                this._logger.LogInformation("Message received with content: [{content}].", content);
                 var fileDto = JsonSerializer.Deserialize<FileDTO>(content);
 
                 if (fileDto != null)
