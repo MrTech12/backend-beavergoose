@@ -1,6 +1,6 @@
-# Choose API Gateway
+# Choice API Gateway
 
-* Decision: choose an API Gateway to help with client communication and centralizing SSL & authentication concerns.
+* Decision: choosing an API Gateway to help with client communication and centralizing SSL & authentication concerns.
 
 In the context of `Choosing a API Gateway`, <br>
 facing `the need have a centralized point for the client to communicate with that support real-time communication`, <br>
