@@ -27,11 +27,15 @@ jobs:
       project-location: "src/Services/FileMicroservice"
       test-location: "tests/FileMicroservice/FileMicroservice.UnitTests"
       project-name: "FileMicroservice"
+    secrets:
+      github-token: ${{ secrets.GITHUB_TOKEN }}
   file-integration-testing:
     uses: "./.github/workflows/template-integration-test.yml"
     with:
       test-location: "tests/FileMicroservice/FileMicroservice.IntegrationTests"
       project-name: "FileMicroservice"
+    secrets:
+      github-token: ${{ secrets.GITHUB_TOKEN }}
   file-analyse:
     uses: "./.github/workflows/template-analyse.yml"
     with:

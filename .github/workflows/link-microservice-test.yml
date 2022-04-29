@@ -25,6 +25,8 @@ jobs:
       project-location: "src/Services/LinkMicroservice"
       test-location: "tests/LinkMicroservice/LinkMicroservice.UnitTests"
       project-name: "LinkMicroservice"
+    secrets:
+      github-token: ${{ secrets.GITHUB_TOKEN }}
   link-analyse:
     uses: "./.github/workflows/template-analyse.yml"
     with:

@@ -10,4 +10,4 @@
 
 
 ## Deployment
-* The project read config information from the environment values of the machine, when the environment type is set to `Release`.
+* The project read config information from the environment values of the machine, when the environment type is set to `Release`. 
