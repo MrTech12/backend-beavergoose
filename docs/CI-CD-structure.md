@@ -19,9 +19,17 @@ These files also contain jobs which houses steps. These steps can be the executi
 * Uses: project and test files of the microservice.
 
 ### build-test
-* Purpose: building and runing tests of a project, which includes displaying the test results and code coverage data.
+* Purpose: building and running unit tests of a project, which includes displaying the test results and code coverage data.
 * Uses: project and test files of the microservice.
 * Special information: 
+    - The workflow creates a Test Report of the passed and failed tests, which is available in the GitHub Actions interface.
+    - The code coverage metric is retrieved from the generated XML file and displayed in the console. The data is also displayed as a comment of a pull request, if the workflow runs in the context of one.
+
+### integration-test
+* Purpose: running integration tests of a project, which includes displaying the test results and code coverage data.
+* Uses: test files of the microservice.
+* Special information:
+    - The workflow run a bash script, which sets up the environment and other components for the Integration tests to run.
     - The workflow creates a Test Report of the passed and failed tests, which is available in the GitHub Actions interface.
     - The code coverage metric is retrieved from the generated XML file and displayed in the console. The data is also displayed as a comment of a pull request, if the workflow runs in the context of one.
 
