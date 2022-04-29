@@ -19,7 +19,7 @@ on:
       - ".github/workflows/link-microservice-test.yml"
 
 jobs:
-  link-testing:
+  link-build-unit-testing:
     uses: "./.github/workflows/template-build-test.yml"
     with:
       project-location: "src/Services/LinkMicroservice"
