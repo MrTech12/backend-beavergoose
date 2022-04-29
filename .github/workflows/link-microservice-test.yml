@@ -1,0 +1,37 @@
+name: "linkmicroservice - build, test & analyse"
+on:
+  push:
+    branches:
+      - "main"
+      - "development"
+      - "feature-**"
+    paths:
+      - "src/Services/LinkMicroservice/**"
+      - "tests/LinkMicrosevice/LinkMicroservice.UnitTests/**"
+      - ".github/workflows/link-microservice-test.yml"
+  pull_request:
+    branches:
+      - "main"
+      - "development"
+    paths:
+      - "src/Services/LinkMicroservice/**"
+      - "tests/LinkMicrosevice/LinkMicroservice.UnitTests/**"
+      - ".github/workflows/link-microservice-test.yml"
+
+jobs:
+  link-build-unit-testing:
+    uses: "./.github/workflows/template-build-test.yml"
+    with:
+      project-location: "src/Services/LinkMicroservice"
+      test-location: "tests/LinkMicroservice/LinkMicroservice.UnitTests"
+      project-name: "LinkMicroservice"
+    secrets:
+      github-token: ${{ secrets.GITHUB_TOKEN }}
+  link-analyse:
+    uses: "./.github/workflows/template-analyse.yml"
+    with:
+      project-location: "src/Services/LinkMicroservice"
+      test-location: "tests/LinkMicroservice/LinkMicroservice.UnitTests"
+    secrets:
+      sonar-token: ${{ secrets.SONAR_TOKEN }}
+      github-token: ${{ secrets.GITHUB_TOKEN }}

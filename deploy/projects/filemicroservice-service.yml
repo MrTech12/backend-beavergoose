@@ -1,0 +1,11 @@
+apiVersion: v1
+Kind: Service
+metadata:
+  name: filemicroservice-service
+spec:
+  selector:
+    app: filemicroservice
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 6000

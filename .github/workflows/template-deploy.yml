@@ -27,16 +27,16 @@ jobs:
       - name: "checkout project code"
         uses: actions/checkout@v2
 
-      - name: Setup Docker
+      - name: "Setup Docker"
         uses: docker/setup-buildx-action@v1
 
-      - name: Login to DockerHub
+      - name: "Login to DockerHub"
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.docker-username }}
           password: ${{ secrets.docker-token }}
 
-      - name: build and push Docker image
+      - name: "build and push Docker image"
         uses: docker/build-push-action@v2
         with:
           context: ${{ inputs.project-location }}
@@ -47,6 +47,11 @@ jobs:
     runs-on: ubuntu-20.04
     needs: build-push-docker
     steps:
+    - name: Change the image value of the manifest file to the new version
+      uses: mikefarah/yq@master
+      with:
+        cmd: yq -i '.spec.template.spec.containers[0].image= "${{ secrets.docker-username }}/${{ inputs.project-name }}:${ GITHUB_REF_NAME }"' 'deploy/projects/${{ inputs.project-name }}-deployment.yml'
+
     - name: Install doctl
       uses: digitalocean/action-doctl@v2
       with:
@@ -55,8 +60,14 @@ jobs:
     - name: Save DigitalOcean kubeconfig with short-lived credentials
       run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 ${{ secrets.digitalocean-cluster-name }}
     
-    - name: Deploy to DigitalOcean's Kubernetes cluster
+    - name: Update deployment on DigitalOcean's Kubernetes cluster
       run: kubectl apply -f deploy/projects/${{ inputs.project-name }}-deployment.yml
     
-    - name: Verify deployment
+    - name: Verify new deployment
       run: kubectl rollout status deployment/${{ inputs.project-name }}-deployment
+
+    - name: Update service on DigitalOcean's Kubernetes cluster
+      run: kubectl apply -f deploy/projects/${{ inputs.project-name }}-service.yml
+    
+    - name: Verify new service
+      run: kubectl get service ${{ inputs.project-name }}-service --sort-by=.metadata.name

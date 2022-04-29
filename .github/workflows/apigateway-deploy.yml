@@ -1,0 +1,25 @@
+name: "apigateway - deploy"
+on:
+  push:
+    branches:
+      - "release-**"
+
+jobs:
+  apigateway-docker-kubernetes:
+    uses: "./.github/workflows/template-deploy.yml"
+    with:
+      project-location: "src/APIGateways/APIGateway"
+      project-name: "apigateway"
+    secrets:
+      docker-username: ${{ secrets.DOCKER_USERNAME }}
+      docker-token: ${{ secrets.DOCKER_TOKEN }}
+      digitalocean-access-token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      digitalocean-cluster-name: ${{ secrets.DIGITALOCEAN_CLUSTER_NAME }}
+  apigateway-kubernetes-ingress:
+    uses: "./.github/workflows/template-deploy-ingress.yml"
+    needs: apigateway-docker-kubernetes
+    with:
+      project-name: "apigateway"
+    secrets:
+      digitalocean-access-token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      digitalocean-cluster-name: ${{ secrets.DIGITALOCEAN_CLUSTER_NAME }}

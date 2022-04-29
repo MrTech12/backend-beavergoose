@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: filemicroservice-deployment
+  labels:
+    app: filemicroservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: filemicroservice
+  template:
+    metadata:
+      labels:
+        app: filemicroservice
+    spec:
+      containers:
+        - name: filemicroservice
+          image: mrtech12/filemicroservice:release-1.0.0
+          ports:
+            - containerPort: 6000
+          env:
+            - name: "DigitalOcean_ServiceURL"
+              valueFrom:
+                secretKeyRef:
+                  name: digitalocean-spacesurl
+                  key: serviceurl
+                  optional: false
+            - name: "DigitalOcean_BucketName"
+              valueFrom:
+                secretKeyRef:
+                  name: digitalocean-spacesbucket
+                  key: bucketname
+                  optional: false
+            - name: "DigitalOcean_AccessKey"
+              valueFrom:
+                secretKeyRef:
+                  name: digitalocean-spacesaccesskey
+                  key: accesskey
+                  optional: false
+            - name: "DigitalOcean_SecretAccessKey"
+              valueFrom:
+                secretKeyRef:
+                  name: digitalocean-spacessecretaccesskey
+                  key: secretaccesskey
+                  optional: false
+            - name: "RabbitMQ_HostName"
+              value: "rabbitmq-service"
+            - name: "RabbitMQ_Port"
+              value: "5672"
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "128m"
+            limits:
+              memory: "640Mi"
+              cpu: "256m"

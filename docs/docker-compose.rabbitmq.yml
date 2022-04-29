@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  rabbitmq-messaging:
+    image: rabbitmq:3.9-management
+    container_name: RabbitMQ
+    ports:
+      - "15672:15672"
+      - "5672:5672"
