@@ -18,7 +18,6 @@ on:
       github-token:
         required: true
 
-
 jobs:
   build-test:
     runs-on: ubuntu-20.04
@@ -41,13 +40,13 @@ jobs:
         run: dotnet test ${{ inputs.test-location }} --logger "trx;LogFileName=test-results.trx" --collect:"XPlat Code Coverage"
 
       - name: "Create Test Report"
-        uses: zyborg/dotnet-tests-report@v1
+        uses: dorny/test-reporter@v1
+        if: success() || failure() # run this step even if previous step failed
         with:
-          project_path: ${{ inputs.test-location }}
-          test_results_path: ${{ inputs.test-location }}/TestResults
-          report_name: "Test results of Unit tests for ${{ inputs.project-name }}"
-          report_title: "Test results of Unit tests for ${{ inputs.project-name }}"
-          github_token: ${{ secrets.github-token }}
+          name: "Test results of Unit tests for ${{ inputs.project-name }}" # Name of the check run which will be created
+          path: ${{ inputs.test-location }}/TestResults/test-results.trx # Path to test results
+          reporter: dotnet-trx
+          token: ${{ secrets.github-token }}
 
       - name: "Copy coverage report to convenient location"
         run: cp ${{ inputs.test-location }}/TestResults/**/In/**/coverage.cobertura.xml ${{ inputs.test-location }}/TestResults/coverage.cobertura.xml
