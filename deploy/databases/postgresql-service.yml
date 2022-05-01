@@ -1,10 +1,10 @@
 apiVersion: v1
 Kind: Service
 metadata:
-  name: rabbitmq-service
+  name: postgresql-service
 spec:
   selector:
-    app: rabbitmq
+    app: postgresql
   ports:
     - protocol: TCP
-      port: 5672
+      port: 5432

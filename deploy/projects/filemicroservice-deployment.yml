@@ -23,25 +23,25 @@ spec:
             - name: "DigitalOcean_ServiceURL"
               valueFrom:
                 secretKeyRef:
-                  name: digitalocean-spacesurl
+                  name: digitalocean-spaces
                   key: serviceurl
                   optional: false
             - name: "DigitalOcean_BucketName"
               valueFrom:
                 secretKeyRef:
-                  name: digitalocean-spacesbucket
+                  name: digitalocean-spaces
                   key: bucketname
                   optional: false
             - name: "DigitalOcean_AccessKey"
               valueFrom:
                 secretKeyRef:
-                  name: digitalocean-spacesaccesskey
+                  name: digitalocean-spaces
                   key: accesskey
                   optional: false
             - name: "DigitalOcean_SecretAccessKey"
               valueFrom:
                 secretKeyRef:
-                  name: digitalocean-spacessecretaccesskey
+                  name: digitalocean-spaces
                   key: secretaccesskey
                   optional: false
             - name: "RabbitMQ_HostName"
