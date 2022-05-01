@@ -1,15 +1,15 @@
 kind: PersistentVolume
 apiVersion: v1
 metadata:
-  name: postgresql-pv
+  name: postgresql-linkmicroservice-pv
   labels:
     type: local
-    app: postgresql
+    app: postgresql-linkmicroservice
 spec:
   storageClassName: manual
   persistentVolumeReclaimPolicy: Retain
   capacity:
-    storage: 5Gi
+    storage: 2Gi
   accessModes:
     - ReadWriteMany
   hostPath:
@@ -18,13 +18,13 @@ spec:
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: postgresql-pv-claim
+  name: postgresql-linkmicroservice-pv-claim
   labels:
-    app: postgresql
+    app: postgresql-linkmicroservice
 spec:
   storageClassName: manual
   accessModes:
     - ReadWriteMany
   resources:
     requests:
-      storage: 5Gi
+      storage: 2Gi

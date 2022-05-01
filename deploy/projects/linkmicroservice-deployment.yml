@@ -23,7 +23,7 @@ spec:
             - name: "ConnectionStrings_LinkContext"
               valueFrom:
                 secretKeyRef:
-                  name: linkmicroservice-dbconnectionstrings
+                  name: linkmicroservice-dbconnectionstring
                   key: linkcontext
                   optional: false
             - name: "RabbitMQ_HostName"
