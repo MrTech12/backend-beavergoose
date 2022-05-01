@@ -46,4 +46,4 @@
 * Request RAM: 256Mi
 * Limit CPU: 256m
 * Limit RAM: 512Mi
-* Volume: 2Gi
+* Volume: 3Gi
