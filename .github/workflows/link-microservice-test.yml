@@ -7,7 +7,8 @@ on:
       - "feature-**"
     paths:
       - "src/Services/LinkMicroservice/**"
-      - "tests/LinkMicrosevice/LinkMicroservice.UnitTests/**"
+      - "tests/LinkMicroservice/LinkMicroservice.UnitTests/**"
+      - "tests/LinkMicroservice/LinkMicroservice.IntegrationTests/**"
       - ".github/workflows/link-microservice-test.yml"
   pull_request:
     branches:
@@ -15,7 +16,8 @@ on:
       - "development"
     paths:
       - "src/Services/LinkMicroservice/**"
-      - "tests/LinkMicrosevice/LinkMicroservice.UnitTests/**"
+      - "tests/LinkMicroservice/LinkMicroservice.UnitTests/**"
+      - "tests/LinkMicroservice/LinkMicroservice.IntegrationTests/**"
       - ".github/workflows/link-microservice-test.yml"
 
 jobs:
