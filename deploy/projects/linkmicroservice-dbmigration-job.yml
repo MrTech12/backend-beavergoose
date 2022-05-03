@@ -23,4 +23,4 @@ spec:
                   name: linkmicroservice-dbconnectionstring
                   key: linkcontext
                   optional: false
-      restartPolicy: Always
+      restartPolicy: Never
