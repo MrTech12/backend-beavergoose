@@ -1,4 +1,4 @@
-name: "deploy template - Kubernetes"
+name: "deploy template - Kubernetes job"
 on:
   workflow_call:
     inputs:
@@ -24,10 +24,10 @@ jobs:
   deploy-kubernetes:
     runs-on: ubuntu-20.04
     steps:
-    - name: Change the image value of the manifest file to the new version
+    - name: Change the image value of the dbmigration Job manifest file to the new version
       uses: mikefarah/yq@master
       with:
-        cmd: yq -i '.spec.template.spec.containers[0].image = ""${{ secrets.docker-username }}/${{ inputs.project-name }}:${{ inputs.version }}""' 'deploy/projects/${{ inputs.project-name }}-deployment.yml'
+        cmd: yq -i '.metadata.name = ""${{ inputs.project-name }}-dbmigration-job-${{ inputs.version }}""' 'deploy/projects/${{ inputs.project-name }}-dbmigration-job.yml'
 
     - name: Install doctl
       uses: digitalocean/action-doctl@v2
@@ -37,14 +37,8 @@ jobs:
     - name: Save DigitalOcean kubeconfig with short-lived credentials
       run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 ${{ secrets.digitalocean-cluster-name }}
     
-    - name: Update deployment on DigitalOcean's Kubernetes cluster
-      run: kubectl apply -f deploy/projects/${{ inputs.project-name }}-deployment.yml
+    - name: Update job on DigitalOcean's Kubernetes cluster
+      run: kubectl apply -f deploy/projects/${{ inputs.project-name }}-dbmigration-job.yml
     
-    - name: Verify new deployment
-      run: kubectl rollout status deployment/${{ inputs.project-name }}-deployment
-
-    - name: Update service on DigitalOcean's Kubernetes cluster
-      run: kubectl apply -f deploy/projects/${{ inputs.project-name }}-service.yml
-    
-    - name: Verify new service
-      run: kubectl get service ${{ inputs.project-name }}-service --sort-by=.metadata.name
+    - name: Verify updated job
+      run: kubectl describe jobs/${{ inputs.project-name }}-dbmigration-job-${{ inputs.version }}

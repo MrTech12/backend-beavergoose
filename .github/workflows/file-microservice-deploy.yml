@@ -14,7 +14,7 @@ jobs:
     secrets:
       docker-username: ${{ secrets.DOCKER_USERNAME }}
       docker-token: ${{ secrets.DOCKER_TOKEN }}
-  file-kubernetes:
+  file-deployment-kubernetes:
     uses: "./.github/workflows/template-deploy-kubernetes.yml"
     needs: file-docker
     with:

@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: linkmicroservice-dbmigration-job-release-1.0.0
+  labels:
+    app: linkmicroservice
+spec:
+  backoffLimit: 1
+  template:
+    metadata:
+      labels:
+        app: linkmicroservice
+    spec:
+      containers:
+        - name: linkmicroservice-dbmigration
+          image: mrtech12/linkmicroservice-dbmigration:release-1.0.0
+          command: ["dotnet"]
+          args: ["LinkMicroservice.DBMigration.dll"]
+          env:
+            - name: "ConnectionString"
+              valueFrom:
+                secretKeyRef:
+                  name: linkmicroservice-dbconnectionstring
+                  key: linkcontext
+                  optional: false
+      restartPolicy: Always
