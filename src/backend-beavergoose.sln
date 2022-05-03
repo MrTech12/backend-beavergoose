@@ -27,6 +27,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkMicroservice.UnitTests"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkMicroservice.IntegrationTests", "..\tests\LinkMicroservice\LinkMicroservice.IntegrationTests\LinkMicroservice.IntegrationTests.csproj", "{8A8DC3DC-E1E1-415C-AC2C-5B10BB82E301}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DB Migrations", "DB Migrations", "{1C0AE0D4-3AB0-4757-9440-473CE503EE0B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkMicroservice.DBMigration", "..\deploy\databases\LinkMicroservice.DBMigration\LinkMicroservice.DBMigration.csproj", "{6563DD5A-AAF6-4BB6-8A9E-98AFF77DC020}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +65,10 @@ Global
 		{8A8DC3DC-E1E1-415C-AC2C-5B10BB82E301}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A8DC3DC-E1E1-415C-AC2C-5B10BB82E301}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A8DC3DC-E1E1-415C-AC2C-5B10BB82E301}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6563DD5A-AAF6-4BB6-8A9E-98AFF77DC020}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6563DD5A-AAF6-4BB6-8A9E-98AFF77DC020}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6563DD5A-AAF6-4BB6-8A9E-98AFF77DC020}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6563DD5A-AAF6-4BB6-8A9E-98AFF77DC020}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -75,6 +83,7 @@ Global
 		{760AFD36-685C-47E5-8394-13D056A6544C} = {AD435ABF-9F5F-429E-9A76-C978F6800D77}
 		{F4DD08E0-09FE-4848-B983-D47556B748F9} = {3495DBB2-B1B0-4C60-9F31-7F8B45CA4E44}
 		{8A8DC3DC-E1E1-415C-AC2C-5B10BB82E301} = {3495DBB2-B1B0-4C60-9F31-7F8B45CA4E44}
+		{6563DD5A-AAF6-4BB6-8A9E-98AFF77DC020} = {1C0AE0D4-3AB0-4757-9440-473CE503EE0B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B955A228-4EFA-487D-B88E-033A796387B6}
