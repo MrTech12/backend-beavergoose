@@ -27,7 +27,7 @@ printf "Message: Command that is executed: 'docker logs localstack' \n"
 until [[ $(docker logs localstack) == *"Ready."* ]]
 do
   printf "Message: still waiting on Localstack to boot..."
-  sleep 50s
+  sleep 30s
 done
 printf "\n"
 

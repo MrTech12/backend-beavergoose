@@ -11,11 +11,11 @@ using Xunit;
 
 namespace LinkMicroservice.UnitTests
 {
-    public class LinkServiceTest
+    public class LinkServiceUnitTest
     {
         private LinkService linkService;
 
-        public LinkServiceTest()
+        public LinkServiceUnitTest()
         {
             this.linkService = new LinkService(new StubLinkRepository());
         }
