@@ -22,7 +22,7 @@ printf "\n"
 
 printf "Message: Waiting for PostgreSQL to boot up \n"
 printf "Message: Command that is executed: 'docker logs postgresql' \n"
-until [[ $(docker logs localstack) == *"database system is ready to accept connections"* ]]
+until [[ $(docker logs postgresql) == *"database system is ready to accept connections"* ]]
 do
   printf "Message: still waiting on PostgreSQL to boot..."
   sleep 5s
