@@ -5,7 +5,7 @@ on:
       - "release-**"
 
 jobs:
-  file-docker:
+  file-docker-dockerhub:
     uses: "./.github/workflows/template-deploy-dockerhub.yml"
     with:
       project-location: "src/Services/FileMicroservice"
@@ -14,9 +14,9 @@ jobs:
     secrets:
       docker-username: ${{ secrets.DOCKER_USERNAME }}
       docker-token: ${{ secrets.DOCKER_TOKEN }}
-  file-deployment-kubernetes:
+  file-kubernetes-deployment:
     uses: "./.github/workflows/template-deploy-kubernetes.yml"
-    needs: file-docker
+    needs: file-docker-dockerhub
     with:
       project-location: "src/Services/FileMicroservice"
       project-name: "filemicroservice"
