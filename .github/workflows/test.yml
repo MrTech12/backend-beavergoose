@@ -6,6 +6,7 @@ jobs:
   test:
     runs-on: ubuntu-20.04
     steps:
-    - name: give branch name
+    - name: give branch name 1
       run: echo ${GITHUB_REF##*/}
-
+    - name: give branch name 2
+      run: echo ${GITHUB_REF_NAME}
