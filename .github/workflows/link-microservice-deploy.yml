@@ -10,7 +10,6 @@ jobs:
     with:
       project-location: "src/Services/LinkMicroservice"
       project-name: "linkmicroservice"
-      version: ${ GITHUB_REF_NAME }
     secrets:
       docker-username: ${{ secrets.DOCKER_USERNAME }}
       docker-token: ${{ secrets.DOCKER_TOKEN }}
@@ -20,7 +19,6 @@ jobs:
     with:
       project-location: "deploy/databases/LinkMicroservice.DBMigration"
       project-name: "linkmicroservice-dbmigration"
-      version: ${ GITHUB_REF_NAME }
     secrets:
       docker-username: ${{ secrets.DOCKER_USERNAME }}
       docker-token: ${{ secrets.DOCKER_TOKEN }}
@@ -30,7 +28,6 @@ jobs:
     with:
       project-location: "deploy/databases/LinkMicroservice.DBMigration"
       project-name: "linkmicroservice"
-      version: ${ GITHUB_REF_NAME }
     secrets:
       digitalocean-access-token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
       digitalocean-cluster-name: ${{ secrets.DIGITALOCEAN_CLUSTER_NAME }}
@@ -40,7 +37,6 @@ jobs:
     with:
       project-location: "src/Services/LinkMicroservice"
       project-name: "linkmicroservice"
-      version: ${ GITHUB_REF_NAME }
     secrets:
       digitalocean-access-token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
       digitalocean-cluster-name: ${{ secrets.DIGITALOCEAN_CLUSTER_NAME }}

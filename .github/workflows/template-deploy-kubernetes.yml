@@ -10,10 +10,6 @@ on:
         required: true
         type: string
         description: "Name of the project"
-      version:
-        required: true
-        type: string
-        description: "Version of the deployment"
     secrets:
       digitalocean-access-token:
         required: true
@@ -27,7 +23,7 @@ jobs:
     - name: Change the image value of the manifest file to the new version
       uses: mikefarah/yq@master
       with:
-        cmd: yq -i '.spec.template.spec.containers[0].image = ""mrtech12/${{ inputs.project-name }}:${{ inputs.version }}""' 'deploy/projects/${{ inputs.project-name }}-deployment.yml'
+        cmd: yq -i '.spec.template.spec.containers[0].image = ""mrtech12/${{ inputs.project-name }}:${ GITHUB_REF##*/ }""' 'deploy/projects/${{ inputs.project-name }}-deployment.yml'
 
     - name: Install doctl
       uses: digitalocean/action-doctl@v2

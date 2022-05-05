@@ -10,10 +10,6 @@ on:
         required: true
         type: string
         description: "Name of the project"
-      version:
-        required: true
-        type: string
-        description: "Version of the deployment"
     secrets:
       docker-username:
         required: true
@@ -42,4 +38,4 @@ jobs:
           context: ${{ inputs.project-location }}
           file: Dockerfile
           push: true
-          tags: ${{ secrets.docker-username }}/${{ inputs.project-name }}:${{ inputs.version }}
+          tags: ${{ secrets.docker-username }}/${{ inputs.project-name }}:${ GITHUB_REF##*/ }
