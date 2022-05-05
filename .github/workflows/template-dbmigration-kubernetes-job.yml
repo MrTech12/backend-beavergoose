@@ -27,13 +27,13 @@ jobs:
         sudo apt update && sudo apt install yq -y
 
     - name: Change the metadata name value of the dbmigration Job manifest file to the new version
-      run: yq -i '.metadata.name = "${{ inputs.project-name }}-dbmigration-job-${{ github.ref_name }}"' 'deploy/projects/${{ inputs.project-name }}-dbmigration-job.yml'
+      run: yqe  -i '.metadata.name = "${{ inputs.project-name }}-dbmigration-job-${{ github.ref_name }}"' 'deploy/projects/${{ inputs.project-name }}-dbmigration-job.yml'
 
     - name: Change the image name value of the dbmigration Job manifest file to the new version
-      run: yq -i '.spec.template.spec.containers[0].image = "mrtech12/${{ inputs.project-name }}-dbmigration:${{ github.ref_name }}"' 'deploy/projects/${{ inputs.project-name }}-dbmigration-job.yml'
+      run: yq e -i '.spec.template.spec.containers[0].image = "mrtech12/${{ inputs.project-name }}-dbmigration:${{ github.ref_name }}"' 'deploy/projects/${{ inputs.project-name }}-dbmigration-job.yml'
 
     - name: Change the argument 'job name' value of the InitContainer of the deployment manifest file to the new version
-      run: yq -i '.spec.template.spec.initContainers[0].args[1] = "${{ inputs.project-name }}-dbmigration-job-${{ github.ref_name }}"' 'deploy/projects/${{ inputs.project-name }}-deployment.yml'
+      run: yq e -i '.spec.template.spec.initContainers[0].args[1] = "${{ inputs.project-name }}-dbmigration-job-${{ github.ref_name }}"' 'deploy/projects/${{ inputs.project-name }}-deployment.yml'
 
     - name: Install doctl
       uses: digitalocean/action-doctl@v2

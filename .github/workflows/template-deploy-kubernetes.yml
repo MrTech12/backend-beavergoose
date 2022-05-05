@@ -27,7 +27,7 @@ jobs:
         sudo apt update && sudo apt install yq -y
       
     - name: Change the image value of the manifest file to the new version
-      run: yq -i '.spec.template.spec.containers[0].image = "mrtech12/${{ inputs.project-name }}:${{ github.ref_name }}"' 'deploy/projects/${{ inputs.project-name }}-deployment.yml'
+      run: yq e -i '.spec.template.spec.containers[0].image = "mrtech12/${{ inputs.project-name }}:${{ github.ref_name }}"' 'deploy/projects/${{ inputs.project-name }}-deployment.yml'
 
     - name: Install doctl
       uses: digitalocean/action-doctl@v2
