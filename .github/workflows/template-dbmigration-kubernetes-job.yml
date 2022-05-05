@@ -20,20 +20,20 @@ jobs:
   deploy-kubernetes:
     runs-on: ubuntu-20.04
     steps:
+    - name: Install yq tool
+      run: |
+        sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys CC86BB64
+        sudo add-apt-repository ppa:rmescandon/yq -y
+        sudo apt update && sudo apt install yq -y
+
     - name: Change the metadata name value of the dbmigration Job manifest file to the new version
-      uses: mikefarah/yq@master
-      with:
-        cmd: yq -i '.metadata.name = "${{ inputs.project-name }}-dbmigration-job-${{ github.ref_name }}"' 'deploy/projects/${{ inputs.project-name }}-dbmigration-job.yml'
+      run: yq -i '.metadata.name = "${{ inputs.project-name }}-dbmigration-job-${{ github.ref_name }}"' 'deploy/projects/${{ inputs.project-name }}-dbmigration-job.yml'
 
     - name: Change the image name value of the dbmigration Job manifest file to the new version
-      uses: mikefarah/yq@master
-      with:
-        cmd: yq -i '.spec.template.spec.containers[0].image = "mrtech12/${{ inputs.project-name }}-dbmigration:${{ github.ref_name }}"' 'deploy/projects/${{ inputs.project-name }}-dbmigration-job.yml'
+      run: yq -i '.spec.template.spec.containers[0].image = "mrtech12/${{ inputs.project-name }}-dbmigration:${{ github.ref_name }}"' 'deploy/projects/${{ inputs.project-name }}-dbmigration-job.yml'
 
     - name: Change the argument 'job name' value of the InitContainer of the deployment manifest file to the new version
-      uses: mikefarah/yq@master
-      with:
-        cmd: yq -i '.spec.template.spec.initContainers[0].args[1] = "${{ inputs.project-name }}-dbmigration-job-${{ github.ref_name }}"' 'deploy/projects/${{ inputs.project-name }}-deployment.yml'
+      run: yq -i '.spec.template.spec.initContainers[0].args[1] = "${{ inputs.project-name }}-dbmigration-job-${{ github.ref_name }}"' 'deploy/projects/${{ inputs.project-name }}-deployment.yml'
 
     - name: Install doctl
       uses: digitalocean/action-doctl@v2
