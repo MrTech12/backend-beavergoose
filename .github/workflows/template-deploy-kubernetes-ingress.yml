@@ -16,6 +16,9 @@ jobs:
   deploy-kubernetes-ingress:
     runs-on: ubuntu-20.04
     steps:
+    - name: checkout project code
+      uses: actions/checkout@v2
+
     - name: Install doctl
       uses: digitalocean/action-doctl@v2
       with:

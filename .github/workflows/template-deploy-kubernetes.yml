@@ -20,14 +20,22 @@ jobs:
   deploy-kubernetes:
     runs-on: ubuntu-20.04
     steps:
-    - name: Install yq tool
-      run: |
-        sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys CC86BB64
-        sudo add-apt-repository ppa:rmescandon/yq -y
-        sudo apt update && sudo apt install yq -y
-      
+    - name: checkout project code
+      uses: actions/checkout@v2
+
     - name: Change the image value of the manifest file to the new version
-      run: cat deploy/projects/${{ inputs.project-name }}-deployment.yml | yq e -i '.spec.template.spec.containers[0].image = "mrtech12/${{ inputs.project-name }}:${{ github.ref_name }}"' - 
+      uses: mikefarah/yq@master
+      with:
+        cmd: yq -i '.spec.template.spec.containers[0].image = ""mrtech12/${{ inputs.project-name }}:${{ github.ref_name }}""' 'deploy/projects/${{ inputs.project-name }}-deployment.yml'
+
+    # - name: Install yq tool
+    #   run: |
+    #     sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys CC86BB64
+    #     sudo add-apt-repository ppa:rmescandon/yq -y
+    #     sudo apt update && sudo apt install yq -y
+      
+    # - name: Change the image value of the manifest file to the new version
+    #   run: cat deploy/projects/${{ inputs.project-name }}-deployment.yml | yq e -i '.spec.template.spec.containers[0].image = "mrtech12/${{ inputs.project-name }}:${{ github.ref_name }}"' - 
 
     - name: Install doctl
       uses: digitalocean/action-doctl@v2
