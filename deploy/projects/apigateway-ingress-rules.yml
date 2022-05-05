@@ -6,7 +6,7 @@ spec:
   rules:
   - http:
       paths:
-      - path: /gateway/*
+      - path: "/gateway/*"
         pathType: Prefix
         backend:
           service:

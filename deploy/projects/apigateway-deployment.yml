@@ -18,7 +18,7 @@ spec:
         - name: apigateway
           image: mrtech12/apigateway:release-1.0.0
           ports:
-            - containerPort: 5000
+            - containerPort: 5001
           resources:
             requests:
               memory: "128Mi"
