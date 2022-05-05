@@ -27,15 +27,10 @@ jobs:
         uses: docker/setup-buildx-action@v1
 
       - name: "Login to DockerHub"
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.docker-username }}
-          password: ${{ secrets.docker-token }}
+        run: docker login -u ${{ secrets.docker-username }} -p ${{ secrets.docker-token }}
 
-      - name: "build and push Docker image"
-        uses: docker/build-push-action@v2
-        with:
-          context: ${{ inputs.project-location }}
-          file: Dockerfile
-          push: true
-          tags: ${{ secrets.docker-username }}/${{ inputs.project-name }}:${ GITHUB_REF##*/ }
+      - name: "build Docker image"
+        run: docker build -t ${{ secrets.docker-username }}/${{ inputs.project-name }}:${ GITHUB_REF##*/ } ${{ inputs.project-name }}
+
+      - name: "Push Docker image"
+        run: docker push ${{ secrets.docker-username }}/${{ inputs.project-name }}:${ GITHUB_REF##*/ }
