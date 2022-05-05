@@ -6,7 +6,7 @@ jobs:
   template-test:
     uses: "./.github/workflows/template-test.yml"
     with:
-      version: ${ GITHUB_REF_NAME }
+      version: ${ GITHUB_REF##*/ }
 
   test-testing:
     runs-on: ubuntu-20.04
