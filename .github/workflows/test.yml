@@ -1,0 +1,11 @@
+name: "test"
+on:
+  push:
+
+jobs:
+  test:
+    runs-on: ubuntu-20.04
+    steps:
+    - name: give branch name
+      run: echo ${ GITHUB_REF_NAME }
+
