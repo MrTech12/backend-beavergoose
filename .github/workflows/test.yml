@@ -10,3 +10,5 @@ jobs:
       run: echo ${GITHUB_REF##*/}
     - name: give branch name 2
       run: echo ${GITHUB_REF_NAME}
+    - name: give branch name 3
+      run: echo ${GITHUB.REF_NAME}
