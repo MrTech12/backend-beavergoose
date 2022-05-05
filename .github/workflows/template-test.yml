@@ -12,6 +12,4 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
     - name: give branch name 1
-      run: echo $branch_name
-      env: 
-        branch_name: ${{inputs.version}}
+      run: echo ${GITHUB_REF##*/}
