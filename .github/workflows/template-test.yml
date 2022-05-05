@@ -1,0 +1,15 @@
+name: "deploy template - Kubernetes"
+on:
+  workflow_call:
+    inputs:
+      version:
+        required: true
+        type: string
+        description: "Version of the deployment"
+
+jobs:
+  test:
+    runs-on: ubuntu-20.04
+    steps:
+    - name: give branch name 1
+      run: echo ${{ inputs.version }}
