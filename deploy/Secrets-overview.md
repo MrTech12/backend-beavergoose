@@ -24,12 +24,12 @@
 # LinkMicroservice - dbmigration-job
 * Name: linkmicroservice-dbconnectionstring
 * Value:
-    - password
+    - linkcontext
 
 # LinkMicroservice - PostgreSQL
-* Name: postgresql-linkmicroservice-credentials
+* Name: linkmicroservice-postgresql-credentials
 * Value:
-    - linkcontext
+    - password
 
 # Seq
 * Name: seq-credentials
