@@ -1,0 +1,26 @@
+name: "filemicroservice - deploy"
+on:
+  push:
+    branches:
+      - "release-**"
+
+jobs:
+  file-docker-dockerhub:
+    uses: "./.github/workflows/template-deploy-dockerhub.yml"
+    with:
+      project-location: "src/Services/FileMicroservice"
+      project-name: "filemicroservice"
+      version: ${ GITHUB_REF_NAME }
+    secrets:
+      docker-username: ${{ secrets.DOCKER_USERNAME }}
+      docker-token: ${{ secrets.DOCKER_TOKEN }}
+  file-kubernetes-deployment:
+    uses: "./.github/workflows/template-deploy-kubernetes.yml"
+    needs: file-docker-dockerhub
+    with:
+      project-location: "src/Services/FileMicroservice"
+      project-name: "filemicroservice"
+      version: ${ GITHUB_REF_NAME }
+    secrets:
+      digitalocean-access-token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      digitalocean-cluster-name: ${{ secrets.DIGITALOCEAN_CLUSTER_NAME }}

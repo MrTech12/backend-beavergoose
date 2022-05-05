@@ -1,0 +1,50 @@
+name: "deploy template - Kubernetes"
+on:
+  workflow_call:
+    inputs:
+      project-location:
+        required: true
+        type: string
+        description: "Path to project files"
+      project-name:
+        required: true
+        type: string
+        description: "Name of the project"
+      version:
+        required: true
+        type: string
+        description: "Version of the deployment"
+    secrets:
+      digitalocean-access-token:
+        required: true
+      digitalocean-cluster-name:
+        required: true
+
+jobs:
+  deploy-kubernetes:
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Change the image value of the manifest file to the new version
+      uses: mikefarah/yq@master
+      with:
+        cmd: yq -i '.spec.template.spec.containers[0].image = ""mrtech12/${{ inputs.project-name }}:${{ inputs.version }}""' 'deploy/projects/${{ inputs.project-name }}-deployment.yml'
+
+    - name: Install doctl
+      uses: digitalocean/action-doctl@v2
+      with:
+        token: ${{ secrets.digitalocean-access-token }}
+    
+    - name: Save DigitalOcean kubeconfig with short-lived credentials
+      run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 ${{ secrets.digitalocean-cluster-name }}
+    
+    - name: Update deployment on DigitalOcean's Kubernetes cluster
+      run: kubectl apply -f deploy/projects/${{ inputs.project-name }}-deployment.yml
+    
+    - name: Verify new deployment
+      run: kubectl rollout status deployment/${{ inputs.project-name }}-deployment
+
+    - name: Update service on DigitalOcean's Kubernetes cluster
+      run: kubectl apply -f deploy/projects/${{ inputs.project-name }}-service.yml
+    
+    - name: Verify new service
+      run: kubectl get service ${{ inputs.project-name }}-service --sort-by=.metadata.name

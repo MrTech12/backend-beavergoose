@@ -1,0 +1,55 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/api/v1/Link/address?address={address}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "linkmicroservice-service",
+          "Port": 7000
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/link?address={address}",
+      "UpstreamHttpMethod": [ "Get" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/Link/links?receiverID={receiverID}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "linkmicroservice-service",
+          "Port": 7000
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/link?receiverID={receiverID}",
+      "UpstreamHttpMethod": [ "Get" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/File?fileName={fileName}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "filemicroservice-service",
+          "Port": 6000
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/file?fileName={fileName}",
+      "UpstreamHttpMethod": [ "Get" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/File",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "filemicroservice-service",
+          "Port": 6000
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/file",
+      "UpstreamHttpMethod": [ "Post" ]
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "http://localhost:5000"
+  }
+}

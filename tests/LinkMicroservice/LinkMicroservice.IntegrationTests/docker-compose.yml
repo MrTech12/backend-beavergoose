@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  postgresql:
+    image: postgres:14.2
+    container_name: postgresql
+    environment:
+      - POSTGRES_USER=developer
+      - POSTGRES_PASSWORD=developer
+      - POSTGRES_DB=tests
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgresqlintegration-dbdata:/var/lib/postgresql/data
+volumes:
+  postgresqlintegration-dbdata:

@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgresql-linkmicroservice-deployment
+  labels:
+    app: postgresql-linkmicroservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgresql-linkmicroservice
+  template:
+    metadata:
+      labels:
+        app: postgresql-linkmicroservice
+    spec:
+      containers:
+        - name: postgresql-linkmicroservice
+          image: postgres:14.2
+          ports:
+            - containerPort: 5432
+          env:
+            - name: "POSTGRES_USER"
+              value: "Sina"
+            - name: "POSTGRES_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: postgresql-linkmicroservice-credentials
+                  key: password
+                  optional: false
+            - name: "POSTGRES_DB"
+              value: "beavergoose"
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "128m"
+            limits:
+              memory: "512Mi"
+              cpu: "256m"
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgresql-linkmicroservice-db
+      volumes:
+        - name: postgresql-linkmicroservice-db
+          persistentVolumeClaim:
+            claimName: postgresql-linkmicroservice-pv-claim
