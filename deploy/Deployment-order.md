@@ -37,6 +37,7 @@
 * This component makes use of Entity Framework, which requires that the database contains a certain schema in order to read and store data.
 * The deployment of this component contains an `InitContainer`, which reaches out to a `Kubernetes Job` before starting the 'LinkMicroservice' component.
 * The `Job` updates the database to the desired schema. After the Job has been completed, the regular component will start.
+* There is a custom `ServiceAccount` & `Role` which allows the `InitContainer` to access the status of the `Job`. Without the Account, the `InitContainer` would receive a *Forbidden* error.
 * The **connection string for PostgreSQL** is stored in a `Secrets` object.
 * The **API key for Seq** is stored in a `Secrets` object.
 * This component depends on: RabbitMQ for messaging, PostgeSQL database for data storage & Seq for logging storage. <br><br>
