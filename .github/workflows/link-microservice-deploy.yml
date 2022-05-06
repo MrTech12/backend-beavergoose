@@ -13,7 +13,7 @@ jobs:
     secrets:
       docker-username: ${{ secrets.DOCKER_USERNAME }}
       docker-token: ${{ secrets.DOCKER_TOKEN }}
-  link-dbmigration-docker-dockerhub:
+  link-docker-dockerhub-dbmigration:
     uses: "./.github/workflows/template-deploy-dockerhub.yml"
     needs: link-docker-dockerhub
     with:
@@ -22,8 +22,8 @@ jobs:
     secrets:
       docker-username: ${{ secrets.DOCKER_USERNAME }}
       docker-token: ${{ secrets.DOCKER_TOKEN }}
-  link-dbmigration-kubernetes-job:
-    uses: "./.github/workflows/template-dbmigration-kubernetes-job.yml"
+  link-kubernetes-job-dbmigration:
+    uses: "./.github/workflows/template-deploy-kubernetes-job.yml"
     needs: link-dbmigration-docker-dockerhub
     with:
       project-location: "deploy/databases/LinkMicroservice.DBMigration"
