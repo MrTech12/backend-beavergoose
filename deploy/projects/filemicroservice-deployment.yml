@@ -17,6 +17,7 @@ spec:
       containers:
         - name: filemicroservice
           image: mrtech12/beavergoose-filemicroservice:release-1.0.0
+          imagePullPolicy: Always
           ports:
             - containerPort: 6000
           env:

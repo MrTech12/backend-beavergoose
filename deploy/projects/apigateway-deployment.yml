@@ -17,6 +17,7 @@ spec:
       containers:
         - name: apigateway
           image: mrtech12/beavergoose-apigateway:release-1.0.0
+          imagePullPolicy: Always
           ports:
             - containerPort: 5001
           resources:

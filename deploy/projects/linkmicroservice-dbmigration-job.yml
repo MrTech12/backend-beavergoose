@@ -14,6 +14,7 @@ spec:
       containers:
         - name: linkmicroservice-dbmigration
           image: mrtech12/beavergoose-linkmicroservice-dbmigration:release-1.0.0
+          imagePullPolicy: Always
           command: ["dotnet"]
           args: ["LinkMicroservice.DBMigration.dll"]
           env:
