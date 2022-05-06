@@ -24,7 +24,7 @@ jobs:
       docker-token: ${{ secrets.DOCKER_TOKEN }}
   link-kubernetes-job-dbmigration:
     uses: "./.github/workflows/template-deploy-kubernetes-job.yml"
-    needs: link-dbmigration-docker-dockerhub
+    needs: link-docker-dockerhub-dbmigration
     with:
       project-location: "deploy/databases/LinkMicroservice.DBMigration"
       project-name: "linkmicroservice"
@@ -33,7 +33,7 @@ jobs:
       digitalocean-cluster-name: ${{ secrets.DIGITALOCEAN_CLUSTER_NAME }}
   link-kubernetes-deployment:
     uses: "./.github/workflows/template-deploy-kubernetes.yml"
-    needs: link-dbmigration-kubernetes-job
+    needs: link-kubernetes-job-dbmigration
     with:
       project-location: "src/Services/LinkMicroservice"
       project-name: "linkmicroservice"
