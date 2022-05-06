@@ -31,7 +31,7 @@ jobs:
     - name: Change the image name value of the dbmigration Job manifest file to the new version
       uses: mikefarah/yq@master
       with:
-        cmd: yq -i '.spec.template.spec.containers[0].image = "mrtech12/${{ inputs.project-name }}-dbmigration:${{ github.ref_name }}"' deploy/projects/${{ inputs.project-name }}-dbmigration-job.yml
+        cmd: yq -i '.spec.template.spec.containers[0].image = "mrtech12/beavergoose-${{ inputs.project-name }}-dbmigration:${{ github.ref_name }}"' deploy/projects/${{ inputs.project-name }}-dbmigration-job.yml
 
     - name: Change the 'job name' value of the InitContainer of the deployment manifest file to the new version
       uses: mikefarah/yq@master

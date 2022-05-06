@@ -26,7 +26,7 @@ jobs:
     - name: Change the image value of the manifest file to the new version
       uses: mikefarah/yq@master
       with:
-        cmd: yq -i '.spec.template.spec.containers[0].image = "mrtech12/${{ inputs.project-name }}:${{ github.ref_name }}"' deploy/projects/${{ inputs.project-name }}-deployment.yml
+        cmd: yq -i '.spec.template.spec.containers[0].image = "mrtech12/beavergoose-${{ inputs.project-name }}:${{ github.ref_name }}"' deploy/projects/${{ inputs.project-name }}-deployment.yml
 
     - name: Install doctl
       uses: digitalocean/action-doctl@v2
