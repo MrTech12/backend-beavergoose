@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
         - name: linkmicroservice-dbmigration
-          image: mrtech12/linkmicroservice-dbmigration:release-1.0.0
+          image: mrtech12/beavergoose-linkmicroservice-dbmigration:release-1.0.0
           command: ["dotnet"]
           args: ["LinkMicroservice.DBMigration.dll"]
           env:

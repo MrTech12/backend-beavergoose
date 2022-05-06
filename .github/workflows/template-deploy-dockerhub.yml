@@ -30,11 +30,11 @@ jobs:
         run: docker login -u ${{ secrets.docker-username }} -p ${{ secrets.docker-token }}
 
       - name: "build Docker image"
-        run: docker build -t ${{ secrets.docker-username }}/${{ inputs.project-name }}:$BRANCH_NAME ${{ inputs.project-location }}
+        run: docker build -t ${{ secrets.docker-username }}/beavergoose-${{ inputs.project-name }}:$BRANCH_NAME ${{ inputs.project-location }}
         env:
           BRANCH_NAME: ${{ github.ref_name }}
 
       - name: "Push Docker image"
-        run: docker push ${{ secrets.docker-username }}/${{ inputs.project-name }}:$BRANCH_NAME
+        run: docker push ${{ secrets.docker-username }}/beavergoose-${{ inputs.project-name }}:$BRANCH_NAME
         env:
           BRANCH_NAME: ${{ github.ref_name }}

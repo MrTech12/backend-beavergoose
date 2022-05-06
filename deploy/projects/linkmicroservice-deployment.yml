@@ -23,7 +23,7 @@ spec:
             - "linkmicroservice-dbmigration-job-release-1.0.0"
       containers:
         - name: linkmicroservice
-          image: mrtech12/linkmicroservice:release-1.0.0
+          image: mrtech12/beavergoose-linkmicroservice:release-1.0.0
           ports:
             - containerPort: 7000
           env:
