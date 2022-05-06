@@ -2,12 +2,15 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: apigateway-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
 spec:
   rules:
-  - http:
+  - host: demo-beavergoose.nl
+    http:
       paths:
-      - path: "/gateway/*"
-        pathType: Prefix
+      - pathType: Prefix
+        path: "/"
         backend:
           service:
             name: apigateway-service

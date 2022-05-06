@@ -1,7 +1,3 @@
-using System.IO;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 
@@ -28,7 +24,8 @@ namespace OcelotBasic
             })
             .ConfigureLogging((hostingContext, logging) =>
             {
-                //add your logging
+                //add your logging                
+                logging.AddConsole();
             })
             .UseIISIntegration()
             .Configure(app =>
