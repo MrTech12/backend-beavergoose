@@ -6,7 +6,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "linkmicroservice-service",
-          "Port": 7000
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/gateway/link?address={address}",
@@ -18,7 +18,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "linkmicroservice-service",
-          "Port": 7000
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/gateway/link?receiverID={receiverID}",
@@ -30,7 +30,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "filemicroservice-service",
-          "Port": 6000
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/gateway/file?fileName={fileName}",
@@ -42,7 +42,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "filemicroservice-service",
-          "Port": 6000
+          "Port": 80
         }
       ],
       "UpstreamPathTemplate": "/gateway/file",
