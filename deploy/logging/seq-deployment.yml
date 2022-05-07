@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: seq-deployment
+  labels:
+    app: seq
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: seq
+  template:
+    metadata:
+      labels:
+        app: seq
+    spec:
+      containers:
+        - name: seq
+          image: datalust/seq:2022.1
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+            - containerPort: 5341
+          env:
+              - name: "ACCEPT_EULA"
+                value: "Y"
+              - name: "SEQ_API_INGESTIONPORT"
+                value: "5431"
+              - name: "SEQ_API_CANONICALURI"
+                value: "https://seq.demo-beavergoose.nl"
+              - name: "SEQ_FIRSTRUN_ADMINUSERNAME"
+                value: "sina"
+              - name: "SEQ_FIRSTRUN_ADMINPASSWORDHASH"
+                valueFrom:
+                  secretKeyRef:
+                    name: seq-credentials
+                    key: adminpasswordhash
+                    optional: false
+              - name: "SEQ_FIRSTRUN_REQUIREAUTHENTICATIONFORHTTPINGESTION"
+                value: "true"
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "128m"
+            limits:
+              memory: "512Mi"
+              cpu: "256m"
+          volumeMounts:
+            - mountPath: /data
+              name: seqdata
+      volumes:
+        - name: seqdata
+          persistentVolumeClaim:
+            claimName: seqdata-pv-claim

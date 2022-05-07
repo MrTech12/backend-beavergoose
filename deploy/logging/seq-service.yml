@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: seq-service
+spec:
+  selector:
+    app: seq
+  ports:
+    - name: ingesting
+      protocol: TCP
+      port: 5341
+      targetPort: 5341
+    - name: webgui
+      protocol: TCP
+      port: 80
+      targetPort: 80
