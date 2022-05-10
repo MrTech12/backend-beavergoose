@@ -25,7 +25,7 @@
       "UpstreamHttpMethod": [ "Get" ]
     },
     {
-      "DownstreamPathTemplate": "/api/v1/File?fileName={fileName}",
+      "DownstreamPathTemplate": "/api/v2/File?fileName={fileName}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -37,7 +37,7 @@
       "UpstreamHttpMethod": [ "Get" ]
     },
     {
-      "DownstreamPathTemplate": "/api/v1/File",
+      "DownstreamPathTemplate": "/api/v2/File",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {

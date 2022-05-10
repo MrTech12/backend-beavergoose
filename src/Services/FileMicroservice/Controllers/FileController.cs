@@ -1,15 +1,15 @@
 ﻿using FileMicroservice.DTOs;
 using FileMicroservice.Interfaces;
-using FileMicroservice.Models;
 using FileMicroservice.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 
 namespace FileMicroservice.Controllers
 {
     [Route("api/v{version:apiVersion}/[controller]")]
     [Produces("application/json")]
-    [ApiVersion("1.0")]
+    [ApiVersion("2.0")]
     public class FileController : ControllerBase
     {
         private readonly IConfiguration _configuration;
@@ -52,14 +52,19 @@ namespace FileMicroservice.Controllers
             {
                 return NotFound(new { message = "No file found."});
             }
-            return File(file, "application/octet-stream", fileName);
+
+            var provider = new FileExtensionContentTypeProvider();
+            if (!provider.TryGetContentType(fileName, out var contentType))
+            {
+                contentType = "application/octet-stream";
+            }
+            return File(file, contentType, fileName);
         }
 
         /// <summary>
         /// Upload a file during the upload phase from the frontend.
         /// </summary>
         /// <param name="file">The uploaded file</param>
-        /// <param name="fileDetailsModel">Extra details of the file, like sender and received ID</param>
         /// <response code="201">File successfully saved</response>
         /// <response code="400">Information not provided</response>
         /// <response code="500">Problem with saving the file</response>
@@ -67,19 +72,31 @@ namespace FileMicroservice.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> UploadFile(IFormFile file, [FromHeader] FileDetailsModel fileDetailsModel)
+        public async Task<IActionResult> UploadFile(IFormFile file)
         {
-            if (fileDetailsModel.SenderID == null || fileDetailsModel.ReceiverID == null || fileDetailsModel.AllowedDownloads == 0)
+            if (!Request.Headers.TryGetValue("X-SenderID", out var senderID) || !Request.Headers.TryGetValue("X-ReceiverID", out var receiverID) || !Request.Headers.TryGetValue("X-AllowedDownloads", out var allowedDownloads))
             {
                 return BadRequest(new { message = "File information not provided" });
             }
+
+            if (senderID.Contains(string.Empty) || receiverID.Contains(string.Empty) || allowedDownloads.Contains(string.Empty))
+            {
+                return BadRequest(new { message = "File information not provided" });
+            }
+
+            if (!int.TryParse(allowedDownloads, out int value))
+            {
+                return BadRequest(new { message = "The allowedDownloads value needs to be an integer" });
+            }
+
             else if (file == null)
             {
                 return BadRequest(new { message = "File not provided" });
             }
 
-            var fileDto = new FileDTO() { SenderID = fileDetailsModel.SenderID, ReceiverID = fileDetailsModel.ReceiverID, AllowedDownloads = fileDetailsModel.AllowedDownloads };
-            
+            var fileDto = new FileDTO() { SenderID = senderID, ReceiverID = receiverID, AllowedDownloads = Convert.ToInt32(allowedDownloads) };
+
+
             await this._fileService.SaveFile(file, fileDto);
             return Created(String.Empty, new { message = "file saved!" });
         }
