@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LinkMicroservice.Data.Migrations
 {
     [DbContext(typeof(LinkContext))]
-    [Migration("20220428144108_InitialMigration")]
+    [Migration("20220518152258_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
