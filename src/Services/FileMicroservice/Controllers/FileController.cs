@@ -4,6 +4,7 @@ using FileMicroservice.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
+using System.Text.RegularExpressions;
 
 namespace FileMicroservice.Controllers
 {
@@ -96,9 +97,33 @@ namespace FileMicroservice.Controllers
 
             var fileDto = new FileDTO() { SenderID = senderID, ReceiverID = receiverID, AllowedDownloads = Convert.ToInt32(allowedDownloads) };
 
+            // Checking file type
+            byte[] buffer = new byte[file.Length];
+            file.OpenReadStream().Read(buffer, 0, Convert.ToInt32(file.Length));
+            string content = System.Text.Encoding.UTF8.GetString(buffer);
 
-            await this._fileService.SaveFile(file, fileDto);
-            return Created(String.Empty, new { message = "file saved!" });
+            string fileType;
+            if (file.ContentType.Contains("text") || file.ContentType.Contains("jpeg"))
+            {
+                return BadRequest(new { message = "File type not allowed." });
+            }
+            else 
+            {
+                fileType = file.ContentType
+                    .Replace("application/", "")
+                    .Replace("image/", "")
+                    .Replace("video/", "")
+                    .Replace("font/", "")
+                    .Replace("model/", "");
+            }
+
+            if (Regex.IsMatch(content, @fileType, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline))
+            {
+                await this._fileService.SaveFile(file, fileDto);
+                return Created(String.Empty, new { message = "file saved!" });
+            }
+
+            return BadRequest(new { message = "File type does not match file extension." });
         }
     }
 }
