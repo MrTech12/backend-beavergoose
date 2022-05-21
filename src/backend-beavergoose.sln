@@ -31,7 +31,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DB Migrations", "DB Migrati
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkMicroservice.DBMigration", "..\deploy\databases\LinkMicroservice.DBMigration\LinkMicroservice.DBMigration.csproj", "{6563DD5A-AAF6-4BB6-8A9E-98AFF77DC020}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountMicroservice", "Services\AccountMicroservice\AccountMicroservice.csproj", "{EF2080D4-8F61-4D46-B854-A8857D99EBCF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AccountMicroservice", "Services\AccountMicroservice\AccountMicroservice.csproj", "{EF2080D4-8F61-4D46-B854-A8857D99EBCF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AccountMicroservice", "AccountMicroservice", "{86DA29A7-B6A2-4835-9A38-125E74CCE4EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountMicroservice.UnitTests", "..\tests\AccountMicroservice\AccountMicroservice.UnitTests\AccountMicroservice.UnitTests.csproj", "{8F75D938-4FB3-4E85-BA8D-7ABA55B61BF6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,6 +79,10 @@ Global
 		{EF2080D4-8F61-4D46-B854-A8857D99EBCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF2080D4-8F61-4D46-B854-A8857D99EBCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EF2080D4-8F61-4D46-B854-A8857D99EBCF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F75D938-4FB3-4E85-BA8D-7ABA55B61BF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F75D938-4FB3-4E85-BA8D-7ABA55B61BF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F75D938-4FB3-4E85-BA8D-7ABA55B61BF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F75D938-4FB3-4E85-BA8D-7ABA55B61BF6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -91,6 +99,8 @@ Global
 		{8A8DC3DC-E1E1-415C-AC2C-5B10BB82E301} = {3495DBB2-B1B0-4C60-9F31-7F8B45CA4E44}
 		{6563DD5A-AAF6-4BB6-8A9E-98AFF77DC020} = {1C0AE0D4-3AB0-4757-9440-473CE503EE0B}
 		{EF2080D4-8F61-4D46-B854-A8857D99EBCF} = {320C3EB0-923F-4E3F-8F71-E3A25E271535}
+		{86DA29A7-B6A2-4835-9A38-125E74CCE4EF} = {62D0B0BA-DE04-4643-A4B8-08D2ABC613E1}
+		{8F75D938-4FB3-4E85-BA8D-7ABA55B61BF6} = {86DA29A7-B6A2-4835-9A38-125E74CCE4EF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B955A228-4EFA-487D-B88E-033A796387B6}

@@ -7,6 +7,16 @@ namespace AccountMicroservice.Data
 {
     public class AccountContext : IdentityDbContext<IdentityUser>
     {
+        public AccountContext()
+        {
+
+        }
+
+        public AccountContext(DbContextOptions<AccountContext> options): base(options)
+        {
+
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
