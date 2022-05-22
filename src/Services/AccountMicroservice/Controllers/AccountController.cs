@@ -38,7 +38,7 @@ namespace AccountMicroservice.Controllers
             }
 
             var result = await this._accountService.CreateAccount(registerDto);
-            if (result.SingleOrDefault().Key == false)
+            if (!result.SingleOrDefault().Key)
             {
                 return BadRequest(new { message = result.SingleOrDefault().Value });
             }
