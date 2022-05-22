@@ -1,0 +1,37 @@
+name: "accountmicroservice - build, test & analyse"
+on:
+  push:
+    branches:
+      - "main"
+      - "development"
+      - "feature-**"
+    paths:
+      - "src/Services/AccountMicroservice/**"
+      - "tests/AccountMicroservice/AccountMicroservice.UnitTests/**"
+      - ".github/workflows/account-microservice-test.yml"
+  pull_request:
+    branches:
+      - "main"
+      - "development"
+    paths:
+      - "src/Services/AccountMicroservice/**"
+      - "tests/AccountMicroservice/AccountMicroservice.UnitTests/**"
+      - ".github/workflows/account-microservice-test.yml"
+
+jobs:
+  link-build-unit-testing:
+    uses: "./.github/workflows/template-build-test.yml"
+    with:
+      project-location: "src/Services/AccountMicroservice"
+      test-location: "tests/AccountMicroservice/AccountMicroservice.UnitTests"
+      project-name: "AccountMicroservice"
+    secrets:
+      github-token: ${{ secrets.GITHUB_TOKEN }}
+  link-analyse:
+    uses: "./.github/workflows/template-analyse.yml"
+    with:
+      project-location: "src/Services/AccountMicroservice"
+      test-location: "tests/AccountMicroservice/AccountMicroservice.UnitTests"
+    secrets:
+      sonar-token: ${{ secrets.SONAR_TOKEN }}
+      github-token: ${{ secrets.GITHUB_TOKEN }}

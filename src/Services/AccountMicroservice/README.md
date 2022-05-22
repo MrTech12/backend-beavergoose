@@ -1,10 +1,10 @@
 # LinkMicroservice
 
-* Microservice projects for the Link application, that is part of the backend-beavergoose project.
+* Microservice projects for the Account application, that is part of the backend-beavergoose project.
 
 
 ## Setup
-* This project depends on a PostgreSQL database and a RabbitMQ connection.
+* This project depends on a PostgreSQL database.
 * The required credentials for these services, are placed in the `appsettings-template.json` file.
 * To run this app, one must create an `appsettings.json` file and place the required credentails inside it.
 
