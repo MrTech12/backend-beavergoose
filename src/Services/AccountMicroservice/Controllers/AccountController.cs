@@ -3,6 +3,7 @@ using AccountMicroservice.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.RegularExpressions;
 
 namespace AccountMicroservice.Controllers
 {
@@ -31,9 +32,9 @@ namespace AccountMicroservice.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Register(RegisterDTO registerDto)
         {
-            if (registerDto.Username == string.Empty || registerDto.Email == string.Empty || registerDto.Password == string.Empty)
+            if (!Regex.IsMatch(registerDto.Email, "^\\S+@\\S+\\.\\S+$"))
             {
-                return BadRequest(new { message = "Account information not provided" });
+                return BadRequest(new { message = "Email is not valid" });
             }
 
             var result = await this._accountService.CreateAccount(registerDto);

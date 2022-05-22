@@ -11,29 +11,13 @@ namespace AccountMicroservice.UnitTests
 {
     public class AccountServiceUnitTest
     {
-        public readonly UserManager<IdentityUser> _userManager;
-        private readonly Mock<FakeUserManager> fakeUserManager;
-        private readonly AccountService _accountService;
+        private Mock<FakeUserManager> fakeUserManager;
+        private AccountService _accountService;
 
         public AccountServiceUnitTest()
         {
             fakeUserManager = new Mock<FakeUserManager>();
-            this._userManager = fakeUserManager.Object;
-            this._accountService = new AccountService(this._userManager);
-        }
-
-        [Fact]
-        public async Task EnterExistingUsername()
-        {
-            // Arrange
-            RegisterDTO registerDto = new RegisterDTO() { Username = "Jan", Email = "jan@gmail.com" };
-            fakeUserManager.Setup(x => x.FindByNameAsync(registerDto.Email)).Returns((IdentityUser user) => Task.FromResult(IdentityResult.Success));
-
-            // Act
-            var result = await this._accountService.CreateAccount(registerDto);
-
-            // Assert
-            Assert.Equal(null, result.SingleOrDefault().Value);
+            this._accountService = new AccountService(fakeUserManager.Object);
         }
 
         [Fact]
@@ -41,13 +25,31 @@ namespace AccountMicroservice.UnitTests
         {
             // Arrange
             RegisterDTO registerDto = new RegisterDTO() { Username = "Jan", Email = "jan@gmail.com" };
-            fakeUserManager.Setup(x => x.FindByEmailAsync(registerDto.Email)).Returns((IdentityUser user) => Task.FromResult(IdentityResult.Success));
+            IdentityUser identityUser = new IdentityUser();
+            fakeUserManager.Setup(x => x.FindByEmailAsync(registerDto.Email)).ReturnsAsync(identityUser);
 
             // Act
             var result = await this._accountService.CreateAccount(registerDto);
 
             // Assert
-            Assert.Equal(null, result.SingleOrDefault().Value);
+            Assert.NotNull(result.SingleOrDefault().Value);
+        }
+
+        [Fact] 
+        public async Task EnterExistingUsername()
+        {
+            // Arrange
+            RegisterDTO registerDto = new RegisterDTO() { Username = "Jan", Email = "jan@gmail.com" };
+            IdentityUser identityUser = new IdentityUser() { UserName = "Jan"};
+            IdentityUser emptyUser = null;
+            fakeUserManager.Setup(x => x.FindByEmailAsync(registerDto.Email)).ReturnsAsync(emptyUser);
+            fakeUserManager.Setup(x => x.FindByNameAsync(registerDto.Username)).ReturnsAsync(identityUser);
+
+            // Act
+            var result = await this._accountService.CreateAccount(registerDto);
+
+            // Assert
+            Assert.NotNull(result.SingleOrDefault().Value);
         }
 
         [Fact]
@@ -56,13 +58,16 @@ namespace AccountMicroservice.UnitTests
             // Arrange
             RegisterDTO registerDto = new RegisterDTO() { Username = "Jan", Email = "jan@gmail.com", Password = "yyeyyDNCNE923_923@!@" };
             IdentityUser identityUser = new IdentityUser() { UserName = registerDto.Username, Email = registerDto.Email };
-            fakeUserManager.Setup(x => x.CreateAsync(identityUser, registerDto.Password)).Returns((IdentityUser user) => Task.FromResult(IdentityResult.Success));
+            IdentityUser emptyUser = null;
+            fakeUserManager.Setup(x => x.FindByEmailAsync(registerDto.Email)).ReturnsAsync(emptyUser);
+            fakeUserManager.Setup(x => x.FindByNameAsync(registerDto.Username)).ReturnsAsync(emptyUser);
+            fakeUserManager.Setup(x => x.CreateAsync(It.IsAny<IdentityUser>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Success);
 
             // Act
             var result = await this._accountService.CreateAccount(registerDto);
 
             // Assert
-            Assert.Equal(null, result.SingleOrDefault().Value);
+            Assert.True(result.SingleOrDefault().Key);
         }
     }
 }
