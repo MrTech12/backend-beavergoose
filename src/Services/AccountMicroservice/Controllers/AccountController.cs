@@ -65,8 +65,8 @@ namespace AccountMicroservice.Controllers
                 return BadRequest(new { message = result.SingleOrDefault().Value });
             }
 
-            var token = await this._accountService.GetToken(loginDto.Username);
-            return Ok(new { token = result.SingleOrDefault().Key, userId = result.SingleOrDefault().Value });
+            var tokenInfo = await this._accountService.GetToken(loginDto.Username);
+            return Ok(new { token = tokenInfo.SingleOrDefault().Key, userId = tokenInfo.SingleOrDefault().Value });
         }
     }
 }
