@@ -27,7 +27,7 @@ spec:
           image: mrtech12/beavergoose-accountmicroservice:release-1.0.0
           imagePullPolicy: Always
           ports:
-            - containerPort: 7000
+            - containerPort: 8000
           env:
             - name: "ConnectionStrings_AccountContext"
               valueFrom:
