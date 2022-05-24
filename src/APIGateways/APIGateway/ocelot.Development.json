@@ -10,7 +10,11 @@
         }
       ],
       "UpstreamPathTemplate": "/gateway/link?address={address}",
-      "UpstreamHttpMethod": [ "Get" ]
+      "UpstreamHttpMethod": [ "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "TestKey",
+        "AllowedScopes": []
+      }
     },
     {
       "DownstreamPathTemplate": "/api/v1/Link/links?receiverID={receiverID}",
@@ -22,7 +26,11 @@
         }
       ],
       "UpstreamPathTemplate": "/gateway/link?receiverID={receiverID}",
-      "UpstreamHttpMethod": [ "Get" ]
+      "UpstreamHttpMethod": [ "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "TestKey",
+        "AllowedScopes": []
+      }
     },
     {
       "DownstreamPathTemplate": "/api/v2/File?fileName={fileName}",
@@ -34,7 +42,11 @@
         }
       ],
       "UpstreamPathTemplate": "/gateway/file?fileName={fileName}",
-      "UpstreamHttpMethod": [ "Get" ]
+      "UpstreamHttpMethod": [ "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "TestKey",
+        "AllowedScopes": []
+      }
     },
     {
       "DownstreamPathTemplate": "/api/v2/File",
@@ -46,7 +58,11 @@
         }
       ],
       "UpstreamPathTemplate": "/gateway/file",
-      "UpstreamHttpMethod": [ "Post" ]
+      "UpstreamHttpMethod": [ "Post" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "TestKey",
+        "AllowedScopes": []
+      }
     },
     {
       "DownstreamPathTemplate": "/api/v1/Account",

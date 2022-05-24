@@ -1,4 +1,4 @@
-﻿namespace FileMicroservice.Helpers
+﻿namespace APIGateway.Helpers
 {
     public static class RetrieveConfigHelper
     {

@@ -9,14 +9,12 @@ namespace FileMicroservice.Services
         private readonly IFileProvider _fileProvider;
         private readonly IConfiguration _configuration;
         private readonly IMessagingProducer _messagingProducer;
-        private readonly RetrieveConfigHelper _retrieveConfigHelper;
 
         public FileService(IConfiguration configuration, IFileProvider fileProvider, IMessagingProducer _messagingProducer)
         {
             this._configuration = configuration;
             this._fileProvider = fileProvider;
             this._messagingProducer = _messagingProducer;
-            this._retrieveConfigHelper = new RetrieveConfigHelper(this._configuration);
         }
 
         public async Task<string> SaveFile(IFormFile file, FileDTO fileDto)
@@ -64,10 +62,10 @@ namespace FileMicroservice.Services
         {
             var EmptyDODataConfig = new DigitalOceanDataConfigDTO()
             {
-                DOServiceURL = this._retrieveConfigHelper.GetConfigValue("DigitalOcean", "ServiceURL"),
-                DOBucketName = this._retrieveConfigHelper.GetConfigValue("DigitalOcean", "BucketName"),
-                DOAccessKey = this._retrieveConfigHelper.GetConfigValue("DigitalOcean", "AccessKey"),
-                DOSecretAccessKey = this._retrieveConfigHelper.GetConfigValue("DigitalOcean", "SecretAccessKey")
+                DOServiceURL = RetrieveConfigHelper.GetConfigValue("DigitalOcean", "ServiceURL"),
+                DOBucketName = RetrieveConfigHelper.GetConfigValue("DigitalOcean", "BucketName"),
+                DOAccessKey = RetrieveConfigHelper.GetConfigValue("DigitalOcean", "AccessKey"),
+                DOSecretAccessKey = RetrieveConfigHelper.GetConfigValue("DigitalOcean", "SecretAccessKey")
             };
             return EmptyDODataConfig;
         }

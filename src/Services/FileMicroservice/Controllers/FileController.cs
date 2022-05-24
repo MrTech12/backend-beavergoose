@@ -1,6 +1,7 @@
 ﻿using FileMicroservice.DTOs;
 using FileMicroservice.Interfaces;
 using FileMicroservice.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
@@ -36,6 +37,7 @@ namespace FileMicroservice.Controllers
         /// <response code="200">File downloaded</response>
         /// <response code="400">Filename not specified</response>
         /// <response code="404">File not found</response>
+        [Authorize]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -69,6 +71,7 @@ namespace FileMicroservice.Controllers
         /// <response code="201">File successfully saved</response>
         /// <response code="400">Information not provided</response>
         /// <response code="500">Problem with saving the file</response>
+        [Authorize]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

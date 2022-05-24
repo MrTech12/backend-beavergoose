@@ -1,10 +1,14 @@
 using FileMicroservice.Data;
 using FileMicroservice.DTOs;
+using FileMicroservice.Helpers;
 using FileMicroservice.Interfaces;
 using FileMicroservice.Messaging;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,6 +45,36 @@ builder.Services.AddScoped<IMessagingProducer, RabbitMQProducer>();
 
 builder.Services.Configure<FormOptions>(x => { x.MultipartBodyLengthLimit = 524288000; });
 
+// Add JWT verification
+var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(RetrieveConfigHelper.GetConfigValue("JWT", "Secret")));
+var authIssuer = RetrieveConfigHelper.GetConfigValue("JWT", "Issuer");
+var expireDate = RetrieveConfigHelper.GetConfigValue("JWT", "ExpirationInDays");
+var signCredentials = new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256);
+
+var tokenValidationParameters = new TokenValidationParameters
+{
+    ValidateIssuerSigningKey = true,
+    IssuerSigningKey = authSigningKey,
+    ValidateIssuer = true,
+    ValidIssuer = authIssuer,
+    ValidateAudience = false,
+    ValidateLifetime = true,
+    ClockSkew = TimeSpan.Zero,
+    RequireExpirationTime = true,
+};
+
+// Adding Authentication
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(x =>
+{
+    x.TokenValidationParameters = tokenValidationParameters;
+});
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -52,6 +86,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
