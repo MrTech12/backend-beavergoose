@@ -43,6 +43,7 @@ namespace OcelotBasic
                 };
                 s.AddAuthentication().AddJwtBearer("TestKey", x =>
                 {
+                    x.SaveToken = true;
                     x.TokenValidationParameters = tokenValidationParameters;
                 });
 
