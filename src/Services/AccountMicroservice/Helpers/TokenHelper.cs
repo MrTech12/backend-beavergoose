@@ -8,7 +8,7 @@ namespace AccountMicroservice.Helpers
 {
     public class TokenHelper
     {
-        public string CreateToken(IdentityUser user)
+        public Dictionary<string, string> CreateToken(IdentityUser user)
         {
             var authClaims = new List<Claim>
             {
@@ -27,7 +27,8 @@ namespace AccountMicroservice.Helpers
                 expires: DateTime.Now.AddDays(Convert.ToDouble(expireDate)),
                 signingCredentials: signCredentials);
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            string returnToken = new JwtSecurityTokenHandler().WriteToken(token);
+            return new Dictionary<string, string>() { { returnToken, user.Id.ToString() } };
         }
     }
 }

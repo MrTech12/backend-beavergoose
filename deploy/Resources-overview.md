@@ -2,6 +2,12 @@
 
 * File that contains informatino about the resources that every deployment will use.
 
+# AccountMicroservice
+* Request CPU: 128m
+* Request RAM: 128Mi
+* Limit CPU: 256m
+* Limit RAM: 512Mi
+
 # FileMicroservice
 * Request CPU: 128m
 * Request RAM: 128Mi
@@ -25,7 +31,7 @@
 * Request RAM: 128Mi
 * Limit CPU: 256m
 * Limit RAM: 512Mi
-* Volume: 2Gi
+* Volume: 1Gi
 
 # PostgreSQL-LinkMicroservice
 * Request CPU: 128m

@@ -57,8 +57,13 @@ namespace AccountMicroservice.Service
                 return new Dictionary<bool, string>() { { false, "Cannot login with these credentials." } };
             }
 
-            var token = tokenHelper.CreateToken(user);
-            return new Dictionary<bool, string>() { { true, token } };
+            return new Dictionary<bool, string>() { { true, string.Empty } };
+        }
+
+        public async Task<Dictionary<string, string>> GetToken(string username)
+        {
+            var user = await this._userManager.FindByNameAsync(username);
+            return tokenHelper.CreateToken(user);
         }
     }
 }

@@ -1,44 +1,40 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: linkmicroservice-deployment
+  name: accountmicroservice-deployment
   labels:
-    app: linkmicroservice
+    app: accountmicroservice
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: linkmicroservice
+      app: accountmicroservice
   template:
     metadata:
       labels:
-        app: linkmicroservice
+        app: accountmicroservice
     spec:
       serviceAccountName: dbmigration-account
       initContainers:
-        - name: "linkmicroservice-dbmigration-init"
+        - name: "accountmicroservice-dbmigration-init"
           image: "groundnuty/k8s-wait-for:1.3"
           imagePullPolicy: Always
           args:
             - "job"
-            - "linkmicroservice-dbmigration-job-release-1.0.0"
+            - "accountmicroservice-dbmigration-job-release-1.0.0"
       containers:
-        - name: linkmicroservice
-          image: mrtech12/beavergoose-linkmicroservice:release-1.0.0
+        - name: accountmicroservice
+          image: mrtech12/beavergoose-accountmicroservice:release-1.0.0
           imagePullPolicy: Always
           ports:
             - containerPort: 7000
           env:
-            - name: "ConnectionStrings_LinkContext"
+            - name: "ConnectionStrings_AccountContext"
               valueFrom:
                 secretKeyRef:
-                  name: linkmicroservice-dbconnectionstring
-                  key: linkcontext
+                  name: accountmicroservice-dbconnectionstring
+                  key: accountcontext
                   optional: false
-            - name: "RabbitMQ_HostName"
-              value: "rabbitmq-service"
-            - name: "RabbitMQ_Port"
-              value: "5672"
           resources:
             requests:
               memory: "128Mi"
