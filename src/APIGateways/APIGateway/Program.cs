@@ -10,6 +10,7 @@ namespace OcelotBasic
     {
         public static void Main(string[] args)
         {
+            var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
             new WebHostBuilder()
             .UseKestrel()
             .UseContentRoot(Directory.GetCurrentDirectory())
@@ -47,6 +48,15 @@ namespace OcelotBasic
                     x.TokenValidationParameters = tokenValidationParameters;
                 });
 
+                s.AddCors(options => options.AddPolicy(name: MyAllowSpecificOrigins, policy =>
+                {
+                    policy
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials();
+                }));
+
                 s.AddOcelot();
             })
             .ConfigureLogging((hostingContext, logging) =>
@@ -57,6 +67,8 @@ namespace OcelotBasic
             .UseIISIntegration()
             .Configure(app =>
             {
+                app.UseCors(MyAllowSpecificOrigins);
+
                 app.UseOcelot().Wait();
             })
             .Build()
