@@ -9,7 +9,7 @@ namespace LinkMicroservice.Controllers
     [ApiController]
     [Route("api/v{version:apiVersion}/[controller]")]
     [Produces("application/json")]
-    [ApiVersion("1.0")]
+    [ApiVersion("2.0")]
     public class LinkController : ControllerBase
     {
         private readonly ILinkRepository _linkRepository;

@@ -24,9 +24,9 @@ builder.Services.AddApiVersioning(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
-    options.SwaggerDoc("v1", new OpenApiInfo
+    options.SwaggerDoc("v2", new OpenApiInfo
     {
-        Version = "v1",
+        Version = "v2",
         Title = "LinkService API",
         Description = "API Documentation of the LinkService API which creates, retrieves and deletes links."
     });

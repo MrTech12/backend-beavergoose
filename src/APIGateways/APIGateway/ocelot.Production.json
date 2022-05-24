@@ -1,7 +1,7 @@
 {
   "Routes": [
     {
-      "DownstreamPathTemplate": "/api/v1/Link/address?address={address}",
+      "DownstreamPathTemplate": "/api/v2/Link/address?address={address}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -17,7 +17,7 @@
       }
     },
     {
-      "DownstreamPathTemplate": "/api/v1/Link/links?receiverID={receiverID}",
+      "DownstreamPathTemplate": "/api/v2/Link/links?receiverID={receiverID}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
