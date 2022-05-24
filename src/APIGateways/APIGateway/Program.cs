@@ -53,8 +53,7 @@ namespace OcelotBasic
                     policy
                         .AllowAnyOrigin()
                         .AllowAnyMethod()
-                        .AllowAnyHeader()
-                        .AllowCredentials();
+                        .AllowAnyHeader();
                 }));
 
                 s.AddOcelot();
