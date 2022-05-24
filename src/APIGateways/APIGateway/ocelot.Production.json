@@ -47,6 +47,30 @@
       ],
       "UpstreamPathTemplate": "/gateway/file",
       "UpstreamHttpMethod": [ "Post" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/Account",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "accountmicroservice-service",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/account",
+      "UpstreamHttpMethod": [ "Get" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/Account",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "accountmicroservice-service",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/account",
+      "UpstreamHttpMethod": [ "Post" ]
     }
   ],
   "GlobalConfiguration": {

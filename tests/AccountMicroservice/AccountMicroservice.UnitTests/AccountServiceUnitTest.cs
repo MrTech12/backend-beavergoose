@@ -2,6 +2,7 @@ using AccountMicroservice.DTOs;
 using AccountMicroservice.Service;
 using AccountMicroservice.UnitTests.Helpers;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Moq;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,11 +14,12 @@ namespace AccountMicroservice.UnitTests
     {
         private Mock<FakeUserManager> fakeUserManager;
         private AccountService _accountService;
+        private Mock<IConfiguration> fakeConfiguration;
 
         public AccountServiceUnitTest()
         {
             fakeUserManager = new Mock<FakeUserManager>();
-            this._accountService = new AccountService(fakeUserManager.Object);
+            this._accountService = new AccountService(fakeUserManager.Object, fakeConfiguration.Object);
         }
 
         [Fact]

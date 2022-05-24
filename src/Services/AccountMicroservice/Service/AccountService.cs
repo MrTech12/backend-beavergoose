@@ -1,4 +1,5 @@
 ﻿using AccountMicroservice.DTOs;
+using AccountMicroservice.Helpers;
 using Microsoft.AspNetCore.Identity;
 
 namespace AccountMicroservice.Service
@@ -6,10 +7,12 @@ namespace AccountMicroservice.Service
     public class AccountService
     {
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly TokenHelper tokenHelper;
 
         public AccountService(UserManager<IdentityUser> userManager)
         {
             this._userManager = userManager;
+            tokenHelper = new TokenHelper();
         }
 
         public async Task<Dictionary<bool, string>> CreateAccount(RegisterDTO registerDto)
@@ -40,9 +43,22 @@ namespace AccountMicroservice.Service
             return new Dictionary<bool, string>() { { true, string.Empty } };
         }
 
-        public string CheckLogin()
+        public async Task<Dictionary<bool, string>> CheckLogin(LoginDTO loginDto)
         {
-            return "";
+            var user = await this._userManager.FindByNameAsync(loginDto.Username);
+            if (user == null)
+            {
+                return new Dictionary<bool, string>() { { false, "Username not found." } };
+            }
+
+            var result = await this._userManager.CheckPasswordAsync(user, loginDto.Password);
+            if (!result)
+            {
+                return new Dictionary<bool, string>() { { false, "Cannot login with these credentials." } };
+            }
+
+            var token = tokenHelper.CreateToken(user);
+            return new Dictionary<bool, string>() { { true, token } };
         }
     }
 }
