@@ -10,7 +10,6 @@ namespace OcelotBasic
     {
         public static void Main(string[] args)
         {
-            var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
             new WebHostBuilder()
             .UseKestrel()
             .UseContentRoot(Directory.GetCurrentDirectory())
@@ -24,6 +23,15 @@ namespace OcelotBasic
                     .AddEnvironmentVariables();
             })
             .ConfigureServices(s => {
+
+                s.AddCors(options =>
+                {
+                    options.AddPolicy(name: "CorsPolicy",
+                        //builder => builder.AllowAnyOrigin()
+                        builder => builder.WithOrigins("http://localhost:4200")
+                            .AllowAnyMethod()
+                            .AllowAnyHeader());
+                });
 
                 // Add JWT verification
                 var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(RetrieveConfigHelper.GetConfigValue("JWT", "Secret")));
@@ -46,15 +54,7 @@ namespace OcelotBasic
                 {
                     x.SaveToken = true;
                     x.TokenValidationParameters = tokenValidationParameters;
-                });
-
-                s.AddCors(options => options.AddPolicy(name: MyAllowSpecificOrigins, policy =>
-                {
-                    policy
-                        .AllowAnyOrigin()
-                        .AllowAnyMethod()
-                        .AllowAnyHeader();
-                }));
+                });               
 
                 s.AddOcelot();
             })
@@ -66,7 +66,7 @@ namespace OcelotBasic
             .UseIISIntegration()
             .Configure(app =>
             {
-                app.UseCors(MyAllowSpecificOrigins);
+                app.UseCors("CorsPolicy");
 
                 app.UseOcelot().Wait();
             })
