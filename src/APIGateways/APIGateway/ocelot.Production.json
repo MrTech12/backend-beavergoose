@@ -65,7 +65,7 @@
       }
     },
     {
-      "DownstreamPathTemplate": "/api/v1/Account",
+      "DownstreamPathTemplate": "/api/v1/Account/login",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -73,11 +73,11 @@
           "Port": 80
         }
       ],
-      "UpstreamPathTemplate": "/gateway/account",
-      "UpstreamHttpMethod": [ "Get" ]
+      "UpstreamPathTemplate": "/gateway/account/login",
+      "UpstreamHttpMethod": [ "Post" ]
     },
     {
-      "DownstreamPathTemplate": "/api/v1/Account",
+      "DownstreamPathTemplate": "/api/v1/Account/register",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -85,7 +85,7 @@
           "Port": 80
         }
       ],
-      "UpstreamPathTemplate": "/gateway/account",
+      "UpstreamPathTemplate": "/gateway/account/register",
       "UpstreamHttpMethod": [ "Post" ]
     }
   ],

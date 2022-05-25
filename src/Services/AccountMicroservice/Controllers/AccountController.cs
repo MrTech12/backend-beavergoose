@@ -28,7 +28,7 @@ namespace AccountMicroservice.Controllers
         /// <param name="registerDto">The information of a new user</param>
         /// <response code="200">Account successfully created</response>
         /// <response code="400">Information not provided</response>
-        [HttpPost]
+        [HttpPost("register")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Register(RegisterDTO registerDto)
@@ -53,7 +53,7 @@ namespace AccountMicroservice.Controllers
         /// <response code="200">Successful login</response>
         /// <response code="400">user not specified</response>
         /// <response code="404">user not found</response>
-        [HttpGet]
+        [HttpPost("login")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
