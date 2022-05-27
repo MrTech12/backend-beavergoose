@@ -10,16 +10,14 @@ namespace FileMicroservice.Messaging
     public class RabbitMQProducer : IMessagingProducer
     {
         private readonly ILogger<RabbitMQProducer> _logger;
-        private readonly IConfiguration _configuration;
-        private readonly RetrieveConfigHelper _retrieveConfigHelper;
+        private readonly IRetrieveConfigHelper _retrieveConfigHelper;
         private const string exchangeName = "link-exchange";
         private const string queueName = "link.managing";
 
-        public RabbitMQProducer(IConfiguration configuration, ILogger<RabbitMQProducer> logger)
+        public RabbitMQProducer(ILogger<RabbitMQProducer> logger, IRetrieveConfigHelper retrieveConfigHelper)
         {
-            this._configuration = configuration;
             this._logger = logger;
-            this._retrieveConfigHelper = new RetrieveConfigHelper(this._configuration);
+            this._retrieveConfigHelper = retrieveConfigHelper;
         }
 
         public void SendMessage<T>(T message, string routingKey)

@@ -14,20 +14,20 @@ namespace FileMicroservice.Controllers
     [ApiVersion("2.0")]
     public class FileController : ControllerBase
     {
-        private readonly IConfiguration _configuration;
         private readonly IFileProvider _fileProvider;
         private readonly IMessagingProducer _messagingProducer;
+        private readonly IRetrieveConfigHelper _retrieveConfigHelper;
         private FileService _fileService;
 
         private readonly ILogger<FileController> _logger;
 
-        public FileController(IConfiguration configuration, IFileProvider fileProvider, ILogger<FileController> logger, IMessagingProducer messagingProducer)
+        public FileController(ILogger<FileController> logger, IFileProvider fileProvider, IMessagingProducer messagingProducer, IRetrieveConfigHelper retrieveConfigHelper)
         {
-            this._configuration = configuration;
-            this._fileProvider = fileProvider;
             this._logger = logger;
+            this._fileProvider = fileProvider;
             this._messagingProducer = messagingProducer;
-            this._fileService = new FileService(this._configuration, this._fileProvider, this._messagingProducer);
+            this._retrieveConfigHelper = retrieveConfigHelper;
+            this._fileService = new FileService(this._fileProvider, this._messagingProducer, this._retrieveConfigHelper);
         }
 
         /// <summary>

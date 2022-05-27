@@ -42,11 +42,12 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IFileProvider, DigitalOceanFileProvider>();
 builder.Services.AddScoped<IMessagingProducer, RabbitMQProducer>();
+builder.Services.AddScoped<IRetrieveConfigHelper, RetrieveConfigHelper>();
 
 builder.Services.Configure<FormOptions>(x => { x.MultipartBodyLengthLimit = 524288000; });
 
 // Add JWT verification
-var retrieveConfigHelper = new RetrieveConfigHelper(builder.Configuration);
+var retrieveConfigHelper = new RetrieveConfigHelper();
 var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(retrieveConfigHelper.GetConfigValue("JWT", "Secret")));
 var authIssuer = retrieveConfigHelper.GetConfigValue("JWT", "Issuer");
 var expireDate = retrieveConfigHelper.GetConfigValue("JWT", "ExpirationInDays");
