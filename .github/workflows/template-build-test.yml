@@ -41,6 +41,7 @@ jobs:
         run: bash ${{ inputs.test-location }}/create-mock-appsettings.sh
       
       - name: "Run test on project"
+        if: success() || failure() # run this step even if previous step failed
         run: dotnet test ${{ inputs.test-location }} --logger "trx;LogFileName=test-results.trx" --collect:"XPlat Code Coverage"
 
       - name: "Create Test Report"
