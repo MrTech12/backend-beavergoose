@@ -27,10 +27,9 @@ namespace OcelotBasic
                 s.AddCors(options =>
                 {
                     options.AddPolicy(name: "CorsPolicy",
-                        //builder => builder.AllowAnyOrigin()
-                        builder => builder.WithOrigins("http://localhost:4200")
-                            .AllowAnyMethod()
-                            .AllowAnyHeader());
+                        builder => builder.WithOrigins(new string[] { "http://localhost:4200", "https://frontend.demo-beavergoose.nl" })
+                                .AllowAnyMethod()
+                                .AllowAnyHeader());
                 });
 
                 // Add JWT verification
