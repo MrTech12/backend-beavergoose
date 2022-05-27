@@ -1,7 +1,9 @@
 using AccountMicroservice.DTOs;
+using AccountMicroservice.Helpers;
 using AccountMicroservice.Service;
 using AccountMicroservice.UnitTests.Helpers;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Moq;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,15 +15,17 @@ namespace AccountMicroservice.UnitTests
     {
         private Mock<FakeUserManager> fakeUserManager;
         private AccountService _accountService;
+        private Mock<TokenHelper> fakeTokenHelper;
 
         public AccountServiceUnitTest()
         {
             fakeUserManager = new Mock<FakeUserManager>();
+            fakeTokenHelper = new Mock<TokenHelper>();
             this._accountService = new AccountService(fakeUserManager.Object);
         }
 
         [Fact]
-        public async Task EnterExistingEmail()
+        public async Task AccountCreation_ExistingEmail()
         {
             // Arrange
             RegisterDTO registerDto = new RegisterDTO() { Username = "Jan", Email = "jan@gmail.com" };
@@ -36,7 +40,7 @@ namespace AccountMicroservice.UnitTests
         }
 
         [Fact] 
-        public async Task EnterExistingUsername()
+        public async Task AccountCreation_ExistingUsername()
         {
             // Arrange
             RegisterDTO registerDto = new RegisterDTO() { Username = "Jan", Email = "jan@gmail.com" };
@@ -53,7 +57,7 @@ namespace AccountMicroservice.UnitTests
         }
 
         [Fact]
-        public async Task CreateAccountSuccessfully()
+        public async Task AccountCreation_CreateSuccessfully()
         {
             // Arrange
             RegisterDTO registerDto = new RegisterDTO() { Username = "Jan", Email = "jan@gmail.com", Password = "yyeyyDNCNE923_923@!@" };
@@ -68,6 +72,37 @@ namespace AccountMicroservice.UnitTests
 
             // Assert
             Assert.True(result.SingleOrDefault().Key);
+        }
+
+        [Fact]
+        public async Task Login_UnknownUsername()
+        {
+            // Arrange
+            LoginDTO loginDto = new LoginDTO() { Username = "Ben", Password = "yyeyyDNCNE923_923@!@" };
+            IdentityUser emptyUser = null;
+            fakeUserManager.Setup(x => x.FindByNameAsync(loginDto.Username)).ReturnsAsync(emptyUser);
+
+            // Act
+            var result = await this._accountService.CheckLogin(loginDto);
+
+            // Assert
+            Assert.False(result.SingleOrDefault().Key);
+        }
+
+        [Fact]
+        public async Task Login_InvalidPassword()
+        {
+            // Arrange
+            LoginDTO loginDto = new LoginDTO() { Username = "Ben", Password = "yyeyyDNCNE923_923@!@" };
+            IdentityUser emptyUser = null;
+            fakeUserManager.Setup(x => x.FindByNameAsync(loginDto.Username)).ReturnsAsync(emptyUser);
+            fakeUserManager.Setup(x => x.CheckPasswordAsync(It.IsAny<IdentityUser>(), loginDto.Password)).ReturnsAsync(false);
+
+            // Act
+            var result = await this._accountService.CheckLogin(loginDto);
+
+            // Assert
+            Assert.False(result.SingleOrDefault().Key);
         }
     }
 }

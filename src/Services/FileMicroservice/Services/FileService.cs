@@ -1,5 +1,4 @@
 ﻿using FileMicroservice.DTOs;
-using FileMicroservice.Helpers;
 using FileMicroservice.Interfaces;
 
 namespace FileMicroservice.Services
@@ -7,16 +6,14 @@ namespace FileMicroservice.Services
     public class FileService
     {
         private readonly IFileProvider _fileProvider;
-        private readonly IConfiguration _configuration;
         private readonly IMessagingProducer _messagingProducer;
-        private readonly RetrieveConfigHelper _retrieveConfigHelper;
+        private readonly IRetrieveConfigHelper _retrieveConfigHelper;
 
-        public FileService(IConfiguration configuration, IFileProvider fileProvider, IMessagingProducer _messagingProducer)
+        public FileService(IFileProvider fileProvider, IMessagingProducer messagingProducer, IRetrieveConfigHelper retrieveConfigHelper)
         {
-            this._configuration = configuration;
             this._fileProvider = fileProvider;
-            this._messagingProducer = _messagingProducer;
-            this._retrieveConfigHelper = new RetrieveConfigHelper(this._configuration);
+            this._messagingProducer = messagingProducer;
+            this._retrieveConfigHelper = retrieveConfigHelper;
         }
 
         public async Task<string> SaveFile(IFormFile file, FileDTO fileDto)

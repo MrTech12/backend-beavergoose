@@ -14,7 +14,7 @@ spec:
       labels:
         app: linkmicroservice
     spec:
-      serviceAccountName: linkmicroservice-dbmigration-account
+      serviceAccountName: dbmigration-account
       initContainers:
         - name: "linkmicroservice-dbmigration-init"
           image: "groundnuty/k8s-wait-for:1.3"

@@ -2,24 +2,19 @@ using FileMicroservice.DTOs;
 using FileMicroservice.Services;
 using FileMicroservice.UnitTests.Stubs;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
 using System.IO;
 using System.Text;
 using Xunit;
 
 namespace FileMicroservice.UnitTests
 {
-    public class FileServiceUnitTest : IClassFixture<TestConfiguration>
+    public class FileServiceUnitTest
     {
         private FileService fileService;
-        private readonly TestConfiguration _fixture;
-        private readonly IConfiguration _configuration;
 
-        public FileServiceUnitTest(TestConfiguration fixture)
+        public FileServiceUnitTest()
         {
-            this._fixture = fixture;
-            this._configuration = _fixture.GetTestDataConfiguration();
-            this.fileService = new FileService(this._configuration, new StubFileProvider(), new StubMessagingProducer());
+            this.fileService = new FileService(new StubFileProvider(), new StubMessagingProducer(), new StubRetrieveConfigHelper());
         }
 
         [Fact]

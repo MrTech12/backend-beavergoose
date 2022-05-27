@@ -1,7 +1,7 @@
 {
   "Routes": [
     {
-      "DownstreamPathTemplate": "/api/v1/Link/address?address={address}",
+      "DownstreamPathTemplate": "/api/v2/Link/address?address={address}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -10,10 +10,14 @@
         }
       ],
       "UpstreamPathTemplate": "/gateway/link?address={address}",
-      "UpstreamHttpMethod": [ "Get" ]
+      "UpstreamHttpMethod": [ "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "TestKey",
+        "AllowedScopes": []
+      }
     },
     {
-      "DownstreamPathTemplate": "/api/v1/Link/links?receiverID={receiverID}",
+      "DownstreamPathTemplate": "/api/v2/Link/links?receiverID={receiverID}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -22,7 +26,11 @@
         }
       ],
       "UpstreamPathTemplate": "/gateway/link?receiverID={receiverID}",
-      "UpstreamHttpMethod": [ "Get" ]
+      "UpstreamHttpMethod": [ "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "TestKey",
+        "AllowedScopes": []
+      }
     },
     {
       "DownstreamPathTemplate": "/api/v2/File?fileName={fileName}",
@@ -34,7 +42,11 @@
         }
       ],
       "UpstreamPathTemplate": "/gateway/file?fileName={fileName}",
-      "UpstreamHttpMethod": [ "Get" ]
+      "UpstreamHttpMethod": [ "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "TestKey",
+        "AllowedScopes": []
+      }
     },
     {
       "DownstreamPathTemplate": "/api/v2/File",
@@ -46,10 +58,26 @@
         }
       ],
       "UpstreamPathTemplate": "/gateway/file",
+      "UpstreamHttpMethod": [ "Post" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "TestKey",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/Account/login",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5300
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/account/login",
       "UpstreamHttpMethod": [ "Post" ]
     },
     {
-      "DownstreamPathTemplate": "/api/v1/Account",
+      "DownstreamPathTemplate": "/api/v1/Account/register",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -57,19 +85,7 @@
           "Port": 5300
         }
       ],
-      "UpstreamPathTemplate": "/gateway/account",
-      "UpstreamHttpMethod": [ "Get" ]
-    },
-    {
-      "DownstreamPathTemplate": "/api/v1/Account",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 5300
-        }
-      ],
-      "UpstreamPathTemplate": "/gateway/account",
+      "UpstreamPathTemplate": "/gateway/account/register",
       "UpstreamHttpMethod": [ "Post" ]
     }
   ],

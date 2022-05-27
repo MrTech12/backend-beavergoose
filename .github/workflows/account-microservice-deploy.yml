@@ -1,0 +1,42 @@
+name: "accountmicroservice - deploy"
+on:
+  push:
+    branches:
+      - "release-**"
+
+jobs:
+  account-docker-dockerhub:
+    uses: "./.github/workflows/template-deploy-dockerhub.yml"
+    with:
+      project-location: "src/Services/AccountMicroservice"
+      project-name: "accountmicroservice"
+    secrets:
+      docker-username: ${{ secrets.DOCKER_USERNAME }}
+      docker-token: ${{ secrets.DOCKER_TOKEN }}
+  account-docker-dockerhub-dbmigration:
+    uses: "./.github/workflows/template-deploy-dockerhub.yml"
+    needs: account-docker-dockerhub
+    with:
+      project-location: "deploy/databases/AccountMicroservice.DBMigration"
+      project-name: "accountmicroservice-dbmigration"
+    secrets:
+      docker-username: ${{ secrets.DOCKER_USERNAME }}
+      docker-token: ${{ secrets.DOCKER_TOKEN }}
+  account-kubernetes-job-dbmigration:
+    uses: "./.github/workflows/template-deploy-kubernetes-job.yml"
+    needs: account-docker-dockerhub-dbmigration
+    with:
+      project-location: "deploy/databases/AccountMicroservice.DBMigration"
+      project-name: "accountmicroservice"
+    secrets:
+      digitalocean-access-token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      digitalocean-cluster-name: ${{ secrets.DIGITALOCEAN_CLUSTER_NAME }}
+  account-kubernetes-deployment:
+    uses: "./.github/workflows/template-deploy-kubernetes.yml"
+    needs: account-kubernetes-job-dbmigration
+    with:
+      project-location: "src/Services/AccountMicroservice"
+      project-name: "accountmicroservice"
+    secrets:
+      digitalocean-access-token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      digitalocean-cluster-name: ${{ secrets.DIGITALOCEAN_CLUSTER_NAME }}

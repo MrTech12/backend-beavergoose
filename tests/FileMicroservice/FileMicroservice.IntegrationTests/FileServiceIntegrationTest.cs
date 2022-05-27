@@ -10,17 +10,13 @@ using Xunit;
 
 namespace FileMicroservice.IntegrationTests
 {
-    public class FileServiceIntegrationTest : IClassFixture<TestConfiguration>
+    public class FileServiceIntegrationTest
     {
         private FileService fileService;
-        private readonly TestConfiguration _fixture;
-        private readonly IConfiguration _configuration;
 
-        public FileServiceIntegrationTest(TestConfiguration fixture)
+        public FileServiceIntegrationTest()
         {
-            this._fixture = fixture;
-            this._configuration = _fixture.GetTestDataConfiguration();
-            this.fileService = new FileService(this._configuration, new LocalstackFileProvider(), new StubMessagingProducer());
+            this.fileService = new FileService(new LocalstackFileProvider(), new StubMessagingProducer(), new StubRetrieveConfigHelper());
         }
 
         [Fact]

@@ -15,6 +15,7 @@ namespace AccountMicroservice.Controllers
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly AccountService _accountService;
+
         public AccountController(UserManager<IdentityUser> userManager)
         {
             this._userManager = userManager;
@@ -27,7 +28,7 @@ namespace AccountMicroservice.Controllers
         /// <param name="registerDto">The information of a new user</param>
         /// <response code="200">Account successfully created</response>
         /// <response code="400">Information not provided</response>
-        [HttpPost]
+        [HttpPost("register")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Register(RegisterDTO registerDto)
@@ -48,17 +49,24 @@ namespace AccountMicroservice.Controllers
         /// <summary>
         /// Logging in a user
         /// </summary>
-        /// <param name="name">The information of an exisiting user</param>
+        /// <param name="loginDto">The information of an exisiting user</param>
         /// <response code="200">Successful login</response>
         /// <response code="400">user not specified</response>
         /// <response code="404">user not found</response>
-        [HttpGet]
+        [HttpPost("login")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult Login(string name)
+        public async Task<IActionResult> Login(LoginDTO loginDto)
         {
-            return Ok(name);
+            var result = await this._accountService.CheckLogin(loginDto);
+            if (!result.SingleOrDefault().Key)
+            {
+                return BadRequest(new { message = result.SingleOrDefault().Value });
+            }
+
+            var tokenInfo = await this._accountService.GetToken(loginDto.Username);
+            return Ok(new { token = tokenInfo.SingleOrDefault().Key, userId = tokenInfo.SingleOrDefault().Value });
         }
     }
 }

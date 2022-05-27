@@ -1,20 +1,16 @@
-﻿namespace FileMicroservice.Helpers
+﻿using FileMicroservice.Interfaces;
+
+namespace FileMicroservice.Helpers
 {
-    public class RetrieveConfigHelper
+    public class RetrieveConfigHelper : IRetrieveConfigHelper
     {
-        private readonly IConfiguration _configuration;
-
-        public RetrieveConfigHelper(IConfiguration configuration)
-        {
-            this._configuration = configuration;
-        }
-
         public string GetConfigValue(string configurationSection, string configurationKey)
         {
             var environmentType = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             if (environmentType == "Development")
             {
-                var configurationValue = this._configuration[$"{configurationSection}:{configurationKey}"];
+                IConfiguration conf = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json").Build();
+                var configurationValue = conf[$"{configurationSection}:{configurationKey}"];
 
                 if (!string.IsNullOrEmpty(configurationValue))
                 {

@@ -1,8 +1,12 @@
 using LinkMicroservice.Data;
+using LinkMicroservice.Helpers;
 using LinkMicroservice.Interfaces;
 using LinkMicroservice.Messaging;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,9 +24,9 @@ builder.Services.AddApiVersioning(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
-    options.SwaggerDoc("v1", new OpenApiInfo
+    options.SwaggerDoc("v2", new OpenApiInfo
     {
-        Version = "v1",
+        Version = "v2",
         Title = "LinkService API",
         Description = "API Documentation of the LinkService API which creates, retrieves and deletes links."
     });
@@ -37,6 +41,35 @@ builder.Services.AddHostedService<ConsumerRabbitMQHostedService>();
 builder.Services.AddSingleton<LinkContext>();
 builder.Services.AddTransient<ILinkRepository, LinkRepository>();
 
+// Add JWT verification
+var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(RetrieveConfigHelper.GetConfigValue("JWT", "Secret")));
+var authIssuer = RetrieveConfigHelper.GetConfigValue("JWT", "Issuer");
+var expireDate = RetrieveConfigHelper.GetConfigValue("JWT", "ExpirationInDays");
+var signCredentials = new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256);
+
+var tokenValidationParameters = new TokenValidationParameters
+{
+    ValidateIssuerSigningKey = true,
+    IssuerSigningKey = authSigningKey,
+    ValidateIssuer = true,
+    ValidIssuer = authIssuer,
+    ValidateAudience = false,
+    ValidateLifetime = true,
+    ClockSkew = TimeSpan.Zero,
+    RequireExpirationTime = true,
+};
+
+// Adding Authentication
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(x =>
+{
+    x.SaveToken = true;
+    x.TokenValidationParameters = tokenValidationParameters;
+});
 
 var app = builder.Build();
 
@@ -49,6 +82,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

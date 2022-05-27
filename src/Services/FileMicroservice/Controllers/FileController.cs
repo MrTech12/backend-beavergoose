@@ -1,6 +1,7 @@
 ﻿using FileMicroservice.DTOs;
 using FileMicroservice.Interfaces;
 using FileMicroservice.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
@@ -13,20 +14,20 @@ namespace FileMicroservice.Controllers
     [ApiVersion("2.0")]
     public class FileController : ControllerBase
     {
-        private readonly IConfiguration _configuration;
         private readonly IFileProvider _fileProvider;
         private readonly IMessagingProducer _messagingProducer;
+        private readonly IRetrieveConfigHelper _retrieveConfigHelper;
         private FileService _fileService;
 
         private readonly ILogger<FileController> _logger;
 
-        public FileController(IConfiguration configuration, IFileProvider fileProvider, ILogger<FileController> logger, IMessagingProducer messagingProducer)
+        public FileController(ILogger<FileController> logger, IFileProvider fileProvider, IMessagingProducer messagingProducer, IRetrieveConfigHelper retrieveConfigHelper)
         {
-            this._configuration = configuration;
-            this._fileProvider = fileProvider;
             this._logger = logger;
+            this._fileProvider = fileProvider;
             this._messagingProducer = messagingProducer;
-            this._fileService = new FileService(this._configuration, this._fileProvider, this._messagingProducer);
+            this._retrieveConfigHelper = retrieveConfigHelper;
+            this._fileService = new FileService(this._fileProvider, this._messagingProducer, this._retrieveConfigHelper);
         }
 
         /// <summary>
@@ -36,6 +37,7 @@ namespace FileMicroservice.Controllers
         /// <response code="200">File downloaded</response>
         /// <response code="400">Filename not specified</response>
         /// <response code="404">File not found</response>
+        [Authorize]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -69,6 +71,7 @@ namespace FileMicroservice.Controllers
         /// <response code="201">File successfully saved</response>
         /// <response code="400">Information not provided</response>
         /// <response code="500">Problem with saving the file</response>
+        [Authorize]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

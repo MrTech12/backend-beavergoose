@@ -1,5 +1,8 @@
+using APIGateway.Helpers;
+using Microsoft.IdentityModel.Tokens;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
+using System.Text;
 
 namespace OcelotBasic
 {
@@ -20,6 +23,38 @@ namespace OcelotBasic
                     .AddEnvironmentVariables();
             })
             .ConfigureServices(s => {
+
+                s.AddCors(options =>
+                {
+                    options.AddPolicy(name: "CorsPolicy",
+                        builder => builder.WithOrigins(new string[] { "http://localhost:4200", "https://frontend.demo-beavergoose.nl" })
+                                .AllowAnyMethod()
+                                .AllowAnyHeader());
+                });
+
+                // Add JWT verification
+                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(RetrieveConfigHelper.GetConfigValue("JWT", "Secret")));
+                var authIssuer = RetrieveConfigHelper.GetConfigValue("JWT", "Issuer");
+                var expireDate = RetrieveConfigHelper.GetConfigValue("JWT", "ExpirationInDays");
+                var signCredentials = new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256);
+
+                var tokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = authSigningKey,
+                    ValidateIssuer = true,
+                    ValidIssuer = authIssuer,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero,
+                    RequireExpirationTime = true,
+                };
+                s.AddAuthentication().AddJwtBearer("TestKey", x =>
+                {
+                    x.SaveToken = true;
+                    x.TokenValidationParameters = tokenValidationParameters;
+                });               
+
                 s.AddOcelot();
             })
             .ConfigureLogging((hostingContext, logging) =>
@@ -30,6 +65,8 @@ namespace OcelotBasic
             .UseIISIntegration()
             .Configure(app =>
             {
+                app.UseCors("CorsPolicy");
+
                 app.UseOcelot().Wait();
             })
             .Build()

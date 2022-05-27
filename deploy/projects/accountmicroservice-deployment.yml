@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: accountmicroservice-deployment
+  labels:
+    app: accountmicroservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: accountmicroservice
+  template:
+    metadata:
+      labels:
+        app: accountmicroservice
+    spec:
+      serviceAccountName: dbmigration-account
+      initContainers:
+        - name: "accountmicroservice-dbmigration-init"
+          image: "groundnuty/k8s-wait-for:1.3"
+          imagePullPolicy: Always
+          args:
+            - "job"
+            - "accountmicroservice-dbmigration-job-release-1.0.0"
+      containers:
+        - name: accountmicroservice
+          image: mrtech12/beavergoose-accountmicroservice:release-1.0.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8000
+          env:
+            - name: "ConnectionStrings_AccountContext"
+              valueFrom:
+                secretKeyRef:
+                  name: accountmicroservice-dbconnectionstring
+                  key: accountcontext
+                  optional: false
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "128m"
+            limits:
+              memory: "512Mi"
+              cpu: "256m"

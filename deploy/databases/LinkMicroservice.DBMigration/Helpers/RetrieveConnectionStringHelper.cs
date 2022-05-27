@@ -20,7 +20,7 @@ namespace LinkMicroservice.DBMigration.Helpers
             }
             else if (environmentType != "DOTNET_ENVIRONMENT")
             {
-                var connectionString = Environment.GetEnvironmentVariable("ConnectionString");
+                var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings_LinkContext");
                 if (!string.IsNullOrEmpty(connectionString))
                 {
                     return connectionString;
