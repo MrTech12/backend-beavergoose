@@ -11,6 +11,7 @@ namespace FileMicroservice.Messaging
     {
         private readonly ILogger<RabbitMQProducer> _logger;
         private readonly IConfiguration _configuration;
+        private readonly RetrieveConfigHelper _retrieveConfigHelper;
         private const string exchangeName = "link-exchange";
         private const string queueName = "link.managing";
 
@@ -18,6 +19,7 @@ namespace FileMicroservice.Messaging
         {
             this._configuration = configuration;
             this._logger = logger;
+            this._retrieveConfigHelper = new RetrieveConfigHelper(this._configuration);
         }
 
         public void SendMessage<T>(T message, string routingKey)
@@ -26,8 +28,8 @@ namespace FileMicroservice.Messaging
 
             var factory = new ConnectionFactory()
             {
-                HostName = RetrieveConfigHelper.GetConfigValue("RabbitMQ", "HostName"),
-                Port = Convert.ToInt32(RetrieveConfigHelper.GetConfigValue("RabbitMQ", "Port")),
+                HostName = this._retrieveConfigHelper.GetConfigValue("RabbitMQ", "HostName"),
+                Port = Convert.ToInt32(this._retrieveConfigHelper.GetConfigValue("RabbitMQ", "Port")),
             };
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())

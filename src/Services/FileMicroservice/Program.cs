@@ -46,9 +46,10 @@ builder.Services.AddScoped<IMessagingProducer, RabbitMQProducer>();
 builder.Services.Configure<FormOptions>(x => { x.MultipartBodyLengthLimit = 524288000; });
 
 // Add JWT verification
-var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(RetrieveConfigHelper.GetConfigValue("JWT", "Secret")));
-var authIssuer = RetrieveConfigHelper.GetConfigValue("JWT", "Issuer");
-var expireDate = RetrieveConfigHelper.GetConfigValue("JWT", "ExpirationInDays");
+var retrieveConfigHelper = new RetrieveConfigHelper(builder.Configuration);
+var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(retrieveConfigHelper.GetConfigValue("JWT", "Secret")));
+var authIssuer = retrieveConfigHelper.GetConfigValue("JWT", "Issuer");
+var expireDate = retrieveConfigHelper.GetConfigValue("JWT", "ExpirationInDays");
 var signCredentials = new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256);
 
 var tokenValidationParameters = new TokenValidationParameters
