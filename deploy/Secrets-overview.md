@@ -4,52 +4,70 @@
 
 # AccountMicroservice
 * Name: accountmicroservice-dbconnectionstring
-* Value:
+  - Value:
     - accountcontext
+* Name: jwt
+  - Values:
+    - issuer
+    - secret
+    - expirationindays
 * Name: seq-logging
-* Value: 
+  - Values:
+    - serverurl
     - apikey
 
 # AccountMicroservice - dbmigration-job
 * Name: accountmicroservice-dbconnectionstring
-* Value:
+  - Value:
     - accountcontext
 
 # AccountMicroservice - PostgreSQL
-* Name: accountmicroservice-postgresql-credentials
-* Value:
+* Name: postgresql-accountmicroservice-credentials
+  - Value:
     - password
 
 ## FileMicroservice
 * Name: digitalocean-spaces
-* Values:
+  - Values:
     - serviceurl
     - bucketname
     - accesskey
     - secretaccesskey
+* Name: jwt
+  - Values:
+    - issuer
+    - secret
+    - expirationindays
 * Name: seq-logging
-* Value: 
+  - Values:
+    - serverurl
     - apikey
 
 # LinkMicroservice
 * Name: linkmicroservice-dbconnectionstring
-* Value:
+  - Value:
     - linkcontext
+* Name: jwt
+  - Values:
+    - issuer
+    - secret
+    - expirationindays
 * Name: seq-logging
-* Value: 
+  - Values:
+    - serverurl
     - apikey
 
 # LinkMicroservice - dbmigration-job
 * Name: linkmicroservice-dbconnectionstring
-* Value:
+  - Value:
     - linkcontext
 
 # LinkMicroservice - PostgreSQL
-* Name: linkmicroservice-postgresql-credentials
-* Value:
+* Name: postgresql-linkmicroservice-credentials
+  - Value:
     - password
 
 # Seq
 * Name: seq-credentials
-* Value:
+  - Value:
     - adminpasswordhash
