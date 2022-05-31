@@ -22,7 +22,7 @@ namespace FileMicroservice.Services
 
             fileDto.FileName = Guid.NewGuid().ToString();
             string fileExtension = Path.GetExtension(file.FileName);
-            if (fileExtension == String.Empty)
+            if (fileExtension == string.Empty)
             {
                 fileDto.FileName += ".txt";
             } else {
