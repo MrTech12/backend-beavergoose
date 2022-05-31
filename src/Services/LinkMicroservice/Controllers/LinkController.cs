@@ -13,7 +13,7 @@ namespace LinkMicroservice.Controllers
     public class LinkController : ControllerBase
     {
         private readonly ILinkRepository _linkRepository;
-        private LinkService _linkService;
+        private readonly LinkService _linkService;
 
         public LinkController(ILinkRepository linkRepository)
         {

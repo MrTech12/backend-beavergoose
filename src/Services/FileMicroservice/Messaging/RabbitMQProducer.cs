@@ -9,7 +9,7 @@ namespace FileMicroservice.Messaging
 {
     public class RabbitMQProducer : IMessagingProducer
     {
-        private readonly ILogger<RabbitMQProducer> _logger;
+        private readonly ILogger _logger;
         private readonly IRetrieveConfigHelper _retrieveConfigHelper;
         private const string exchangeName = "link-exchange";
         private const string queueName = "link.managing";
@@ -22,7 +22,7 @@ namespace FileMicroservice.Messaging
 
         public void SendMessage<T>(T message, string routingKey)
         {
-            this._logger.LogInformation("Sending status of a file to {routingKey}", routingKey);
+            this._logger.LogInformation("Sending status of a file to {RoutingKey}", routingKey);
 
             var factory = new ConnectionFactory()
             {
