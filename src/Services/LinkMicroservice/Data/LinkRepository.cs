@@ -19,6 +19,7 @@ namespace LinkMicroservice.Data
         {
             try
             {
+                this._logger.LogInformation("Retrieving filename based on a given address");
                 return await this._context.Links.FirstOrDefaultAsync(link => link.Address == address);
             }
             catch (Exception exception)
@@ -33,6 +34,7 @@ namespace LinkMicroservice.Data
         {
             try
             {
+                this._logger.LogInformation("Retrieving link based on a given filename");
                 return await this._context.Links.FirstOrDefaultAsync(link => link.FileName == fileName);
             }
             catch (Exception exception)
@@ -47,6 +49,7 @@ namespace LinkMicroservice.Data
         {
             try
             {
+                this._logger.LogInformation("Saving a new link");
                 await this._context.Links.AddAsync(linkEntity);
                 await this._context.SaveChangesAsync();
             }
@@ -62,6 +65,7 @@ namespace LinkMicroservice.Data
         {
             try
             {
+                this._logger.LogInformation("Removing an existing link");
                 this._context.Links.Remove(linkEntity);
                 await this._context.SaveChangesAsync();
             }
@@ -77,6 +81,7 @@ namespace LinkMicroservice.Data
         {
             try
             {
+                this._logger.LogInformation("Retrieving all links for a given receiver");
                 return await this._context.Links.Where(link => link.ReceiverID == receiverID).ToListAsync();
             }
             catch (Exception exception)
