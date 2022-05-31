@@ -51,7 +51,7 @@ namespace FileMicroservice.Messaging
             }
             catch (Exception exception)
             {
-                this._logger.LogError("There was a problem connection or communicating with RabbitMQ. Source of Exception: {Source}. Expection Message: {Message}", exception.Source, exception.Message);
+                this._logger.LogError(exception, "There was a problem connection or communicating with RabbitMQ. Source of Exception: {Source}. Expection Message: {Message}", exception.Source, exception.Message);
                 throw;
             }
         }

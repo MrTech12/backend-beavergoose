@@ -41,7 +41,7 @@ namespace FileMicroservice.Data
 			}
 			catch (Exception exception)
 			{
-				this._logger.LogError("There was a problem when downloading a file. Source of Exception: {Source}. Expection Message: {Message}", exception.Source, exception.Message);
+				this._logger.LogError(exception, "There was a problem when downloading a file. Source of Exception: {Source}. Expection Message: {Message}", exception.Source, exception.Message);
 				throw;
 			}
 		}
@@ -76,11 +76,11 @@ namespace FileMicroservice.Data
 			}
 			catch (AmazonS3Exception exception)
 			{
-				this._logger.LogError("There was an S3 problem when uploading a file. Source of Exception: {Source}. Expection Message: {Message}", exception.Source, exception.Message);
+				this._logger.LogError(exception, "There was an S3 problem when uploading a file. Source of Exception: {Source}. Expection Message: {Message}", exception.Source, exception.Message);
 			}
 			catch (Exception exception)
 			{
-				this._logger.LogError("There was a problem when uploading a file. Source of Exception: {Source}. Expection Message: {Message}", exception.Source, exception.Message);
+				this._logger.LogError(exception, "There was a problem when uploading a file. Source of Exception: {Source}. Expection Message: {Message}", exception.Source, exception.Message);
 			}
 		}
 
@@ -112,7 +112,7 @@ namespace FileMicroservice.Data
 						return false;
 					}
 				}
-				this._logger.LogError("There was a problem when looking up a file. Source of Exception: {Source}. Expection Message: {Message}", exception.Source, exception.Message);
+				this._logger.LogError(exception, "There was a problem when looking up a file. Source of Exception: {Source}. Expection Message: {Message}", exception.Source, exception.Message);
 				throw;
 			}
 		}
@@ -134,7 +134,7 @@ namespace FileMicroservice.Data
 			}
 			catch (Exception exception)
 			{
-				this._logger.LogError("There was a problem when deleting a file. Source of Exception: {Source}. Expection Message: {Message}", exception.Source, exception.Message);
+				this._logger.LogError(exception, "There was a problem when deleting a file. Source of Exception: {Source}. Expection Message: {Message}", exception.Source, exception.Message);
 				throw;
 			}
         }

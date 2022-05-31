@@ -63,7 +63,7 @@ namespace LinkMicroservice.Messaging
             }
             catch (BrokerUnreachableException brokenUnreachable)
             {
-                this._logger.LogError("There was a problem connecting with RabbitMQ. Source of Exception: {Source}. Exception message: {ExceptionMessage}.", brokenUnreachable.Source, brokenUnreachable.Message);
+                this._logger.LogError(brokenUnreachable, "There was a problem connecting with RabbitMQ. Source of Exception: {Source}. Exception message: {ExceptionMessage}.", brokenUnreachable.Source, brokenUnreachable.Message);
                 throw;
             }
             return base.StartAsync(cancellationToken);

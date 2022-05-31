@@ -24,7 +24,7 @@ namespace LinkMicroservice.Data
             }
             catch (Exception exception)
             {
-                this._logger.LogError("There was a problem getting the filename. Source of Exception: {Source}. Expection Message: {Message}", exception.Source, exception.Message);
+                this._logger.LogError(exception, "There was a problem getting the filename. Source of Exception: {Source}. Expection Message: {Message}", exception.Source, exception.Message);
                 throw;
             }
 
@@ -39,7 +39,7 @@ namespace LinkMicroservice.Data
             }
             catch (Exception exception)
             {
-                this._logger.LogError("There was a problem getting the link. Source of Exception: {Source}. Expection Message: {Message}", exception.Source, exception.Message);
+                this._logger.LogError(exception, "There was a problem getting the link. Source of Exception: {Source}. Expection Message: {Message}", exception.Source, exception.Message);
                 throw;
             }
             
@@ -55,7 +55,7 @@ namespace LinkMicroservice.Data
             }
             catch (Exception exception)
             {
-                this._logger.LogError("There was a problem saving a link. Source of Exception: {Source}. Expection Message: {Message}", exception.Source, exception.Message);
+                this._logger.LogError(exception, "There was a problem saving a link. Source of Exception: {Source}. Expection Message: {Message}", exception.Source, exception.Message);
                 throw;
             }
 
@@ -71,7 +71,7 @@ namespace LinkMicroservice.Data
             }
             catch (Exception exception)
             {
-                this._logger.LogError("There was a problem deleting a link. Source of Exception: {Source}. Expection Message: {Message}", exception.Source, exception.Message);
+                this._logger.LogError(exception, "There was a problem deleting a link. Source of Exception: {Source}. Expection Message: {Message}", exception.Source, exception.Message);
                 throw;
             }
 
@@ -86,7 +86,7 @@ namespace LinkMicroservice.Data
             }
             catch (Exception exception)
             {
-                this._logger.LogError("There was a problem getting all link for a given receiver. Source of Exception: {Source}. Expection Message: {Message}", exception.Source, exception.Message);
+                this._logger.LogError(exception, "There was a problem getting all link for a given receiver. Source of Exception: {Source}. Expection Message: {Message}", exception.Source, exception.Message);
                 throw;
             }
         }
