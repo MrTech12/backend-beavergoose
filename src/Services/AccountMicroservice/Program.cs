@@ -1,8 +1,10 @@
 using AccountMicroservice.Data;
+using AccountMicroservice.Helpers;
 using AccountMicroservice.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
+using Serilog;
 using System.Configuration;
 using System.Reflection;
 
@@ -33,6 +35,17 @@ builder.Services.AddSwaggerGen(options =>
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
+
+// Configure Serilog Logging
+builder.Host.UseSerilog((ctx, lc) => lc.ReadFrom.Configuration(builder.Configuration)
+    .MinimumLevel.Information()
+    .Enrich.WithProperty("Application", "AccountMicroservice")
+    .Enrich.WithProperty("Environment", Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"))
+    .Enrich.FromLogContext()
+    .WriteTo.Console(outputTemplate: "[{Timestamp:dd-MM-yyyy HH:mm:ss}] [{Level}] ({SourceContext}) {Message}{NewLine}{Exception}")
+    .WriteTo.Seq(RetrieveConfigHelper.GetConfigValue("Seq", "ServerUrl"), apiKey: RetrieveConfigHelper.GetConfigValue("Seq", "ApiKey")));
+
+Serilog.Debugging.SelfLog.Enable(Console.Error);
 
 // For Entity Framework
 builder.Services.AddSingleton<AccountContext>();
