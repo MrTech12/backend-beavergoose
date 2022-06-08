@@ -37,7 +37,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AccountMicroservice", "Acco
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AccountMicroservice.UnitTests", "..\tests\AccountMicroservice\AccountMicroservice.UnitTests\AccountMicroservice.UnitTests.csproj", "{8F75D938-4FB3-4E85-BA8D-7ABA55B61BF6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountMicroservice.DBMigration", "..\deploy\databases\AccountMicroservice.DBMigration\AccountMicroservice.DBMigration.csproj", "{D5783E52-DA8F-47CB-BF60-BF9F7DBDCC0F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AccountMicroservice.DBMigration", "..\deploy\databases\AccountMicroservice.DBMigration\AccountMicroservice.DBMigration.csproj", "{D5783E52-DA8F-47CB-BF60-BF9F7DBDCC0F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cloud Logic", "Cloud Logic", "{95D24957-A914-4EB2-B7D3-4C0760F472D9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeleteFileApp", "CloudLogic\DeleteFileApp\DeleteFileApp.csproj", "{CFAC048F-33B2-48FD-A79F-D4B32C92641A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -89,6 +93,10 @@ Global
 		{D5783E52-DA8F-47CB-BF60-BF9F7DBDCC0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5783E52-DA8F-47CB-BF60-BF9F7DBDCC0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5783E52-DA8F-47CB-BF60-BF9F7DBDCC0F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFAC048F-33B2-48FD-A79F-D4B32C92641A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFAC048F-33B2-48FD-A79F-D4B32C92641A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFAC048F-33B2-48FD-A79F-D4B32C92641A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFAC048F-33B2-48FD-A79F-D4B32C92641A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -108,6 +116,7 @@ Global
 		{86DA29A7-B6A2-4835-9A38-125E74CCE4EF} = {62D0B0BA-DE04-4643-A4B8-08D2ABC613E1}
 		{8F75D938-4FB3-4E85-BA8D-7ABA55B61BF6} = {86DA29A7-B6A2-4835-9A38-125E74CCE4EF}
 		{D5783E52-DA8F-47CB-BF60-BF9F7DBDCC0F} = {1C0AE0D4-3AB0-4757-9440-473CE503EE0B}
+		{CFAC048F-33B2-48FD-A79F-D4B32C92641A} = {95D24957-A914-4EB2-B7D3-4C0760F472D9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B955A228-4EFA-487D-B88E-033A796387B6}

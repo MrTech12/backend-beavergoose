@@ -42,6 +42,9 @@
   - Values:
     - serverurl
     - apikey
+* Name: DeleteFileApp
+  - Value:
+    - endpoint
 
 # LinkMicroservice
 * Name: linkmicroservice-dbconnectionstring
@@ -71,3 +74,20 @@
 * Name: seq-credentials
   - Value:
     - adminpasswordhash
+
+# DeleteFileApp
+* Name: digitalocean-spaces
+  - Values:
+    - serviceurl
+    - bucketname
+    - accesskey
+    - secretaccesskey
+* Name: jwt
+  - Values:
+    - issuer
+    - secret
+    - expirationindays
+* Name: seq-logging
+  - Values:
+    - serverurl
+    - apikey
