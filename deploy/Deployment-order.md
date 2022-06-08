@@ -7,6 +7,7 @@
 * The inner-communication, Event Bus solution for all microservices.
 * Certain services **expect** a working RabbitMQ instance upon startup.
 * This will be the **first** deployed component. <br><br>
+* First the `deployment` & then the `service` manifest needs to be applied.
 
 
 2. Seq
@@ -16,7 +17,11 @@
 * This component makes use of a `Persistent Volume` & `Persistent Volume Claim` for storing log data.
 * After deployment, one needs to login in order to create an **API key**, that is used by other applications to ingest data.
 * This will be the **second** deployed component. <br><br>
-
+* The commands to deploy Seq are as follows:
+```yml
+1. kubectl apply -f seq-volume.yml # Create the Volume & Claims for storage of Seq data.
+2. helm install -f seq-config.yml my-seq datalust/seq # Install seq onto the cluster.
+```
 
 3. PostgeSQL database for LinkMicroservice
 * Database for storing data from LinkMicroservice.
@@ -24,6 +29,7 @@
 * The **password of the user** is stored in a `Secrets` object.
 * This component makes use of a `Peristent Volume` & `Peristent Volume Claim` for storing user data. 
 * This will be the **third** deployed component. <br><br>
+* First the `volume`, then `deployment` & then the `service` manifest needs to be applied.
 
 4. PostgeSQL database for AccountMicroservice
 * Database for storing data from AccountMicroservice.
@@ -31,7 +37,7 @@
 * The **password of the user** is stored in a `Secrets` object.
 * This component makes use of a `Peristent Volume` & `Peristent Volume Claim` for storing user data. 
 * This will be the **fourth** deployed component. <br><br>
-
+* First the `volume`, then `deployment` & then the `service` manifest needs to be applied.
 
 5. APIGateway
 * The component that the frontend will talk to & communicates with the other microservices.

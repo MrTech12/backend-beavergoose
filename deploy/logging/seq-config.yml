@@ -1,0 +1,30 @@
+# config.yaml
+ingress:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+
+ui:
+  service:
+    port: 80
+  ingress:
+    enabled: true
+    path: /
+    hosts:
+      - seq.demo-beavergoose.nl
+
+ingestion:
+  service:
+    port: 5341
+
+resources:
+  requests:
+    memory: 512Mi
+  limits:
+    memory: 2Gi
+
+persistence:
+  enabled: true
+
+  existingClaim: seqdata-pv-claim
+  accessMode: ReadWriteOnce
+  size: 3Gi
