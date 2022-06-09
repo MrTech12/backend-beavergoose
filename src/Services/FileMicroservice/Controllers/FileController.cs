@@ -17,13 +17,10 @@ namespace FileMicroservice.Controllers
         private readonly IFileProvider _fileProvider;
         private readonly IMessagingProducer _messagingProducer;
         private readonly IRetrieveConfigHelper _retrieveConfigHelper;
-        private FileService _fileService;
+        private readonly FileService _fileService;
 
-        private readonly ILogger<FileController> _logger;
-
-        public FileController(ILogger<FileController> logger, IFileProvider fileProvider, IMessagingProducer messagingProducer, IRetrieveConfigHelper retrieveConfigHelper)
+        public FileController(IFileProvider fileProvider, IMessagingProducer messagingProducer, IRetrieveConfigHelper retrieveConfigHelper)
         {
-            this._logger = logger;
             this._fileProvider = fileProvider;
             this._messagingProducer = messagingProducer;
             this._retrieveConfigHelper = retrieveConfigHelper;

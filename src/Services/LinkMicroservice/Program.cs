@@ -5,6 +5,8 @@ using LinkMicroservice.Messaging;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
+using Serilog.Exceptions;
 using System.Reflection;
 using System.Text;
 
@@ -34,7 +36,16 @@ builder.Services.AddSwaggerGen(options =>
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
-builder.Services.AddSwaggerGen();
+
+// Configure Serilog Logging
+builder.Host.UseSerilog((ctx, lc) => lc.ReadFrom.Configuration(builder.Configuration)
+    .MinimumLevel.Information()
+    .Enrich.WithProperty("Application", builder.Environment.ApplicationName)
+    .Enrich.WithProperty("Environment", Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"))
+    .Enrich.WithExceptionDetails()
+    .Enrich.FromLogContext()
+    .WriteTo.Console(outputTemplate: "[{Timestamp:dd-MM-yyyy HH:mm:ss}] [{Level}] ({SourceContext}) {Message}{NewLine}{Exception}")
+    .WriteTo.Seq(RetrieveConfigHelper.GetConfigValue("Seq", "ServerUrl"), apiKey: RetrieveConfigHelper.GetConfigValue("Seq", "ApiKey")));
 
 builder.Services.AddHostedService<ConsumerRabbitMQHostedService>();
 
@@ -86,5 +97,9 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseSerilogRequestLogging(options => {
+    options.EnrichDiagnosticContext = HttpContextEnricherHelper.HttpRequestEnricher;
+});
 
 app.Run();

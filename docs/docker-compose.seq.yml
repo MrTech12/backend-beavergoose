@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  seq:
+    image: datalust/seq:2022.1
+    container_name: seq
+    environment:
+      - ACCEPT_EULA=Y
+      - SEQ_API_INGESTIONPORT=5341
+      - SEQ_API_CANONICALURI=http://localhost:80
+      - SEQ_FIRSTRUN_ADMINUSERNAME=sina
+      - SEQ_FIRSTRUN_ADMINPASSWORDHASH=FEwKPzEYAI9OeTBjg0vPvW1CNBnccNfHF8SfWyGVsLa1g9rXSA==
+      - SEQ_FIRSTRUN_REQUIREAUTHENTICATIONFORHTTPINGESTION=true
+    ports:
+      - "80:80"
+      - "5341:5341"
+    volumes:
+      - seq-loggingdata:/data
+volumes:
+  seq-loggingdata:

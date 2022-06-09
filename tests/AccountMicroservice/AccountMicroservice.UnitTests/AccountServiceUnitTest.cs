@@ -4,6 +4,7 @@ using AccountMicroservice.Service;
 using AccountMicroservice.UnitTests.Helpers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Moq;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,7 +22,11 @@ namespace AccountMicroservice.UnitTests
         {
             fakeUserManager = new Mock<FakeUserManager>();
             fakeTokenHelper = new Mock<TokenHelper>();
-            this._accountService = new AccountService(fakeUserManager.Object);
+
+            var loggerMock = new Mock<ILogger<AccountService>>();
+            ILogger<AccountService> accountServiceLogger = loggerMock.Object;
+
+            this._accountService = new AccountService(fakeUserManager.Object, accountServiceLogger);
         }
 
         [Fact]

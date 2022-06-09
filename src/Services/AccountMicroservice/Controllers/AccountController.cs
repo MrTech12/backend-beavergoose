@@ -15,11 +15,13 @@ namespace AccountMicroservice.Controllers
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly AccountService _accountService;
+        private readonly ILogger<AccountService> _accountServiceLogger;
 
-        public AccountController(UserManager<IdentityUser> userManager)
+        public AccountController(UserManager<IdentityUser> userManager, ILogger<AccountService> accountServiceLogger)
         {
             this._userManager = userManager;
-            this._accountService = new AccountService(this._userManager);
+            this._accountServiceLogger = accountServiceLogger;
+            this._accountService = new AccountService(this._userManager, _accountServiceLogger);
         }
 
         /// <summary>

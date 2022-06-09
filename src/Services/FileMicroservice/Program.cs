@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
+using Serilog.Exceptions;
 using System.Reflection;
 using System.Text;
 
@@ -38,7 +40,17 @@ builder.Services.AddSwaggerGen(options =>
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
-builder.Services.AddSwaggerGen();
+
+// Configure Serilog Logging
+var retrieveConfigHelper = new RetrieveConfigHelper();
+builder.Host.UseSerilog((ctx, lc) => lc.ReadFrom.Configuration(builder.Configuration)
+    .MinimumLevel.Information()
+    .Enrich.WithProperty("Application", builder.Environment.ApplicationName)
+    .Enrich.WithProperty("Environment", Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"))
+    .Enrich.WithExceptionDetails()
+    .Enrich.FromLogContext()
+    .WriteTo.Console(outputTemplate: "[{Timestamp:dd-MM-yyyy HH:mm:ss}] [{Level}] ({SourceContext}) {Message}{NewLine}{Exception}")
+    .WriteTo.Seq(retrieveConfigHelper.GetConfigValue("Seq", "ServerUrl"), apiKey: retrieveConfigHelper.GetConfigValue("Seq", "ApiKey")));
 
 builder.Services.AddScoped<IFileProvider, DigitalOceanFileProvider>();
 builder.Services.AddScoped<IMessagingProducer, RabbitMQProducer>();
@@ -47,7 +59,6 @@ builder.Services.AddScoped<IRetrieveConfigHelper, RetrieveConfigHelper>();
 builder.Services.Configure<FormOptions>(x => { x.MultipartBodyLengthLimit = 524288000; });
 
 // Add JWT verification
-var retrieveConfigHelper = new RetrieveConfigHelper();
 var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(retrieveConfigHelper.GetConfigValue("JWT", "Secret")));
 var authIssuer = retrieveConfigHelper.GetConfigValue("JWT", "Issuer");
 var expireDate = retrieveConfigHelper.GetConfigValue("JWT", "ExpirationInDays");
@@ -93,5 +104,9 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseSerilogRequestLogging(options => {
+    options.EnrichDiagnosticContext = HttpContextEnricherHelper.HttpRequestEnricher;
+});
 
 app.Run();
