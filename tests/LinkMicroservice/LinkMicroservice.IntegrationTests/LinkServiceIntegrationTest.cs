@@ -6,6 +6,8 @@ using LinkMicroservice.UnitTests;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Moq;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -35,7 +37,10 @@ namespace LinkMicroservice.IntegrationTests
             
             this._linkContext.Database.Migrate();
 
-            this._linkRepository = new LinkRepository(_linkContext);
+            var loggerMock = new Mock<ILogger<LinkRepository>>();
+            ILogger<LinkRepository> linkRepositorylogger = loggerMock.Object;
+
+            this._linkRepository = new LinkRepository(_linkContext, linkRepositorylogger);
             this._linkService = new LinkService(this._linkRepository);
         }
 
