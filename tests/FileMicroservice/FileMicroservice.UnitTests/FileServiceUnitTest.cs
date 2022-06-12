@@ -3,6 +3,7 @@ using FileMicroservice.Services;
 using FileMicroservice.UnitTests.Stubs;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Xunit;
 
@@ -22,6 +23,7 @@ namespace FileMicroservice.UnitTests
         {
             // Arrange
             var fileDto = new FileDTO() { ReceiverID = "12", SenderID = "24" };
+            var userId = "12";
 
             string fileName = "dummy.txt";
             var bytes = Encoding.UTF8.GetBytes("This is a dummy text file");
@@ -31,8 +33,8 @@ namespace FileMicroservice.UnitTests
             var newFileName = await this.fileService.SaveFile(stubFile, fileDto);
 
             // Assert
-            var savedFile = await this.fileService.RetrieveFile(newFileName);
-            Assert.NotNull(savedFile);
+            var savedFile = await this.fileService.RetrieveFile(newFileName, userId);
+            Assert.NotNull(savedFile.Values);
         }
 
         [Fact]
@@ -40,6 +42,7 @@ namespace FileMicroservice.UnitTests
         {
             // Arrange
             var fileDto = new FileDTO() { ReceiverID = "12", SenderID = "24" };
+            var userId = "12";
 
             string fileName = "qwerty";
             var bytes = Encoding.UTF8.GetBytes("This is a qwerty file wih no extension");
@@ -49,8 +52,8 @@ namespace FileMicroservice.UnitTests
             var newFileName = await this.fileService.SaveFile(stubFile, fileDto);
 
             // Assert
-            var savedFile = await this.fileService.RetrieveFile(newFileName);
-            Assert.NotNull(savedFile);
+            var savedFile = await this.fileService.RetrieveFile(newFileName, userId);
+            Assert.NotNull(savedFile.Values);
         }
 
         [Fact]
@@ -58,6 +61,7 @@ namespace FileMicroservice.UnitTests
         {
             // Arrange
             var fileDto = new FileDTO() { ReceiverID = "12", SenderID = "24" };
+            var userId = "12";
 
             string fileName = "dummy.txt";
             var bytes = Encoding.UTF8.GetBytes("This is a dummy text file");
@@ -65,10 +69,10 @@ namespace FileMicroservice.UnitTests
             var newFileName = await this.fileService.SaveFile(stubFile, fileDto);
 
             // Act
-            var savedFile = await this.fileService.RetrieveFile(newFileName);
+            var savedFile = await this.fileService.RetrieveFile(newFileName, userId);
 
             // Assert
-            Assert.NotNull(savedFile);
+            Assert.NotNull(savedFile.Values);
         }
 
         [Fact]
@@ -76,6 +80,7 @@ namespace FileMicroservice.UnitTests
         {
             // Arrange
             var fileDto = new FileDTO() { ReceiverID = "12", SenderID = "24" };
+            var userId = "12";
 
             string fileName = "azerty.pdf";
             var bytes = Encoding.UTF8.GetBytes("This is a azerty PDF");
@@ -84,11 +89,11 @@ namespace FileMicroservice.UnitTests
             var newFileName = await this.fileService.SaveFile(stubFile, fileDto);
 
             // Act
-            var savedFile = await this.fileService.RetrieveFile("qwerty.txt");
+            var savedFile = await this.fileService.RetrieveFile("qwerty.txt", userId);
 
             // Assert
             File.Delete(Path.GetTempPath() + newFileName);
-            Assert.Null(savedFile);
+            Assert.Null(savedFile.SingleOrDefault().Value);
         }
 
         [Fact]
@@ -96,6 +101,7 @@ namespace FileMicroservice.UnitTests
         {
             // Arrange
             var fileDto = new FileDTO() { ReceiverID = "12", SenderID = "24" };
+            var userId = "12";
 
             string fileName = "qwerty.pdf";
             var bytes = Encoding.UTF8.GetBytes("This is a qwerty file");
@@ -104,11 +110,11 @@ namespace FileMicroservice.UnitTests
             var newFileName = await this.fileService.SaveFile(stubFile, fileDto);
 
             // Act
-            byte[]? fileBytes = await this.fileService.RetrieveFile(newFileName);
+            var fileBytes = await this.fileService.RetrieveFile(newFileName, userId);
 
             // Assert
             File.Delete(Path.GetTempPath() + newFileName);
-            Assert.NotEmpty(fileBytes);
+            Assert.NotEmpty(fileBytes.Values);
         }
 
         [Fact]
@@ -116,6 +122,7 @@ namespace FileMicroservice.UnitTests
         {
             // Arrange
             var fileDto = new FileDTO() { ReceiverID = "12", SenderID = "24" };
+            var userId = "12";
 
             string fileName = "pineapple.pdf";
             var bytes = Encoding.UTF8.GetBytes("This is a pineapple PDF");
@@ -124,32 +131,11 @@ namespace FileMicroservice.UnitTests
             var newFileName = await this.fileService.SaveFile(stubFile, fileDto);
 
             // Act
-            byte[]? fileBytes = await this.fileService.RetrieveFile(newFileName);
+            var fileBytes = await this.fileService.RetrieveFile(newFileName, userId);
 
             // Assert
             File.Delete(Path.GetTempPath() + newFileName);
-            Assert.Equal(23, fileBytes.Length);
-        }
-
-        [Fact]
-        public async void RemoveFile()
-        {
-            // Arrange
-            var fileDto = new FileDTO() { ReceiverID = "12", SenderID = "24" };
-
-            string fileName = "qwerty.docx";
-            var bytes = Encoding.UTF8.GetBytes("This is a qwerty document");
-            IFormFile stubFile = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "Data", fileName);
-
-            var newFileName = await this.fileService.SaveFile(stubFile, fileDto);
-
-            // Act
-            await this.fileService.RemoveFile(newFileName);
-
-            // Assert
-            File.Delete(Path.GetTempPath() + newFileName);
-            var deletedFile = await this.fileService.RetrieveFile(newFileName);
-            Assert.Null(deletedFile);
+            Assert.Equal(23, fileBytes.SingleOrDefault().Value.Length);
         }
     }
 }

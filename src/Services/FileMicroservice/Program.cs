@@ -55,6 +55,7 @@ builder.Host.UseSerilog((ctx, lc) => lc.ReadFrom.Configuration(builder.Configura
 builder.Services.AddScoped<IFileProvider, DigitalOceanFileProvider>();
 builder.Services.AddScoped<IMessagingProducer, RabbitMQProducer>();
 builder.Services.AddScoped<IRetrieveConfigHelper, RetrieveConfigHelper>();
+builder.Services.AddScoped<IDeleteFileHelper, DeleteFileHelper>();
 
 builder.Services.Configure<FormOptions>(x => { x.MultipartBodyLengthLimit = 524288000; });
 

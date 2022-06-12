@@ -1,6 +1,7 @@
 ﻿using FileMicroservice.DTOs;
 using FileMicroservice.Interfaces;
 using FileMicroservice.Services;
+using FileMicroservice.Types;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -41,16 +42,23 @@ namespace FileMicroservice.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DownloadFile(string fileName)
         {
+            //var token = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+            var userId = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
+
             if (fileName == null)
             {
                 return BadRequest(new { message = "No filename specified." });
             }
 
-            var file = await this._fileService.RetrieveFile(fileName);
+            var file = await this._fileService.RetrieveFile(fileName, userId);
 
-            if (file == null)
+            if (file.SingleOrDefault().Key == ResultType.FileNotFound)
             {
                 return NotFound(new { message = "No file found."});
+            }
+            else if (file.SingleOrDefault().Key == ResultType.FileNotForUser)
+            {
+                return Unauthorized(new { message = "File does not belong to the user." });
             }
 
             var provider = new FileExtensionContentTypeProvider();
@@ -58,7 +66,7 @@ namespace FileMicroservice.Controllers
             {
                 contentType = "application/octet-stream";
             }
-            return File(file, contentType, fileName);
+            return File(file.SingleOrDefault().Value, contentType, fileName);
         }
 
         /// <summary>

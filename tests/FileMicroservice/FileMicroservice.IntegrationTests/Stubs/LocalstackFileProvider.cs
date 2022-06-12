@@ -15,26 +15,6 @@ namespace FileMicroservice.IntegrationTests.Stubs
 {
     public class LocalstackFileProvider : IFileProvider
     {
-        public async Task DeleteFileAsync(string fileName, DigitalOceanDataConfigDTO DODataConfigDto)
-        {
-			var _awsS3Client = CreateAWSS3Client(DODataConfigDto);
-
-			try
-			{
-				var deleteObjectRequest = new DeleteObjectRequest
-				{
-					BucketName = DODataConfigDto.DOBucketName,
-					Key = fileName // Keys are the full filename, including the file extension.
-				};
-				await _awsS3Client.DeleteObjectAsync(deleteObjectRequest);
-			}
-			catch (Exception exception)
-			{
-				Console.WriteLine("Unknown encountered on server. Message:'{0}' when deleting a file", exception.Message);
-				throw;
-			}
-		}
-
         public async Task<byte[]> DownloadFileAsync(string fileName, DigitalOceanDataConfigDTO DODataConfigDto)
         {
 			var _awsS3Client = CreateAWSS3Client(DODataConfigDto);
@@ -64,7 +44,7 @@ namespace FileMicroservice.IntegrationTests.Stubs
 			}
 		}
 
-        public async Task<bool> FindFileAsync(string fileName, DigitalOceanDataConfigDTO DODataConfigDto)
+        public async Task<Dictionary<bool, string>> FindFileAsync(string fileName, DigitalOceanDataConfigDTO DODataConfigDto)
         {
 			var _awsS3Client = CreateAWSS3Client(DODataConfigDto);
 
@@ -76,7 +56,7 @@ namespace FileMicroservice.IntegrationTests.Stubs
 					Key = fileName // Keys are the full filename, including the file extension.
 				};
 				await _awsS3Client.GetObjectAsync(getRequest);
-				return true;
+				return new Dictionary<bool, string>() { { true, "12" } };
 			}
 			catch (Exception exception)
 			{
@@ -84,12 +64,12 @@ namespace FileMicroservice.IntegrationTests.Stubs
 				{
 					if (exception.Message.Contains("NoSuchBucket"))
 					{
-						return false;
+						return new Dictionary<bool, string>() { { false, string.Empty } };
 					}
 
 					else if (exception.Message.Contains("NotFound"))
 					{
-						return false;
+						return new Dictionary<bool, string>() { { false, string.Empty } };
 					}
 				}
 				Console.WriteLine("Unknown encountered on server. Message:'{0}' when looking up a file", exception.Message);

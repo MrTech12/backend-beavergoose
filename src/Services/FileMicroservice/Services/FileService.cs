@@ -1,5 +1,6 @@
 ﻿using FileMicroservice.DTOs;
 using FileMicroservice.Interfaces;
+using FileMicroservice.Types;
 
 namespace FileMicroservice.Services
 {
@@ -35,26 +36,25 @@ namespace FileMicroservice.Services
             return fileDto.FileName;
         }
 
-        public async Task<byte[]?> RetrieveFile(string fileName)
+        public async Task<Dictionary<ResultType, byte[]?>> RetrieveFile(string fileName, string userId)
         {
             var DODataConfig = retrieveDODataConfig();
 
-            bool presence = await this._fileProvider.FindFileAsync(fileName, DODataConfig);
-            if (presence)
+            var presence = await this._fileProvider.FindFileAsync(fileName, DODataConfig);
+            if (presence.SingleOrDefault().Key)
             {
+                if (presence.SingleOrDefault().Value != userId)
+                {
+                    return new Dictionary<ResultType, byte[]?>() { { ResultType.FileNotForUser, null } };
+                }
+
                 var file = await this._fileProvider.DownloadFileAsync(fileName, DODataConfig);
                 
                 var fileDto = new FileDTO() { FileName = fileName };
                 this._messagingProducer.SendMessage(fileDto, "delete");
-                return file;
+                return new Dictionary<ResultType, byte[]?>() { { ResultType.FilePresent, file } };
             }
-            return null;
-        }
-
-        public async Task RemoveFile(string fileName)
-        {
-            var DODataConfig = retrieveDODataConfig();
-            await this._fileProvider.DeleteFileAsync(fileName, DODataConfig);
+            return new Dictionary<ResultType, byte[]?>() { { ResultType.FileNotFound, null } };
         }
 
         internal DigitalOceanDataConfigDTO retrieveDODataConfig()

@@ -8,8 +8,6 @@ namespace FileMicroservice.Interfaces
 
         Task UploadFileAsync(IFormFile file, DigitalOceanDataConfigDTO DODataConfigDto, FileDTO fileDTO);
 
-        Task<bool> FindFileAsync(string fileName, DigitalOceanDataConfigDTO DODataConfigDto);
-
-        Task DeleteFileAsync(string fileName, DigitalOceanDataConfigDTO DODataConfigDto);
+        Task<Dictionary<bool, string>> FindFileAsync(string fileName, DigitalOceanDataConfigDTO DODataConfigDto);
     }
 }
