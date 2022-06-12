@@ -17,11 +17,16 @@ ui:
     enabled: true
     path: /
     hosts:
-      - seq.demo-beavergoose.nl
+      - sequi.demo-beavergoose.nl
 
 ingestion:
   service:
     port: 5341
+  ingress:
+    enabled: true
+    path: /
+    hosts:
+      - seqingestion.demo-beavergoose.nl
 
 resources:
   requests:
