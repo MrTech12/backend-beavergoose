@@ -9,12 +9,14 @@ namespace FileMicroservice.Services
         private readonly IFileProvider _fileProvider;
         private readonly IMessagingProducer _messagingProducer;
         private readonly IRetrieveConfigHelper _retrieveConfigHelper;
+        private readonly IDeleteFileHelper _deleteFileHelper;
 
-        public FileService(IFileProvider fileProvider, IMessagingProducer messagingProducer, IRetrieveConfigHelper retrieveConfigHelper)
+        public FileService(IFileProvider fileProvider, IMessagingProducer messagingProducer, IRetrieveConfigHelper retrieveConfigHelper, IDeleteFileHelper _deleteFileHelper)
         {
             this._fileProvider = fileProvider;
             this._messagingProducer = messagingProducer;
             this._retrieveConfigHelper = retrieveConfigHelper;
+            this._deleteFileHelper = _deleteFileHelper;
         }
 
         public async Task<string> SaveFile(IFormFile file, FileDTO fileDto)
@@ -36,7 +38,7 @@ namespace FileMicroservice.Services
             return fileDto.FileName;
         }
 
-        public async Task<Dictionary<ResultType, byte[]?>> RetrieveFile(string fileName, string userId)
+        public async Task<Dictionary<ResultType, byte[]?>> RetrieveFile(string fileName, string userId, string token)
         {
             var DODataConfig = retrieveDODataConfig();
 
@@ -52,6 +54,7 @@ namespace FileMicroservice.Services
                 
                 var fileDto = new FileDTO() { FileName = fileName };
                 this._messagingProducer.SendMessage(fileDto, "delete");
+                this._deleteFileHelper.DeleteFile(fileName, token);
                 return new Dictionary<ResultType, byte[]?>() { { ResultType.FilePresent, file } };
             }
             return new Dictionary<ResultType, byte[]?>() { { ResultType.FileNotFound, null } };

@@ -2,6 +2,6 @@
 {
     public interface IDeleteFileHelper
     {
-        void DeleteFile(string fileName);
+        Task DeleteFile(string fileName, string token);
     }
 }

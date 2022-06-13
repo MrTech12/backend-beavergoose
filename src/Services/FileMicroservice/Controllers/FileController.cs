@@ -18,14 +18,16 @@ namespace FileMicroservice.Controllers
         private readonly IFileProvider _fileProvider;
         private readonly IMessagingProducer _messagingProducer;
         private readonly IRetrieveConfigHelper _retrieveConfigHelper;
+        private readonly IDeleteFileHelper _deleteFileHelper;
         private readonly FileService _fileService;
 
-        public FileController(IFileProvider fileProvider, IMessagingProducer messagingProducer, IRetrieveConfigHelper retrieveConfigHelper)
+        public FileController(IFileProvider fileProvider, IMessagingProducer messagingProducer, IRetrieveConfigHelper retrieveConfigHelper, IDeleteFileHelper deleteFileHelper)
         {
             this._fileProvider = fileProvider;
             this._messagingProducer = messagingProducer;
             this._retrieveConfigHelper = retrieveConfigHelper;
-            this._fileService = new FileService(this._fileProvider, this._messagingProducer, this._retrieveConfigHelper);
+            this._deleteFileHelper = deleteFileHelper;
+            this._fileService = new FileService(this._fileProvider, this._messagingProducer, this._retrieveConfigHelper, this._deleteFileHelper);
         }
 
         /// <summary>
@@ -42,7 +44,7 @@ namespace FileMicroservice.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DownloadFile(string fileName)
         {
-            //var token = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+            var token = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
             var userId = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value;
 
             if (fileName == null)
@@ -50,7 +52,7 @@ namespace FileMicroservice.Controllers
                 return BadRequest(new { message = "No filename specified." });
             }
 
-            var file = await this._fileService.RetrieveFile(fileName, userId);
+            var file = await this._fileService.RetrieveFile(fileName, userId, token);
 
             if (file.SingleOrDefault().Key == ResultType.FileNotFound)
             {
