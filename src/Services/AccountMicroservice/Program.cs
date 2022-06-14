@@ -72,6 +72,9 @@ builder.Services.AddAuthentication(options =>
 // For JWT
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JWT"));
 
+// For hashing password
+builder.Services.Configure<PasswordHasherOptions>(option => option.CompatibilityMode = PasswordHasherCompatibilityMode.IdentityV3);
+
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true); // Needed for saving DateTime variables
 
 var app = builder.Build();
