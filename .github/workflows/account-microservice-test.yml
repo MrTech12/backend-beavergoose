@@ -36,3 +36,10 @@ jobs:
     secrets:
       sonar-token: ${{ secrets.SONAR_TOKEN }}
       github-token: ${{ secrets.GITHUB_TOKEN }}
+  account-security:
+    uses: "./.github/workflows/workflow-security.yml"
+    with:
+      project-location: "src/Services/AccountMicroservice"
+      test-location: "tests/AccountMicroservice/AccountMicroservice.UnitTests"
+    secrets:
+      snyk-token: ${{ secrets.SNYK_TOKEN }}

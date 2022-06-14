@@ -1,0 +1,35 @@
+name: "workflow - security"
+on:
+  workflow_call:
+    inputs:
+      project-location:
+        required: true
+        type: string
+        description: "Path to project files"
+      project-name:
+        required: true
+        type: string
+        description: "name of the project"
+    secrets:
+      snyk-token:
+        required: true
+
+jobs:
+  snyk-security:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: "checkout project code"
+        uses: actions/checkout@v2
+      - name: "Change to project directory"
+        run: cd ${{ inputs.project-location }}
+      - name: "Run Snyk to check for vulnerabilities"
+        uses: snyk/actions/dotnet@master
+        continue-on-error: true
+        env:
+          SNYK_TOKEN: ${{ secrets.snyk-token }}
+        with:
+          args: --sarif-file-output=snyk-${{ inputs.project-name }}.sarif
+      - name: "Upload Synk results to GitHub Code Scanning"
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: snyk-${{ inputs.project-name }}.sarif
