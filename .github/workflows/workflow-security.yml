@@ -15,23 +15,20 @@ on:
         required: true
 
 jobs:
-  snyk-security:
+  trufflehog-leaked-credentiaks:
     runs-on: ubuntu-20.04
     steps:
       - name: "checkout project code"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: "Change to project directory"
         run: cd ${{ inputs.project-location }}
       - name: "Show working directory"
         run: pwd
-      - name: "Run Snyk to check for vulnerabilities"
-        uses: snyk/actions/dotnet@master
-        continue-on-error: true
-        env:
-          SNYK_TOKEN: ${{ secrets.snyk-token }}
+      - name: TruffleHog OSS
+        uses: trufflesecurity/trufflehog@v3.4.3
         with:
-          args: --sarif-file-output=snyk-${{ inputs.project-name }}.sarif --file=src/backend-beavergoose.sln --project-name-prefix=Services/AccountMicroservice
-      - name: "Upload Synk results to GitHub Code Scanning"
-        uses: github/codeql-action/upload-sarif@v1
-        with:
-          sarif_file: snyk-${{ inputs.project-name }}.sarif
+          path: ${{ inputs.project-location }}
+          base: ${{ github.ref_name }}
+          head: HEAD
