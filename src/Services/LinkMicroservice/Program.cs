@@ -55,8 +55,6 @@ builder.Services.AddTransient<ILinkRepository, LinkRepository>();
 // Add JWT verification
 var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(RetrieveConfigHelper.GetConfigValue("JWT", "Secret")));
 var authIssuer = RetrieveConfigHelper.GetConfigValue("JWT", "Issuer");
-var expireDate = RetrieveConfigHelper.GetConfigValue("JWT", "ExpirationInDays");
-var signCredentials = new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256);
 
 var tokenValidationParameters = new TokenValidationParameters
 {

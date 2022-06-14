@@ -66,7 +66,7 @@
     },
     {
       "DownstreamPathTemplate": "/api/v1/Account/login",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "accountmicroservice-service",
@@ -78,7 +78,7 @@
     },
     {
       "DownstreamPathTemplate": "/api/v1/Account/register",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "accountmicroservice-service",
@@ -86,6 +86,18 @@
         }
       ],
       "UpstreamPathTemplate": "/gateway/account/register",
+      "UpstreamHttpMethod": [ "Post" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/Token/refresh",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "accountmicroservice-service",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/account/token/fefresh",
       "UpstreamHttpMethod": [ "Post" ]
     }
   ],
