@@ -1,4 +1,4 @@
-name: "deploy template - DockerHub"
+name: "workflow - deploy to DockerHub"
 on:
   workflow_call:
     inputs:
@@ -26,7 +26,7 @@ jobs:
       - name: "Setup Docker"
         uses: docker/setup-buildx-action@v1
 
-      - name: "Login to DockerHub"
+      - name: "Login into DockerHub"
         run: docker login -u ${{ secrets.docker-username }} -p ${{ secrets.docker-token }}
 
       - name: "build Docker image"

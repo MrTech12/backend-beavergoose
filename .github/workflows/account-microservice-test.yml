@@ -5,6 +5,7 @@ on:
       - "main"
       - "development"
       - "feature-**"
+      - "techdebt-**"
     paths:
       - "src/Services/AccountMicroservice/**"
       - "tests/AccountMicroservice/AccountMicroservice.UnitTests/**"
@@ -20,7 +21,7 @@ on:
 
 jobs:
   link-build-unit-testing:
-    uses: "./.github/workflows/template-build-test.yml"
+    uses: "./.github/workflows/workflow-build-unit-test.yml"
     with:
       project-location: "src/Services/AccountMicroservice"
       test-location: "tests/AccountMicroservice/AccountMicroservice.UnitTests"
@@ -28,7 +29,7 @@ jobs:
     secrets:
       github-token: ${{ secrets.GITHUB_TOKEN }}
   link-analyse:
-    uses: "./.github/workflows/template-analyse.yml"
+    uses: "./.github/workflows/workflow-analyse.yml"
     with:
       project-location: "src/Services/AccountMicroservice"
       test-location: "tests/AccountMicroservice/AccountMicroservice.UnitTests"

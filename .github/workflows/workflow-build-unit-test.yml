@@ -1,4 +1,4 @@
-name: "build & test template"
+name: "workflow - build & unit test"
 on:
   workflow_call:
     inputs:

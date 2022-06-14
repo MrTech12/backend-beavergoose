@@ -5,6 +5,7 @@ on:
       - "main"
       - "development"
       - "feature-**"
+      - "techdebt-**"
     paths:
       - "src/Services/FileMicroservice/**"
       - "tests/FileMicroservice/FileMicroservice.UnitTests/**"
@@ -22,7 +23,7 @@ on:
 
 jobs:
   file-build-unit-testing:
-    uses: "./.github/workflows/template-build-test.yml"
+    uses: "./.github/workflows/workflow-build-unit-test.yml"
     with:
       project-location: "src/Services/FileMicroservice"
       test-location: "tests/FileMicroservice/FileMicroservice.UnitTests"
@@ -30,14 +31,14 @@ jobs:
     secrets:
       github-token: ${{ secrets.GITHUB_TOKEN }}
   file-integration-testing:
-    uses: "./.github/workflows/template-integration-test.yml"
+    uses: "./.github/workflows/workflow-integration-test.yml"
     with:
       test-location: "tests/FileMicroservice/FileMicroservice.IntegrationTests"
       project-name: "FileMicroservice"
     secrets:
       github-token: ${{ secrets.GITHUB_TOKEN }}
   file-analyse:
-    uses: "./.github/workflows/template-analyse.yml"
+    uses: "./.github/workflows/workflow-analyse.yml"
     with:
       project-location: "src/Services/FileMicroservice"
       test-location: "tests/FileMicroservice/FileMicroservice.UnitTests"
