@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AccountMicroservice.DTOs;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -9,12 +10,12 @@ namespace AccountMicroservice.Helpers
 {
     public class TokenHelper
     {
-        public string CreateAccessToken(IdentityUser user)
+        public string CreateAccessToken(UserDTO userDto)
         {
             var authClaims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-                new Claim("Username", user.UserName),
+                new Claim(JwtRegisteredClaimNames.Sub, userDto.UserId),
+                new Claim("Username", userDto.UserName),
             };
 
             var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(RetrieveConfigHelper.GetConfigValue("JWT", "Secret")));

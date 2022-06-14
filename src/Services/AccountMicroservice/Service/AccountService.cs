@@ -72,13 +72,15 @@ namespace AccountMicroservice.Service
             this._logger.LogInformation("Finding entered username for token creation");
             var user = await this._userManager.FindByNameAsync(username);
 
+            var userDto = new UserDTO() { UserId = user.Id, UserName = user.UserName };
             var userId = user.Id.ToString();
+
             this._logger.LogInformation("Creating JWT access & refresh tokens for login evidence");
-            
-            var tokenResponseDTO = new TokenResponseDTO();
-            tokenResponseDTO.AccessToken = tokenHelper.CreateAccessToken(user);
-            tokenResponseDTO.RefreshToken = tokenHelper.CreateRefreshToken();
-            return new Dictionary<string, TokenResponseDTO>() { { userId, tokenResponseDTO } };
+            var tokenResponseDto = new TokenResponseDTO();
+            tokenResponseDto.AccessToken = tokenHelper.CreateAccessToken(userDto);
+            tokenResponseDto.RefreshToken = tokenHelper.CreateRefreshToken();
+
+            return new Dictionary<string, TokenResponseDTO>() { { userId, tokenResponseDto } };
         }
 
         public async Task<TokenResponseDTO> CreateNewTokens(string accessToken)
@@ -88,12 +90,27 @@ namespace AccountMicroservice.Service
             
             this._logger.LogInformation("Finding user in db based on id");
             var user = await this._userManager.FindByIdAsync(userId);
+            var userDto = new UserDTO() { UserId = user.Id, UserName = user.UserName };
 
             this._logger.LogInformation("Creating new JWT access & refresh tokens for login evidence");
-            var newAccessToken = tokenHelper.CreateAccessToken(user);
+            var newAccessToken = tokenHelper.CreateAccessToken(userDto);
             var newRefreshToken = tokenHelper.CreateRefreshToken();
 
             return new TokenResponseDTO() { AccessToken = newAccessToken, RefreshToken = newRefreshToken };
+        }
+
+        public List<UserDTO> GetAllUsers()
+        {
+            this._logger.LogInformation("Retrieving all user in db.");
+            var userEntries = this._userManager.Users.Select(x => new { x.Id, x.UserName }).ToList();
+            
+            var userDtos = new List<UserDTO>();
+            foreach (var userEntry in userEntries)
+            {
+                userDtos.Add(new UserDTO() { UserId = userEntry.Id, UserName = userEntry.UserName });
+            }
+
+            return userDtos;
         }
     }
 }

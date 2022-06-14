@@ -99,6 +99,22 @@
       ],
       "UpstreamPathTemplate": "/gateway/account/token/fefresh",
       "UpstreamHttpMethod": [ "Post" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/Account/users",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "accountmicroservice-service",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/account/users",
+      "UpstreamHttpMethod": [ "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "TestKey",
+        "AllowedScopes": []
+      }
     }
   ],
   "GlobalConfiguration": {
