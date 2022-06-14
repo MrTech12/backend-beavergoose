@@ -56,8 +56,6 @@ builder.Services.AddScoped<IRetrieveConfigHelper, RetrieveConfigHelper>();
 // Add JWT verification
 var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(retrieveConfigHelper.GetConfigValue("JWT", "Secret")));
 var authIssuer = retrieveConfigHelper.GetConfigValue("JWT", "Issuer");
-var expireDate = retrieveConfigHelper.GetConfigValue("JWT", "ExpirationInDays");
-var signCredentials = new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256);
 
 var tokenValidationParameters = new TokenValidationParameters
 {
