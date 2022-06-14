@@ -1,4 +1,4 @@
-name: "Integration test template"
+name: "workflow - Integration test"
 on:
   workflow_call:
     inputs:
