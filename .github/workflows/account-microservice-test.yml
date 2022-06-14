@@ -20,7 +20,7 @@ on:
       - ".github/workflows/account-microservice-test.yml"
 
 jobs:
-  link-build-unit-testing:
+  account-build-unit-testing:
     uses: "./.github/workflows/workflow-build-unit-test.yml"
     with:
       project-location: "src/Services/AccountMicroservice"
@@ -28,7 +28,7 @@ jobs:
       project-name: "AccountMicroservice"
     secrets:
       github-token: ${{ secrets.GITHUB_TOKEN }}
-  link-analyse:
+  account-analyse:
     uses: "./.github/workflows/workflow-analyse.yml"
     with:
       project-location: "src/Services/AccountMicroservice"
