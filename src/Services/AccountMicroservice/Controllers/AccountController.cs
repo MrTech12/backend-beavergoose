@@ -82,7 +82,7 @@ namespace AccountMicroservice.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult GetUsers()
         {
-            var test = null;
+            string test = "";
             var result = this._accountService.GetAllUsers();
             return Ok(result);
         }
