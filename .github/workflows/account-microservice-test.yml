@@ -40,6 +40,6 @@ jobs:
     uses: "./.github/workflows/workflow-security.yml"
     with:
       project-location: "src/Services/AccountMicroservice"
-      test-location: "tests/AccountMicroservice/AccountMicroservice.UnitTests"
+      project-name: "AccountMicroservice"
     secrets:
       snyk-token: ${{ secrets.SNYK_TOKEN }}
