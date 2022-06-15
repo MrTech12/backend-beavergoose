@@ -52,6 +52,8 @@ builder.Host.UseSerilog((ctx, lc) => lc.ReadFrom.Configuration(builder.Configura
     .WriteTo.Console(outputTemplate: "[{Timestamp:dd-MM-yyyy HH:mm:ss}] [{Level}] ({SourceContext}) {Message}{NewLine}{Exception}")
     .WriteTo.Seq(retrieveConfigHelper.GetConfigValue("Seq", "ServerUrl"), apiKey: retrieveConfigHelper.GetConfigValue("Seq", "ApiKey")));
 
+Serilog.Debugging.SelfLog.Enable(Console.Error);
+
 builder.Services.AddScoped<IFileProvider, DigitalOceanFileProvider>();
 builder.Services.AddScoped<IMessagingProducer, RabbitMQProducer>();
 builder.Services.AddScoped<IRetrieveConfigHelper, RetrieveConfigHelper>();

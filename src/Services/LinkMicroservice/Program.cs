@@ -47,6 +47,8 @@ builder.Host.UseSerilog((ctx, lc) => lc.ReadFrom.Configuration(builder.Configura
     .WriteTo.Console(outputTemplate: "[{Timestamp:dd-MM-yyyy HH:mm:ss}] [{Level}] ({SourceContext}) {Message}{NewLine}{Exception}")
     .WriteTo.Seq(RetrieveConfigHelper.GetConfigValue("Seq", "ServerUrl"), apiKey: RetrieveConfigHelper.GetConfigValue("Seq", "ApiKey")));
 
+Serilog.Debugging.SelfLog.Enable(Console.Error);
+
 builder.Services.AddHostedService<ConsumerRabbitMQHostedService>();
 
 builder.Services.AddSingleton<LinkContext>();
