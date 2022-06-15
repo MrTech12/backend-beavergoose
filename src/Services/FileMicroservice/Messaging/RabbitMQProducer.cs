@@ -22,7 +22,7 @@ namespace FileMicroservice.Messaging
 
         public void SendMessage<T>(T message, string routingKey)
         {
-            this._logger.LogInformation("Sending status of a file to {RoutingKey}", routingKey);
+            this._logger.LogInformation("Sending status of a file to routingkey: {RoutingKey}", routingKey);
 
             var factory = new ConnectionFactory()
             {

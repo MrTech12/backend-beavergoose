@@ -7,4 +7,5 @@ spec:
     app: postgresql-accountmicroservice
   ports:
     - protocol: TCP
-      port: 5432
+      port: 1111
+      targetPort: 5432

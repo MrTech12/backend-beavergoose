@@ -5,7 +5,7 @@ metadata:
   labels:
     app: apigateway
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: apigateway
@@ -20,6 +20,19 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 5001
+          env:
+            - name: "JWT_Secret"
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-config
+                  key: secret
+                  optional: false
+            - name: "JWT_Issuer"
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-config
+                  key: issuer
+                  optional: false
           resources:
             requests:
               memory: "128Mi"

@@ -5,7 +5,7 @@ metadata:
   labels:
     app: accountmicroservice
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: accountmicroservice
@@ -34,6 +34,26 @@ spec:
                 secretKeyRef:
                   name: accountmicroservice-dbconnectionstring
                   key: accountcontext
+                  optional: false
+            - name: "JWT_Secret"
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-config
+                  key: secret
+                  optional: false
+            - name: "JWT_Issuer"
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-config
+                  key: issuer
+                  optional: false
+            - name: "Seq_ServerUrl"
+              value: "my-seq.default.svc.cluster.local"
+            - name: "Seq_ApiKey"
+              valueFrom:
+                secretKeyRef:
+                  name: seq-apikeys
+                  key: accountmicroservice
                   optional: false
           resources:
             requests:

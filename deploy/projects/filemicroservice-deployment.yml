@@ -5,7 +5,7 @@ metadata:
   labels:
     app: filemicroservice
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: filemicroservice
@@ -21,38 +21,55 @@ spec:
           ports:
             - containerPort: 6000
           env:
-            - name: "DigitalOcean_ServiceURL"
-              valueFrom:
-                secretKeyRef:
-                  name: digitalocean-spaces
-                  key: serviceurl
-                  optional: false
-            - name: "DigitalOcean_BucketName"
-              valueFrom:
-                secretKeyRef:
-                  name: digitalocean-spaces
-                  key: bucketname
-                  optional: false
-            - name: "DigitalOcean_AccessKey"
-              valueFrom:
-                secretKeyRef:
-                  name: digitalocean-spaces
-                  key: accesskey
-                  optional: false
-            - name: "DigitalOcean_SecretAccessKey"
-              valueFrom:
-                secretKeyRef:
-                  name: digitalocean-spaces
-                  key: secretaccesskey
-                  optional: false
             - name: "RabbitMQ_HostName"
               value: "rabbitmq-service"
             - name: "RabbitMQ_Port"
               value: "5672"
+            - name: "JWT_Secret"
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-config
+                  key: secret
+                  optional: false
+            - name: "JWT_Issuer"
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-config
+                  key: issuer
+                  optional: false
+            - name: "Seq_ServerUrl"
+              value: "my-seq.default.svc.cluster.local"
+            - name: "Seq_ApiKey"
+              valueFrom:
+                secretKeyRef:
+                  name: seq-apikeys
+                  key: filemicroservice
+                  optional: false
+            - name: "DeleteFile_Endpoint"
+              valueFrom:
+                secretKeyRef:
+                  name: deletefile
+                  key: endpoint
+                  optional: false
+            - name: "GCP_ProjectId"
+              valueFrom:
+                secretKeyRef:
+                  name: gcp
+                  key: projectid
+                  optional: false
+            - name: "GOOGLE_APPLICATION_CREDENTIALS"
+              value: "/var/run/secret/gcp/serviceaccount.json"
           resources:
             requests:
               memory: "128Mi"
               cpu: "128m"
             limits:
-              memory: "640Mi"
+              memory: "512Mi"
               cpu: "256m"
+          volumeMounts:
+              - name: "gcp-service-account"
+                mountPath: "/var/run/secret/gcp"
+      volumes:
+        - name: "gcp-service-account"
+          secret:
+            secretName: "gcp-serviceaccount-credentials"

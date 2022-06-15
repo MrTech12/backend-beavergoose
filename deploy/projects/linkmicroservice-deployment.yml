@@ -5,7 +5,7 @@ metadata:
   labels:
     app: linkmicroservice
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: linkmicroservice
@@ -39,6 +39,26 @@ spec:
               value: "rabbitmq-service"
             - name: "RabbitMQ_Port"
               value: "5672"
+            - name: "JWT_Secret"
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-config
+                  key: secret
+                  optional: false
+            - name: "JWT_Issuer"
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-config
+                  key: issuer
+                  optional: false
+            - name: "Seq_ServerUrl"
+              value: "my-seq.default.svc.cluster.local"
+            - name: "Seq_ApiKey"
+              valueFrom:
+                secretKeyRef:
+                  name: seq-apikeys
+                  key: linkmicroservice
+                  optional: false
           resources:
             requests:
               memory: "128Mi"
