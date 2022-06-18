@@ -24,13 +24,13 @@ namespace FileMicroservice.UnitTests.Stubs
             return Task.FromResult(new Dictionary<bool, string>() { { true, "24"} });
         }
 
-        public async Task UploadFileAsync(IFormFile file, DigitalOceanDataConfigDTO DODataConfigurationDTO, FileDTO fileDTO)
+        public async Task UploadFileAsync(SaveFileDTO saveFileDto, DigitalOceanDataConfigDTO DODataConfigurationDTO)
         {
-            var saveToPath = Path.Combine(Path.GetTempPath(), fileDTO.FileName);
+            var saveToPath = Path.Combine(Path.GetTempPath(), saveFileDto.FileName);
 
             using (var targetStream = File.Create(saveToPath))
             {
-                await file.CopyToAsync(targetStream);
+                await saveFileDto.File.CopyToAsync(targetStream);
             }
         }
     }

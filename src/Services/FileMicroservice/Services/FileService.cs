@@ -19,7 +19,7 @@ namespace FileMicroservice.Services
             this._retrieveExternalSecretHelper = retrieveExternalSecretHelper;
         }
 
-        public async Task SaveFile(UploadFileDTO uploadFileDto)
+        public async Task<string> SaveFile(UploadFileDTO uploadFileDto)
         {
             var DODataConfig = retrieveDODataConfig();
 
@@ -51,6 +51,7 @@ namespace FileMicroservice.Services
                 AllowedDownloads = Convert.ToInt32(saveFileDto.AllowedDownloads)
             };
             this._messagingProducer.SendMessage(fileDTO, "create");
+            return saveFileDto.FileName;
         }
 
         public async Task<Dictionary<ResultType, byte[]?>> RetrieveFile(string fileName, string userId, string token)

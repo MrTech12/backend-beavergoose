@@ -1,6 +1,7 @@
 using FileMicroservice.DTOs;
 using FileMicroservice.IntegrationTests.Stubs;
 using FileMicroservice.Services;
+using FileMicroservice.Types;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System.IO;
@@ -17,14 +18,14 @@ namespace FileMicroservice.IntegrationTests
 
         public FileServiceIntegrationTest()
         {
-            this.fileService = new FileService(new LocalstackFileProvider(), new StubMessagingProducer(), new StubRetrieveConfigHelper(), new StubDeleteFileHelper());
+            this.fileService = new FileService(new LocalstackFileProvider(), new StubMessagingProducer(), new StubRetrieveConfigHelper(), new StubDeleteFileHelper(), new StubRetrieveExternalSecretHelper());
         }
 
         [Fact]
         public async Task SaveFileWithExtension()
         {
             // Arrange
-            var fileDto = new FileDTO() { ReceiverId = "12", SenderId = "24" };
+            var UploadFileDto = new UploadFileDTO() { ReceiverId = "12", SenderId = "24", AllowedDownloads = "1" };
             string userId = "12";
             var token = string.Empty;
 
@@ -35,8 +36,10 @@ namespace FileMicroservice.IntegrationTests
                 ContentType = "text/plain"
             };
 
+            UploadFileDto.File = stubFile;
+
             // Act
-            var newFileName = await this.fileService.SaveFile(stubFile, fileDto);
+            var newFileName = await this.fileService.SaveFile(UploadFileDto);
 
             // Assert
             var savedFile = await this.fileService.RetrieveFile(newFileName, userId, token);
@@ -47,7 +50,7 @@ namespace FileMicroservice.IntegrationTests
         public async void SaveFileWithoutExtension()
         {
             // Arrange
-            var fileDto = new FileDTO() { ReceiverId = "12", SenderId = "24" };
+            var UploadFileDto = new UploadFileDTO() { ReceiverId = "12", SenderId = "24", AllowedDownloads = "1" };
             string userId = "12";
             var token = string.Empty;
 
@@ -58,8 +61,10 @@ namespace FileMicroservice.IntegrationTests
                 ContentType = "text/plain"
             };
 
+            UploadFileDto.File = stubFile;
+
             // Act
-            var newFileName = await this.fileService.SaveFile(stubFile, fileDto);
+            var newFileName = await this.fileService.SaveFile(UploadFileDto);
 
             // Assert
             var savedFile = await this.fileService.RetrieveFile(newFileName, userId, token);
@@ -70,7 +75,7 @@ namespace FileMicroservice.IntegrationTests
         public async void CheckIfSavedFilePresent()
         {
             // Arrange
-            var fileDto = new FileDTO() { ReceiverId = "12", SenderId = "24" };
+            var UploadFileDto = new UploadFileDTO() { ReceiverId = "12", SenderId = "24", AllowedDownloads = "1" };
             string userId = "12";
             var token = string.Empty;
 
@@ -81,7 +86,9 @@ namespace FileMicroservice.IntegrationTests
                 ContentType = "text/plain"
             };
 
-            var newFileName = await this.fileService.SaveFile(stubFile, fileDto);
+            UploadFileDto.File = stubFile;
+
+            var newFileName = await this.fileService.SaveFile(UploadFileDto);
 
             // Act
             var savedFile = await this.fileService.RetrieveFile(newFileName, userId, token);
@@ -94,7 +101,7 @@ namespace FileMicroservice.IntegrationTests
         public async void CheckIfUnsavedFilePresent()
         {
             // Arrange
-            var fileDto = new FileDTO() { ReceiverId = "12", SenderId = "24" };
+            var UploadFileDto = new UploadFileDTO() { ReceiverId = "12", SenderId = "24", AllowedDownloads = "1" };
             string userId = "12";
             var token = string.Empty;
 
@@ -105,7 +112,9 @@ namespace FileMicroservice.IntegrationTests
                 ContentType = "application/pdf"
             };
 
-            var newFileName = await this.fileService.SaveFile(stubFile, fileDto);
+            UploadFileDto.File = stubFile;
+
+            var newFileName = await this.fileService.SaveFile(UploadFileDto);
 
             // Act
             var savedFile = await this.fileService.RetrieveFile("qwerty.txt", userId, token);
@@ -118,7 +127,7 @@ namespace FileMicroservice.IntegrationTests
         public async void DownloadPresentFile()
         {
             // Arrange
-            var fileDto = new FileDTO() { ReceiverId = "12", SenderId = "24" };
+            var UploadFileDto = new UploadFileDTO() { ReceiverId = "12", SenderId = "24", AllowedDownloads = "1" };
             string userId = "12";
             var token = string.Empty;
 
@@ -129,7 +138,9 @@ namespace FileMicroservice.IntegrationTests
                 ContentType = "application/pdf"
             };
 
-            var newFileName = await this.fileService.SaveFile(stubFile, fileDto);
+            UploadFileDto.File = stubFile;
+
+            var newFileName = await this.fileService.SaveFile(UploadFileDto);
 
             // Act
             var fileBytes = await this.fileService.RetrieveFile(newFileName, userId, token);
@@ -142,7 +153,7 @@ namespace FileMicroservice.IntegrationTests
         public async void DownloadNonPresentFile()
         {
             // Arrange
-            var fileDto = new FileDTO() { ReceiverId = "12", SenderId = "24" };
+            var UploadFileDto = new UploadFileDTO() { ReceiverId = "12", SenderId = "24", AllowedDownloads = "1" };
             string userId = "12";
             var token = string.Empty;
 
@@ -153,13 +164,42 @@ namespace FileMicroservice.IntegrationTests
                 ContentType = "application/pdf"
             };
 
-            var newFileName = await this.fileService.SaveFile(stubFile, fileDto);
+            UploadFileDto.File = stubFile;
+
+            var newFileName = await this.fileService.SaveFile(UploadFileDto);
+
+            // Act
+            var fileBytes = await this.fileService.RetrieveFile("Orange.pdf", userId, token);
+
+            // Assert
+            Assert.Equal(ResultType.FileNotFound, fileBytes.SingleOrDefault().Key);
+        }
+
+        [Fact]
+        public async void DownloadPresentFileFromAnotherUser()
+        {
+            // Arrange
+            var uploadFileDto = new UploadFileDTO() { ReceiverId = "12", SenderId = "24", AllowedDownloads = "1" };
+            var userId = "35";
+            var token = string.Empty;
+
+            var bytes = Encoding.UTF8.GetBytes("This is a Mango PDF");
+            IFormFile stubFile = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "Data", "Mango.pdf")
+            {
+                Headers = new HeaderDictionary(),
+                ContentType = "application/pdf"
+            };
+
+            uploadFileDto.File = stubFile;
+
+            var newFileName = await this.fileService.SaveFile(uploadFileDto);
 
             // Act
             var fileBytes = await this.fileService.RetrieveFile(newFileName, userId, token);
 
             // Assert
-            Assert.Equal(23, fileBytes.SingleOrDefault().Value.Length);
+            File.Delete(Path.GetTempPath() + newFileName);
+            Assert.Equal(ResultType.FileNotForUser, fileBytes.SingleOrDefault().Key);
         }
     }
 }

@@ -24,7 +24,7 @@ namespace LinkMicroservice.UnitTests
         public async Task CreateLink()
         {
             // Arrange
-            var fileDto = new FileDTO() { FileName = "qwerty.txt", SenderID = "qw", ReceiverID = "we", AllowedDownloads = 1 };
+            var fileDto = new FileDTO() { FileName = "qwerty.txt", SenderId = "qw", ReceiverId = "we", AllowedDownloads = 1 };
 
             // Act
             await this.linkService.CreateSaveLink(fileDto);
@@ -38,7 +38,7 @@ namespace LinkMicroservice.UnitTests
         public async Task CheckIfLinkPresent()
         {
             // Arrange
-            var fileDto = new FileDTO() { FileName = "azerty.txt", SenderID = "qw", ReceiverID = "we", AllowedDownloads = 1 };
+            var fileDto = new FileDTO() { FileName = "azerty.txt", SenderId = "qw", ReceiverId = "we", AllowedDownloads = 1 };
             await this.linkService.CreateSaveLink(fileDto);
 
             // Act
@@ -52,7 +52,7 @@ namespace LinkMicroservice.UnitTests
         public async Task CheckIfLinkNotPresent()
         {
             // Arrange
-            var fileDto = new FileDTO() { FileName = "serty.txt", SenderID = "qw", ReceiverID = "we", AllowedDownloads = 1 };
+            var fileDto = new FileDTO() { FileName = "serty.txt", SenderId = "qw", ReceiverId = "we", AllowedDownloads = 1 };
             await this.linkService.CreateSaveLink(fileDto);
 
             // Act
@@ -66,7 +66,7 @@ namespace LinkMicroservice.UnitTests
         public async Task RemoveLink()
         {
             // Arrange
-            var fileDto = new FileDTO() { FileName = "sandcat.txt", SenderID = "qw", ReceiverID = "we", AllowedDownloads = 1 };
+            var fileDto = new FileDTO() { FileName = "sandcat.txt", SenderId = "qw", ReceiverId = "we", AllowedDownloads = 1 };
             await this.linkService.CreateSaveLink(fileDto);
 
             // Act
@@ -78,7 +78,7 @@ namespace LinkMicroservice.UnitTests
         }
 
         [Fact]
-        public async Task RetrieveLinksByKnownReceiverID()
+        public async Task RetrieveLinksByKnownReceiverId()
         {
             // Arrange
 
@@ -90,10 +90,10 @@ namespace LinkMicroservice.UnitTests
         }
 
         [Fact]
-        public async Task RetrieveLinksByUNknownReceiverID()
+        public async Task RetrieveLinksByUNknownReceiverId()
         {
             // Arrange
-            var fileDto = new FileDTO() { FileName = "sandcat.txt", SenderID = "qw", ReceiverID = "we", AllowedDownloads = 1 };
+            var fileDto = new FileDTO() { FileName = "sandcat.txt", SenderId = "qw", ReceiverId = "we", AllowedDownloads = 1 };
             await this.linkService.CreateSaveLink(fileDto);
 
             // Act

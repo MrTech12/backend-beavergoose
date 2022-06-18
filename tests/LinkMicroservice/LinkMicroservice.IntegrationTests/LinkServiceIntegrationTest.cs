@@ -48,7 +48,7 @@ namespace LinkMicroservice.IntegrationTests
         public async Task CreateSaveALink()
         {
             // Arrange
-            FileDTO fileDto = new FileDTO() { FileName = "qwerty.txt", SenderID = "Jan", ReceiverID = "Bob", AllowedDownloads = 1 };
+            FileDTO fileDto = new FileDTO() { FileName = "qwerty.txt", SenderId = "Jan", ReceiverId = "Bob", AllowedDownloads = 1 };
 
             // Act
             await this._linkService.CreateSaveLink(fileDto);
@@ -152,7 +152,7 @@ namespace LinkMicroservice.IntegrationTests
             this._linkContext.Links.Add(new Link() { FileName = "grades Jan.pdf", Address = "rwermo3994-4329r99", SenderID = "Mr. Henk", ReceiverID = "Jan", AllowedDownloads = 1 });
             await this._linkContext.SaveChangesAsync();
 
-            FileDTO deletedFile = new FileDTO() { FileName = "assignment Jan.docx", SenderID = "Jan", ReceiverID = "Mr. Henk", AllowedDownloads = 1 };
+            FileDTO deletedFile = new FileDTO() { FileName = "assignment Jan.docx", SenderId = "Jan", ReceiverId = "Mr. Henk", AllowedDownloads = 1 };
 
             // Act
             await this._linkService.RemoveLink(deletedFile);
@@ -172,7 +172,7 @@ namespace LinkMicroservice.IntegrationTests
             this._linkContext.Links.Add(new Link() { FileName = "grades Jan.pdf", Address = "rwermo3994-4329r99", SenderID = "Mr. Henk", ReceiverID = "Jan", AllowedDownloads = 1 });
             await this._linkContext.SaveChangesAsync();
 
-            FileDTO deletedFile = new FileDTO() { FileName = "assignment Adrian.docx", SenderID = "Adrian", ReceiverID = "Mr. Henk", AllowedDownloads = 1 };
+            FileDTO deletedFile = new FileDTO() { FileName = "assignment Adrian.docx", SenderId = "Adrian", ReceiverId = "Mr. Henk", AllowedDownloads = 1 };
 
             // Act
             await this._linkService.RemoveLink(deletedFile);

@@ -25,7 +25,7 @@ namespace AccountMicroservice.Helpers
             var token = new JwtSecurityToken(
                 issuer: authIssuer,
                 claims: authClaims,
-                expires: DateTime.Now.AddMinutes(5),
+                expires: DateTime.Now.AddMinutes(15),
                 signingCredentials: signCredentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);

@@ -77,7 +77,7 @@ namespace FileMicroservice.IntegrationTests.Stubs
 			}
 		}
 
-        public async Task UploadFileAsync(IFormFile file, DigitalOceanDataConfigDTO DODataConfigDto, FileDTO fileDto)
+        public async Task UploadFileAsync(SaveFileDTO saveFileDto, DigitalOceanDataConfigDTO DODataConfigDto)
         {
 			var _awsS3Client = CreateAWSS3Client(DODataConfigDto);
 
@@ -85,21 +85,21 @@ namespace FileMicroservice.IntegrationTests.Stubs
 			{
 				using (var newMemoryStream = new MemoryStream())
 				{
-					file.CopyTo(newMemoryStream);
+					saveFileDto.File.CopyTo(newMemoryStream);
 
 					var fileTransferUtility = new TransferUtility(_awsS3Client);
 					var uploadRequest = new TransferUtilityUploadRequest
 					{
 						InputStream = newMemoryStream,
-						Key = fileDto.FileName,
+						Key = saveFileDto.FileName,
 						BucketName = DODataConfigDto.DOBucketName,
-						ContentType = file.ContentType,
+						ContentType = saveFileDto.File.ContentType,
 						CannedACL = S3CannedACL.Private
 					};
 
-					uploadRequest.Metadata.Add("senderid", fileDto.SenderId);
-					uploadRequest.Metadata.Add("receiverid", fileDto.ReceiverId);
-					uploadRequest.Metadata.Add("alloweddownloads", Convert.ToString(fileDto.AllowedDownloads));
+					uploadRequest.Metadata.Add("senderid", saveFileDto.SenderId);
+					uploadRequest.Metadata.Add("receiverid", saveFileDto.ReceiverId);
+					uploadRequest.Metadata.Add("alloweddownloads", Convert.ToString(saveFileDto.AllowedDownloads));
 					await fileTransferUtility.UploadAsync(uploadRequest);
 				}
 			}
