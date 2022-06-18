@@ -3,11 +3,13 @@ using AccountMicroservice.Helpers;
 using AccountMicroservice.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Exceptions;
 using System.Configuration;
 using System.Reflection;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,6 +49,8 @@ builder.Host.UseSerilog((ctx, lc) => lc.ReadFrom.Configuration(builder.Configura
     .WriteTo.Console(outputTemplate: "[{Timestamp:dd-MM-yyyy HH:mm:ss}] [{Level}] ({SourceContext}) {Message}{NewLine}{Exception}")
     .WriteTo.Seq(RetrieveConfigHelper.GetConfigValue("Seq", "ServerUrl"), apiKey: RetrieveConfigHelper.GetConfigValue("Seq", "ApiKey")));
 
+Serilog.Debugging.SelfLog.Enable(Console.Error);
+
 // For Entity Framework
 builder.Services.AddSingleton<AccountContext>();
 
@@ -72,7 +76,38 @@ builder.Services.AddAuthentication(options =>
 // For JWT
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JWT"));
 
+// For hashing password
+builder.Services.Configure<PasswordHasherOptions>(option => option.CompatibilityMode = PasswordHasherCompatibilityMode.IdentityV3);
+
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true); // Needed for saving DateTime variables
+
+// Add JWT verification
+var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(RetrieveConfigHelper.GetConfigValue("JWT", "Secret")));
+var authIssuer = RetrieveConfigHelper.GetConfigValue("JWT", "Issuer");
+
+var tokenValidationParameters = new TokenValidationParameters
+{
+    ValidateIssuerSigningKey = true,
+    IssuerSigningKey = authSigningKey,
+    ValidateIssuer = true,
+    ValidIssuer = authIssuer,
+    ValidateAudience = false,
+    ValidateLifetime = true,
+    ClockSkew = TimeSpan.Zero,
+    RequireExpirationTime = true,
+};
+
+// Adding Authentication
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(x =>
+{
+    x.SaveToken = true;
+    x.TokenValidationParameters = tokenValidationParameters;
+});
 
 var app = builder.Build();
 

@@ -1,11 +1,7 @@
-name: "deploy template - Kubernetes"
+name: "workflow - deploy to Kubernetes"
 on:
   workflow_call:
     inputs:
-      project-location:
-        required: true
-        type: string
-        description: "Path to project files"
       project-name:
         required: true
         type: string

@@ -47,6 +47,8 @@ builder.Host.UseSerilog((ctx, lc) => lc.ReadFrom.Configuration(builder.Configura
     .WriteTo.Console(outputTemplate: "[{Timestamp:dd-MM-yyyy HH:mm:ss}] [{Level}] ({SourceContext}) {Message}{NewLine}{Exception}")
     .WriteTo.Seq(RetrieveConfigHelper.GetConfigValue("Seq", "ServerUrl"), apiKey: RetrieveConfigHelper.GetConfigValue("Seq", "ApiKey")));
 
+Serilog.Debugging.SelfLog.Enable(Console.Error);
+
 builder.Services.AddHostedService<ConsumerRabbitMQHostedService>();
 
 builder.Services.AddSingleton<LinkContext>();
@@ -55,8 +57,6 @@ builder.Services.AddTransient<ILinkRepository, LinkRepository>();
 // Add JWT verification
 var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(RetrieveConfigHelper.GetConfigValue("JWT", "Secret")));
 var authIssuer = RetrieveConfigHelper.GetConfigValue("JWT", "Issuer");
-var expireDate = RetrieveConfigHelper.GetConfigValue("JWT", "ExpirationInDays");
-var signCredentials = new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256);
 
 var tokenValidationParameters = new TokenValidationParameters
 {

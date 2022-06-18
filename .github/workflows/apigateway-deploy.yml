@@ -6,7 +6,7 @@ on:
 
 jobs:
   apigateway-docker-dockerhub:
-    uses: "./.github/workflows/template-deploy-dockerhub.yml"
+    uses: "./.github/workflows/workflow-deploy-dockerhub.yml"
     with:
       project-location: "src/APIGateways/APIGateway"
       project-name: "apigateway"
@@ -14,16 +14,15 @@ jobs:
       docker-username: ${{ secrets.DOCKER_USERNAME }}
       docker-token: ${{ secrets.DOCKER_TOKEN }}
   apigateway-kubernetes-deployment:
-    uses: "./.github/workflows/template-deploy-kubernetes.yml"
+    uses: "./.github/workflows/workflow-deploy-kubernetes.yml"
     needs: apigateway-docker-dockerhub
     with:
-      project-location: "src/APIGateways/APIGateway"
       project-name: "apigateway"
     secrets:
       digitalocean-access-token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
       digitalocean-cluster-name: ${{ secrets.DIGITALOCEAN_CLUSTER_NAME }}
   apigateway-kubernetes-ingress:
-    uses: "./.github/workflows/template-deploy-kubernetes-ingress.yml"
+    uses: "./.github/workflows/workflow-deploy-kubernetes-ingress.yml"
     needs: apigateway-kubernetes-deployment
     with:
       project-name: "apigateway"

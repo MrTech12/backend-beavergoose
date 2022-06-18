@@ -28,7 +28,7 @@ namespace DeleteFileApp.Services
             }
             else if (result.SingleOrDefault().Value != deleteFileDto.UserId)
             {
-                _logger.LogWarning("File does not belong to the user of the current request.");
+                _logger.LogInformation("File does not belong to the user of the current request.");
                 return ResultType.FileNotForUser;
             }
 

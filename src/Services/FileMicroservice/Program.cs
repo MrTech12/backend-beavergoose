@@ -52,17 +52,19 @@ builder.Host.UseSerilog((ctx, lc) => lc.ReadFrom.Configuration(builder.Configura
     .WriteTo.Console(outputTemplate: "[{Timestamp:dd-MM-yyyy HH:mm:ss}] [{Level}] ({SourceContext}) {Message}{NewLine}{Exception}")
     .WriteTo.Seq(retrieveConfigHelper.GetConfigValue("Seq", "ServerUrl"), apiKey: retrieveConfigHelper.GetConfigValue("Seq", "ApiKey")));
 
+Serilog.Debugging.SelfLog.Enable(Console.Error);
+
 builder.Services.AddScoped<IFileProvider, DigitalOceanFileProvider>();
 builder.Services.AddScoped<IMessagingProducer, RabbitMQProducer>();
 builder.Services.AddScoped<IRetrieveConfigHelper, RetrieveConfigHelper>();
+builder.Services.AddScoped<IDeleteFileHelper, DeleteFileHelper>();
+builder.Services.AddScoped<IRetrieveExternalSecretHelper, RetrieveExternalSecretHelper>();
 
 builder.Services.Configure<FormOptions>(x => { x.MultipartBodyLengthLimit = 524288000; });
 
 // Add JWT verification
 var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(retrieveConfigHelper.GetConfigValue("JWT", "Secret")));
 var authIssuer = retrieveConfigHelper.GetConfigValue("JWT", "Issuer");
-var expireDate = retrieveConfigHelper.GetConfigValue("JWT", "ExpirationInDays");
-var signCredentials = new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256);
 
 var tokenValidationParameters = new TokenValidationParameters
 {

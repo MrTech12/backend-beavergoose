@@ -1,10 +1,10 @@
 ﻿namespace FileMicroservice.DTOs
 {
-    public class FileDTO
+    public class UploadFileDTO
     {
-        public string FileName { get; set; } = string.Empty;
+        public IFormFile File { get; set; }
         public string SenderId { get; set; } = string.Empty;
         public string ReceiverId { get; set; } = string.Empty;
-        public int AllowedDownloads { get; set; }
+        public string AllowedDownloads { get; set; } = string.Empty;
     }
 }

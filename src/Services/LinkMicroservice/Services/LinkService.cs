@@ -18,8 +18,8 @@ namespace LinkMicroservice.Services
             {
                 Address = Guid.NewGuid().ToString(),
                 FileName = fileDto.FileName,
-                SenderID = fileDto.SenderID,
-                ReceiverID = fileDto.ReceiverID,
+                SenderID = fileDto.SenderId,
+                ReceiverID = fileDto.ReceiverId,
                 AllowedDownloads = fileDto.AllowedDownloads
             };
             await this._linkRepository.SaveLink(link);

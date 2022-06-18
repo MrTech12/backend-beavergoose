@@ -2,19 +2,23 @@
 
 * File that contains information about the secrets that need to be created and accessed, per deployment.
 
+# APIGateway
+* Name: jwt-config
+  - Values:
+    - issuer
+    - secret
+
 # AccountMicroservice
 * Name: accountmicroservice-dbconnectionstring
   - Value:
     - accountcontext
-* Name: jwt
+* Name: jwt-config
   - Values:
     - issuer
     - secret
-    - expirationindays
-* Name: seq-logging
+* Name: seq-apikeys
   - Values:
-    - serverurl
-    - apikey
+    - accountmicroservice
 
 # AccountMicroservice - dbmigration-job
 * Name: accountmicroservice-dbconnectionstring
@@ -27,24 +31,22 @@
     - password
 
 ## FileMicroservice
-* Name: digitalocean-spaces
-  - Values:
-    - serviceurl
-    - bucketname
-    - accesskey
-    - secretaccesskey
-* Name: jwt
+* Name: jwt-config
   - Values:
     - issuer
     - secret
-    - expirationindays
-* Name: seq-logging
+* Name: seq-apikeys
   - Values:
-    - serverurl
-    - apikey
-* Name: DeleteFileApp
+    - filemicroservice
+* Name: deletefileapp
   - Value:
     - endpoint
+* Name: GCP
+  - Value:
+    - projectid
+* Name: GOOGLE_APPLICATION_CREDENTIALS
+  - Value:
+    - volume mountpoint
 
 # LinkMicroservice
 * Name: linkmicroservice-dbconnectionstring
@@ -54,11 +56,9 @@
   - Values:
     - issuer
     - secret
-    - expirationindays
-* Name: seq-logging
+* Name: seq-apikeys
   - Values:
-    - serverurl
-    - apikey
+    - linkmicroservice
 
 # LinkMicroservice - dbmigration-job
 * Name: linkmicroservice-dbconnectionstring
@@ -69,11 +69,6 @@
 * Name: postgresql-linkmicroservice-credentials
   - Value:
     - password
-
-# Seq
-* Name: seq-credentials
-  - Value:
-    - adminpasswordhash
 
 # DeleteFileApp
 * Name: digitalocean-spaces
@@ -86,7 +81,6 @@
   - Values:
     - issuer
     - secret
-    - expirationindays
 * Name: seq-logging
   - Values:
     - serverurl

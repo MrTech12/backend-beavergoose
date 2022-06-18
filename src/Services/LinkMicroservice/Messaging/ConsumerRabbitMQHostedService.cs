@@ -76,7 +76,7 @@ namespace LinkMicroservice.Messaging
             var consumer = new AsyncEventingBasicConsumer(this._channel);
             consumer.Received += async (model, ea) =>
             {
-                this._logger.LogInformation("Message received from {RoutingKey}.", ea.RoutingKey);
+                this._logger.LogInformation("Message received from routingkey: {RoutingKey}.", ea.RoutingKey);
                 var content = Encoding.UTF8.GetString(ea.Body.ToArray());
                 var fileDto = JsonSerializer.Deserialize<FileDTO>(content);
 

@@ -46,7 +46,7 @@ namespace FileMicroservice.Data
 			}
 		}
 
-        public async Task UploadFileAsync(IFormFile file, DigitalOceanDataConfigDTO DODataConfigDto, FileDTO fileDto)
+        public async Task UploadFileAsync(SaveFileDTO saveFileDto, DigitalOceanDataConfigDTO DODataConfigDto)
 		{
 			var _awsS3Client = CreateAWSS3Client(DODataConfigDto);
 
@@ -54,21 +54,21 @@ namespace FileMicroservice.Data
 			{
 				using (var newMemoryStream = new MemoryStream())
 				{
-					file.CopyTo(newMemoryStream);
+					saveFileDto.File.CopyTo(newMemoryStream);
 
 					var fileTransferUtility = new TransferUtility(_awsS3Client);
 					var uploadRequest = new TransferUtilityUploadRequest
 					{
 						InputStream = newMemoryStream,
-						Key = fileDto.FileName,
+						Key = saveFileDto.FileName,
+						ContentType = saveFileDto.File.ContentType,
 						BucketName = DODataConfigDto.DOBucketName,
-						ContentType = file.ContentType,
 						CannedACL = S3CannedACL.Private
 					};
 
-					uploadRequest.Metadata.Add("senderid", fileDto.SenderID);
-					uploadRequest.Metadata.Add("receiverid", fileDto.ReceiverID);
-					uploadRequest.Metadata.Add("alloweddownloads", Convert.ToString(fileDto.AllowedDownloads));
+					uploadRequest.Metadata.Add("senderid", saveFileDto.SenderId);
+					uploadRequest.Metadata.Add("receiverid", saveFileDto.ReceiverId);
+					uploadRequest.Metadata.Add("alloweddownloads", saveFileDto.AllowedDownloads);
 
 					this._logger.LogInformation("Uploading a file to DigitalOcean Spaces");
 					await fileTransferUtility.UploadAsync(uploadRequest);
@@ -84,7 +84,7 @@ namespace FileMicroservice.Data
 			}
 		}
 
-		public async Task<bool> FindFileAsync(string fileName, DigitalOceanDataConfigDTO DODataConfigDto)
+		public async Task<Dictionary<bool, string>> FindFileAsync(string fileName, DigitalOceanDataConfigDTO DODataConfigDto)
 		{
 			var _awsS3Client = CreateAWSS3Client(DODataConfigDto);
 
@@ -97,47 +97,28 @@ namespace FileMicroservice.Data
 				};
 
 				this._logger.LogInformation("Finding a file on DigitalOcean Spaces");
-				await _awsS3Client.GetObjectAsync(getRequest);
-				return true;
+				var result = await _awsS3Client.GetObjectAsync(getRequest);
+
+				this._logger.LogInformation("File found on DigitalOcean Spaces");
+				var receiverId = result.Metadata["x-amz-meta-receiverid"].ToString();
+				return new Dictionary<bool, string>() { { true, receiverId } };
             }
             catch (Exception exception)
 			{
 				if (exception.InnerException != null)
 				{
 					if (exception.Message.Contains("NoSuchBucket")) {
-						return false;
+						return new Dictionary<bool, string>() { { false, string.Empty } };
 					}
 
 					else if (exception.Message.Contains("NoSuchKey")) {
-						return false;
+						return new Dictionary<bool, string>() { { false, string.Empty } };
 					}
 				}
 				this._logger.LogError(exception, "There was a problem when looking up a file. Source of Exception: {Source}. Expection Message: {Message}", exception.Source, exception.Message);
 				throw;
 			}
 		}
-
-        public async Task DeleteFileAsync(string fileName, DigitalOceanDataConfigDTO DODataConfigDto)
-        {
-			var _awsS3Client = CreateAWSS3Client(DODataConfigDto);
-
-			try
-            {
-				var deleteObjectRequest = new DeleteObjectRequest
-				{
-					BucketName = DODataConfigDto.DOBucketName,
-					Key = fileName // Keys are the full filename, including the file extension.
-				};
-
-				this._logger.LogInformation("Deleting a file from DigitalOcean Spaces");
-				await _awsS3Client.DeleteObjectAsync(deleteObjectRequest);
-			}
-			catch (Exception exception)
-			{
-				this._logger.LogError(exception, "There was a problem when deleting a file. Source of Exception: {Source}. Expection Message: {Message}", exception.Source, exception.Message);
-				throw;
-			}
-        }
 
 		internal IAmazonS3 CreateAWSS3Client(DigitalOceanDataConfigDTO DODataConfigDto)
         {

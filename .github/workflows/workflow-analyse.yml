@@ -1,4 +1,4 @@
-name: "analyse template"
+name: "workflow - analyse"
 on:
   workflow_call:
     inputs:

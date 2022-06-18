@@ -1,5 +1,6 @@
 ﻿using AccountMicroservice.DTOs;
 using AccountMicroservice.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -67,8 +68,22 @@ namespace AccountMicroservice.Controllers
                 return BadRequest(new { message = result.SingleOrDefault().Value });
             }
 
-            var tokenInfo = await this._accountService.GetToken(loginDto.Username);
-            return Ok(new { token = tokenInfo.SingleOrDefault().Key, userId = tokenInfo.SingleOrDefault().Value });
+            var tokenInfo = await this._accountService.GetTokens(loginDto.Username);
+            var tokenresponse = new TokenResponseDTO() { AccessToken = tokenInfo.SingleOrDefault().Value.AccessToken, RefreshToken = tokenInfo.SingleOrDefault().Value.RefreshToken };
+            return Ok(new { UserId = tokenInfo.SingleOrDefault().Key, AccessToken = tokenresponse.AccessToken, RefreshToken = tokenresponse.RefreshToken });
+        }
+
+        /// <summary>
+        /// Retrieve all users, including usernames and id's 
+        /// </summary>
+        /// <response code="200">Users retrieved</response>
+        [Authorize]
+        [HttpGet("users")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public IActionResult GetUsers()
+        {
+            var result = this._accountService.GetAllUsers();
+            return Ok(result);
         }
     }
 }
