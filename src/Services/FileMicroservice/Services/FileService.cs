@@ -19,23 +19,30 @@ namespace FileMicroservice.Services
             this._retrieveExternalSecretHelper = retrieveExternalSecretHelper;
         }
 
-        public async Task<string> SaveFile(IFormFile file, FileDTO fileDto)
+        public async Task SaveFile(UploadFileDTO uploadFileDto)
         {
             var DODataConfig = retrieveDODataConfig();
 
-            fileDto.FileName = Guid.NewGuid().ToString();
-            string fileExtension = Path.GetExtension(file.FileName);
-            if (fileExtension == string.Empty)
+            var saveFileDto = new SaveFileDTO()
             {
-                fileDto.FileName += ".txt";
-            } else {
-                fileDto.FileName += fileExtension;
-            }
+                SenderId = uploadFileDto.SenderId,
+                ReceiverId = uploadFileDto.ReceiverId,
+                AllowedDownloads = uploadFileDto.AllowedDownloads,
+                ContentType = uploadFileDto.ContentType,
+                FileContent = uploadFileDto.FileContent
+            };
 
-            await this._fileProvider.UploadFileAsync(file, DODataConfig, fileDto);
-            this._messagingProducer.SendMessage(fileDto, "create");
+            saveFileDto.FileName = Guid.NewGuid().ToString() + uploadFileDto.FileExtenstion;
+            await this._fileProvider.UploadFileAsync(saveFileDto, DODataConfig);
 
-            return fileDto.FileName;
+            var fileDTO = new FileDTO()
+            {
+                FileName = saveFileDto.FileName,
+                SenderId = saveFileDto.SenderId,
+                ReceiverId = saveFileDto.ReceiverId,
+                AllowedDownloads = Convert.ToInt32(saveFileDto.AllowedDownloads)
+            };
+            this._messagingProducer.SendMessage(fileDTO, "create");
         }
 
         public async Task<Dictionary<ResultType, byte[]?>> RetrieveFile(string fileName, string userId, string token)

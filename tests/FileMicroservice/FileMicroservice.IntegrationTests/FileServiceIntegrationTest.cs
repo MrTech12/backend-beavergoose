@@ -24,7 +24,7 @@ namespace FileMicroservice.IntegrationTests
         public async Task SaveFileWithExtension()
         {
             // Arrange
-            var fileDto = new FileDTO() { ReceiverID = "12", SenderID = "24" };
+            var fileDto = new FileDTO() { ReceiverId = "12", SenderId = "24" };
             string userId = "12";
             var token = string.Empty;
 
@@ -47,7 +47,7 @@ namespace FileMicroservice.IntegrationTests
         public async void SaveFileWithoutExtension()
         {
             // Arrange
-            var fileDto = new FileDTO() { ReceiverID = "12", SenderID = "24" };
+            var fileDto = new FileDTO() { ReceiverId = "12", SenderId = "24" };
             string userId = "12";
             var token = string.Empty;
 
@@ -70,7 +70,7 @@ namespace FileMicroservice.IntegrationTests
         public async void CheckIfSavedFilePresent()
         {
             // Arrange
-            var fileDto = new FileDTO() { ReceiverID = "12", SenderID = "24" };
+            var fileDto = new FileDTO() { ReceiverId = "12", SenderId = "24" };
             string userId = "12";
             var token = string.Empty;
 
@@ -94,7 +94,7 @@ namespace FileMicroservice.IntegrationTests
         public async void CheckIfUnsavedFilePresent()
         {
             // Arrange
-            var fileDto = new FileDTO() { ReceiverID = "12", SenderID = "24" };
+            var fileDto = new FileDTO() { ReceiverId = "12", SenderId = "24" };
             string userId = "12";
             var token = string.Empty;
 
@@ -118,7 +118,7 @@ namespace FileMicroservice.IntegrationTests
         public async void DownloadPresentFile()
         {
             // Arrange
-            var fileDto = new FileDTO() { ReceiverID = "12", SenderID = "24" };
+            var fileDto = new FileDTO() { ReceiverId = "12", SenderId = "24" };
             string userId = "12";
             var token = string.Empty;
 
@@ -142,7 +142,7 @@ namespace FileMicroservice.IntegrationTests
         public async void DownloadNonPresentFile()
         {
             // Arrange
-            var fileDto = new FileDTO() { ReceiverID = "12", SenderID = "24" };
+            var fileDto = new FileDTO() { ReceiverId = "12", SenderId = "24" };
             string userId = "12";
             var token = string.Empty;
 
