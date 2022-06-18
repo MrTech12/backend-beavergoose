@@ -54,17 +54,14 @@ namespace FileMicroservice.Data
 			{
 				using (var newMemoryStream = new MemoryStream())
 				{
-					StreamWriter writer = new StreamWriter(newMemoryStream);
-					writer.Write(saveFileDto.FileContent);
-					writer.Flush();
-					newMemoryStream.Position = 0;
+					saveFileDto.File.CopyTo(newMemoryStream);
 
 					var fileTransferUtility = new TransferUtility(_awsS3Client);
 					var uploadRequest = new TransferUtilityUploadRequest
 					{
 						InputStream = newMemoryStream,
 						Key = saveFileDto.FileName,
-						ContentType = saveFileDto.ContentType,
+						ContentType = saveFileDto.File.ContentType,
 						BucketName = DODataConfigDto.DOBucketName,
 						CannedACL = S3CannedACL.Private
 					};

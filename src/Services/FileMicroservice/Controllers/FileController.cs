@@ -11,7 +11,7 @@ using System.Text.RegularExpressions;
 namespace FileMicroservice.Controllers
 {
     [Route("api/v{version:apiVersion}/[controller]")]
-    [Produces("application/json")]
+    //[Produces("application/json")]
     [ApiVersion("2.0")]
     public class FileController : ControllerBase
     {
@@ -85,26 +85,36 @@ namespace FileMicroservice.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> UploadFile([FromBody] UploadFileDTO uploadFileDto)
+        public async Task<IActionResult> UploadFile([FromForm] UploadFileDTO uploadFileDto)
         {
-            if (uploadFileDto.ContentType == string.Empty || uploadFileDto.SenderId == string.Empty || uploadFileDto.ReceiverId == string.Empty || uploadFileDto.AllowedDownloads == string.Empty)
+            if ( uploadFileDto.SenderId == string.Empty || uploadFileDto.ReceiverId == string.Empty || uploadFileDto.AllowedDownloads == string.Empty)
             {
                 return BadRequest(new { message = "File information not provided" });
             }
 
-            else if (uploadFileDto.FileContent == null)
+            if (!int.TryParse(uploadFileDto.AllowedDownloads, out int value))
+            {
+                return BadRequest(new { message = "The allowedDownloads value needs to be an integer" });
+            }
+
+            else if (uploadFileDto.File == null)
             {
                 return BadRequest(new { message = "File not provided" });
             }
 
+            // Checking file type
+            byte[] buffer = new byte[uploadFileDto.File.Length];
+            uploadFileDto.File.OpenReadStream().Read(buffer, 0, Convert.ToInt32(uploadFileDto.File.Length));
+            string content = System.Text.Encoding.UTF8.GetString(buffer);
+
             string fileType;
-            if (uploadFileDto.ContentType.Contains("text") || uploadFileDto.ContentType.Contains("jpeg"))
+            if (uploadFileDto.File.ContentType.Contains("text") || uploadFileDto.File.ContentType.Contains("jpeg"))
             {
                 return BadRequest(new { message = "File type not allowed." });
             }
-            else 
+            else
             {
-                fileType = uploadFileDto.ContentType
+                fileType = uploadFileDto.File.ContentType
                     .Replace("application/", "")
                     .Replace("image/", "")
                     .Replace("video/", "")
@@ -112,10 +122,8 @@ namespace FileMicroservice.Controllers
                     .Replace("model/", "");
             }
 
-            if (Regex.IsMatch(uploadFileDto.FileContent, @fileType, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline))
+            if (Regex.IsMatch(content, @fileType, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline))
             {
-                uploadFileDto.FileExtenstion = "." + fileType;
-
                 await this._fileService.SaveFile(uploadFileDto);
                 return Created(String.Empty, new { message = "file saved!" });
             }

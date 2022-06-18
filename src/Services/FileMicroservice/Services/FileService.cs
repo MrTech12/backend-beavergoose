@@ -25,14 +25,22 @@ namespace FileMicroservice.Services
 
             var saveFileDto = new SaveFileDTO()
             {
+                File = uploadFileDto.File,
                 SenderId = uploadFileDto.SenderId,
                 ReceiverId = uploadFileDto.ReceiverId,
-                AllowedDownloads = uploadFileDto.AllowedDownloads,
-                ContentType = uploadFileDto.ContentType,
-                FileContent = uploadFileDto.FileContent
+                AllowedDownloads = uploadFileDto.AllowedDownloads
             };
 
-            saveFileDto.FileName = Guid.NewGuid().ToString() + uploadFileDto.FileExtenstion;
+            saveFileDto.FileName = Guid.NewGuid().ToString();
+            string fileExtension = Path.GetExtension(uploadFileDto.File.FileName);
+            if (fileExtension == string.Empty)
+            {
+                saveFileDto.FileName += ".txt";
+            }
+            else
+            {
+                saveFileDto.FileName += fileExtension;
+            }
             await this._fileProvider.UploadFileAsync(saveFileDto, DODataConfig);
 
             var fileDTO = new FileDTO()
