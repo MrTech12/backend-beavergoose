@@ -38,3 +38,11 @@ jobs:
     secrets:
       digitalocean-access-token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
       digitalocean-cluster-name: ${{ secrets.DIGITALOCEAN_CLUSTER_NAME }}
+  link-kubernetes-scaler:
+    uses: "./.github/workflows/workflow-deploy-kubernetes-scaler.yml"
+    needs: link-kubernetes-deployment
+    with:
+      project-name: "linkmicroservice"
+    secrets:
+      digitalocean-access-token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      digitalocean-cluster-name: ${{ secrets.DIGITALOCEAN_CLUSTER_NAME }}

@@ -1,0 +1,34 @@
+name: "workflow - deploy Kubernetes Scaler"
+on:
+  workflow_call:
+    inputs:
+      project-name:
+        required: true
+        type: string
+        description: "Name of the project"
+    secrets:
+      digitalocean-access-token:
+        required: true
+      digitalocean-cluster-name:
+        required: true
+
+jobs:
+  deploy-kubernetes-scaler:
+    runs-on: ubuntu-20.04
+    steps:
+    - name: checkout project code
+      uses: actions/checkout@v2
+
+    - name: Install doctl
+      uses: digitalocean/action-doctl@v2
+      with:
+        token: ${{ secrets.digitalocean-access-token }}
+    
+    - name: Save DigitalOcean kubeconfig with short-lived credentials
+      run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 ${{ secrets.digitalocean-cluster-name }}
+    
+    - name: Update hpa on DigitalOcean's Kubernetes cluster
+      run: kubectl apply -f deploy/projects/${{ inputs.project-name }}-horizontalscaler.yml
+    
+    - name: Verify hpa
+      run: kubectl get hpa ${{ inputs.project-name }}-horizontalscaler
