@@ -12,6 +12,9 @@
 ## Entities
 * Contains Models of the data objects that are stored/retrieved from the database and are used to create database tables.
 
+## Helps
+* Contains logic which multiple classes make use of.
+
 ## Interfaces
 * Contains interfaces for the Data Repositories and Service classes.
 

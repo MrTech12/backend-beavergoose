@@ -1,5 +1,6 @@
 ﻿using LinkMicroservice.Interfaces;
 using LinkMicroservice.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,11 +9,11 @@ namespace LinkMicroservice.Controllers
     [ApiController]
     [Route("api/v{version:apiVersion}/[controller]")]
     [Produces("application/json")]
-    [ApiVersion("1.0")]
+    [ApiVersion("2.0")]
     public class LinkController : ControllerBase
     {
         private readonly ILinkRepository _linkRepository;
-        private LinkService _linkService;
+        private readonly LinkService _linkService;
 
         public LinkController(ILinkRepository linkRepository)
         {
@@ -26,6 +27,7 @@ namespace LinkMicroservice.Controllers
         /// <param name="address">The generated link</param>
         /// <response code="200">FileName located</response>
         /// <response code="404">Address not found</response>
+        [Authorize]
         [HttpGet("address")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -45,6 +47,7 @@ namespace LinkMicroservice.Controllers
         /// <param name="receiverID">The ID of the person that received the link</param>
         /// <response code="200">FileName located</response>
         /// <response code="404">Address not found</response>
+        [Authorize]
         [HttpGet("links")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

@@ -12,7 +12,7 @@ namespace LinkMicroservice.Messaging
 {
     public class ConsumerRabbitMQHostedService : BackgroundService
     {
-        private readonly ILogger<ConsumerRabbitMQHostedService> _logger;
+        private readonly ILogger _logger;
         private ConnectionFactory _connectionFactory;
         private IConnection _connection;
         private IModel _channel;
@@ -20,14 +20,12 @@ namespace LinkMicroservice.Messaging
         private const string queueName = "link.managing";
         private readonly IConfiguration _configuration;
         private readonly ILinkRepository _linkRepository;
-        private readonly RetrieveConfigHelper _retrieveConfigHelper;
 
         public ConsumerRabbitMQHostedService(IConfiguration configuration, ILogger<ConsumerRabbitMQHostedService> logger, ILinkRepository linkRepository)
         {
             this._configuration = configuration;
             this._logger = logger;
             this._linkRepository = linkRepository;
-            this._retrieveConfigHelper = new RetrieveConfigHelper(this._configuration);
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)
@@ -40,8 +38,8 @@ namespace LinkMicroservice.Messaging
 
             this._connectionFactory = new ConnectionFactory
             {
-                HostName = this._retrieveConfigHelper.GetConfigValue("RabbitMQ", "HostName"),
-                Port = Convert.ToInt32(this._retrieveConfigHelper.GetConfigValue("RabbitMQ", "Port")),
+                HostName = RetrieveConfigHelper.GetConfigValue("RabbitMQ", "HostName"),
+                Port = Convert.ToInt32(RetrieveConfigHelper.GetConfigValue("RabbitMQ", "Port")),
                 DispatchConsumersAsync = true
             };
             try
@@ -61,11 +59,11 @@ namespace LinkMicroservice.Messaging
                 properties.Persistent = true; // Declaring the message as persistent
                 this._channel.BasicQos(0, 1, false); // Send messages to different workers based on received acknowledgment
 
-                this._logger.LogInformation("Queue [{queueName}] is waiting for messages.", queueName);
+                this._logger.LogInformation("Queue {QueueName} is waiting for messages.", queueName);
             }
             catch (BrokerUnreachableException brokenUnreachable)
             {
-                this._logger.LogError("Connection to RabbitMQ can't be established. Exception message: {ExceptionMessage}.", brokenUnreachable.Message);
+                this._logger.LogError(brokenUnreachable, "There was a problem connecting with RabbitMQ. Source of Exception: {Source}. Exception message: {ExceptionMessage}.", brokenUnreachable.Source, brokenUnreachable.Message);
                 throw;
             }
             return base.StartAsync(cancellationToken);
@@ -78,8 +76,8 @@ namespace LinkMicroservice.Messaging
             var consumer = new AsyncEventingBasicConsumer(this._channel);
             consumer.Received += async (model, ea) =>
             {
+                this._logger.LogInformation("Message received from routingkey: {RoutingKey}.", ea.RoutingKey);
                 var content = Encoding.UTF8.GetString(ea.Body.ToArray());
-                this._logger.LogInformation("Message received with content: [{content}].", content);
                 var fileDto = JsonSerializer.Deserialize<FileDTO>(content);
 
                 if (fileDto != null)
@@ -113,7 +111,7 @@ namespace LinkMicroservice.Messaging
         {
             await base.StopAsync(cancellationToken);
             this._connection.Close();
-            this._logger.LogInformation("RabbitMQ connection is closed.");
+            this._logger.LogInformation("RabbitMQ connection has been closed.");
         }
     }
 }

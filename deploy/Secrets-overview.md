@@ -2,36 +2,86 @@
 
 * File that contains information about the secrets that need to be created and accessed, per deployment.
 
+# APIGateway
+* Name: jwt-config
+  - Values:
+    - issuer
+    - secret
+
+# AccountMicroservice
+* Name: accountmicroservice-dbconnectionstring
+  - Value:
+    - accountcontext
+* Name: jwt-config
+  - Values:
+    - issuer
+    - secret
+* Name: seq-apikeys
+  - Values:
+    - accountmicroservice
+
+# AccountMicroservice - dbmigration-job
+* Name: accountmicroservice-dbconnectionstring
+  - Value:
+    - accountcontext
+
+# AccountMicroservice - PostgreSQL
+* Name: postgresql-accountmicroservice-credentials
+  - Value:
+    - password
+
 ## FileMicroservice
+* Name: jwt-config
+  - Values:
+    - issuer
+    - secret
+* Name: seq-apikeys
+  - Values:
+    - filemicroservice
+* Name: deletefileapp
+  - Value:
+    - endpoint
+* Name: GCP
+  - Value:
+    - projectid
+* Name: GOOGLE_APPLICATION_CREDENTIALS
+  - Value:
+    - volume mountpoint
+
+# LinkMicroservice
+* Name: linkmicroservice-dbconnectionstring
+  - Value:
+    - linkcontext
+* Name: jwt
+  - Values:
+    - issuer
+    - secret
+* Name: seq-apikeys
+  - Values:
+    - linkmicroservice
+
+# LinkMicroservice - dbmigration-job
+* Name: linkmicroservice-dbconnectionstring
+  - Value:
+    - linkcontext
+
+# LinkMicroservice - PostgreSQL
+* Name: postgresql-linkmicroservice-credentials
+  - Value:
+    - password
+
+# DeleteFileApp
 * Name: digitalocean-spaces
-* Values:
+  - Values:
     - serviceurl
     - bucketname
     - accesskey
     - secretaccesskey
+* Name: jwt
+  - Values:
+    - issuer
+    - secret
 * Name: seq-logging
-* Value: 
+  - Values:
+    - serverurl
     - apikey
-
-# LinkMicroservice
-* Name: linkmicroservice-dbconnectionstring
-* Value:
-    - linkcontext
-* Name: seq-logging
-* Value: 
-    - apikey
-
-# LinkMicroservice - dbmigration-job
-* Name: linkmicroservice-dbconnectionstring
-* Value:
-    - linkcontext
-
-# LinkMicroservice - PostgreSQL
-* Name: linkmicroservice-postgresql-credentials
-* Value:
-    - password
-
-# Seq
-* Name: seq-credentials
-* Value:
-    - adminpasswordhash

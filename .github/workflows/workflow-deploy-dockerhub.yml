@@ -1,0 +1,40 @@
+name: "workflow - deploy to DockerHub"
+on:
+  workflow_call:
+    inputs:
+      project-location:
+        required: true
+        type: string
+        description: "Path to project files"
+      project-name:
+        required: true
+        type: string
+        description: "Name of the project"
+    secrets:
+      docker-username:
+        required: true
+      docker-token:
+        required: true
+
+jobs:
+  build-push-docker:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: "checkout project code"
+        uses: actions/checkout@v2
+
+      - name: "Setup Docker"
+        uses: docker/setup-buildx-action@v1
+
+      - name: "Login into DockerHub"
+        run: docker login -u ${{ secrets.docker-username }} -p ${{ secrets.docker-token }}
+
+      - name: "build Docker image"
+        run: docker build -t ${{ secrets.docker-username }}/beavergoose-${{ inputs.project-name }}:$BRANCH_NAME ${{ inputs.project-location }}
+        env:
+          BRANCH_NAME: ${{ github.ref_name }}
+
+      - name: "Push Docker image"
+        run: docker push ${{ secrets.docker-username }}/beavergoose-${{ inputs.project-name }}:$BRANCH_NAME
+        env:
+          BRANCH_NAME: ${{ github.ref_name }}

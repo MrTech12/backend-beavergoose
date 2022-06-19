@@ -4,7 +4,8 @@
 
 
 ## Setup
-* This project depends on a MySQL database and a RabbitMQ connection.
+* This project depends on a PostgreSQL database and a RabbitMQ connection.
+* The project also require information about verifying JWT tokens, as to validate requests.
 * The required credentials for these services, are placed in the `appsettings-template.json` file.
 * To run this app, one must create an `appsettings.json` file and place the required credentails inside it.
 

@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  postgresqlbeavergoose-linkdb:
+    image: postgres:14.2
+    container_name: postgresqlbeavergoose-linkdb
+    environment:
+      - POSTGRES_USER=Sina
+      - POSTGRES_PASSWORD=sU4m1!rc&1HiNWZZNbB9j!
+      - POSTGRES_DB=beavergoose
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgresqlbeavergoose-linkdata:/var/lib/postgresql/data
+volumes:
+  postgresqlbeavergoose-linkdata:

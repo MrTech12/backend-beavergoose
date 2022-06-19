@@ -18,7 +18,7 @@ spec:
           command: ["dotnet"]
           args: ["LinkMicroservice.DBMigration.dll"]
           env:
-            - name: "ConnectionString"
+            - name: "ConnectionStrings_LinkContext"
               valueFrom:
                 secretKeyRef:
                   name: linkmicroservice-dbconnectionstring

@@ -1,75 +1,102 @@
 ﻿using FileMicroservice.DTOs;
-using FileMicroservice.Helpers;
 using FileMicroservice.Interfaces;
+using FileMicroservice.Types;
 
 namespace FileMicroservice.Services
 {
     public class FileService
     {
         private readonly IFileProvider _fileProvider;
-        private readonly IConfiguration _configuration;
         private readonly IMessagingProducer _messagingProducer;
-        private readonly RetrieveConfigHelper _retrieveConfigHelper;
+        private readonly IRetrieveExternalSecretHelper _retrieveExternalSecretHelper;
+        private readonly IDeleteFileHelper _deleteFileHelper;
 
-        public FileService(IConfiguration configuration, IFileProvider fileProvider, IMessagingProducer _messagingProducer)
+        public FileService(IFileProvider fileProvider, IMessagingProducer messagingProducer, IRetrieveConfigHelper retrieveConfigHelper, IDeleteFileHelper _deleteFileHelper, IRetrieveExternalSecretHelper retrieveExternalSecretHelper)
         {
-            this._configuration = configuration;
             this._fileProvider = fileProvider;
-            this._messagingProducer = _messagingProducer;
-            this._retrieveConfigHelper = new RetrieveConfigHelper(this._configuration);
+            this._messagingProducer = messagingProducer;
+            this._deleteFileHelper = _deleteFileHelper;
+            this._retrieveExternalSecretHelper = retrieveExternalSecretHelper;
         }
 
-        public async Task<string> SaveFile(IFormFile file, FileDTO fileDto)
+        public async Task<string> SaveFile(UploadFileDTO uploadFileDto)
         {
             var DODataConfig = retrieveDODataConfig();
 
-            fileDto.FileName = Guid.NewGuid().ToString();
-            string fileExtension = Path.GetExtension(file.FileName);
-            if (fileExtension == String.Empty)
+            var saveFileDto = new SaveFileDTO()
             {
-                fileDto.FileName += ".txt";
-            } else {
-                fileDto.FileName += fileExtension;
+                File = uploadFileDto.File,
+                SenderId = uploadFileDto.SenderId,
+                ReceiverId = uploadFileDto.ReceiverId,
+                AllowedDownloads = uploadFileDto.AllowedDownloads
+            };
+
+            saveFileDto.FileName = Guid.NewGuid().ToString();
+            string fileExtension = Path.GetExtension(uploadFileDto.File.FileName);
+            if (fileExtension == string.Empty)
+            {
+                saveFileDto.FileName += ".txt";
             }
+            else
+            {
+                saveFileDto.FileName += fileExtension;
+            }
+            await this._fileProvider.UploadFileAsync(saveFileDto, DODataConfig);
 
-            await this._fileProvider.UploadFileAsync(file, DODataConfig, fileDto);
-            this._messagingProducer.SendMessage(fileDto, "create");
-
-            return fileDto.FileName;
+            var fileDTO = new FileDTO()
+            {
+                FileName = saveFileDto.FileName,
+                SenderId = saveFileDto.SenderId,
+                ReceiverId = saveFileDto.ReceiverId,
+                AllowedDownloads = Convert.ToInt32(saveFileDto.AllowedDownloads)
+            };
+            this._messagingProducer.SendMessage(fileDTO, "create");
+            return saveFileDto.FileName;
         }
 
-        public async Task<byte[]?> RetrieveFile(string fileName)
+        public async Task<Dictionary<ResultType, byte[]?>> RetrieveFile(string fileName, string userId, string token)
         {
             var DODataConfig = retrieveDODataConfig();
 
-            bool presence = await this._fileProvider.FindFileAsync(fileName, DODataConfig);
-            if (presence)
+            var presence = await this._fileProvider.FindFileAsync(fileName, DODataConfig);
+            if (presence.SingleOrDefault().Key)
             {
+                if (presence.SingleOrDefault().Value != userId)
+                {
+                    return new Dictionary<ResultType, byte[]?>() { { ResultType.FileNotForUser, null } };
+                }
+
                 var file = await this._fileProvider.DownloadFileAsync(fileName, DODataConfig);
                 
                 var fileDto = new FileDTO() { FileName = fileName };
                 this._messagingProducer.SendMessage(fileDto, "delete");
-                return file;
+                await this._deleteFileHelper.DeleteFile(fileName, token);
+                return new Dictionary<ResultType, byte[]?>() { { ResultType.FilePresent, file } };
             }
-            return null;
-        }
-
-        public async Task RemoveFile(string fileName)
-        {
-            var DODataConfig = retrieveDODataConfig();
-            await this._fileProvider.DeleteFileAsync(fileName, DODataConfig);
+            return new Dictionary<ResultType, byte[]?>() { { ResultType.FileNotFound, null } };
         }
 
         internal DigitalOceanDataConfigDTO retrieveDODataConfig()
         {
-            var EmptyDODataConfig = new DigitalOceanDataConfigDTO()
+            var DODataConfig = new DigitalOceanDataConfigDTO()
             {
-                DOServiceURL = this._retrieveConfigHelper.GetConfigValue("DigitalOcean", "ServiceURL"),
-                DOBucketName = this._retrieveConfigHelper.GetConfigValue("DigitalOcean", "BucketName"),
-                DOAccessKey = this._retrieveConfigHelper.GetConfigValue("DigitalOcean", "AccessKey"),
-                DOSecretAccessKey = this._retrieveConfigHelper.GetConfigValue("DigitalOcean", "SecretAccessKey")
+                DOServiceURL = this._retrieveExternalSecretHelper.GetSecret("DigitalOcean_ServiceURL"),
+                DOBucketName = this._retrieveExternalSecretHelper.GetSecret("DigitalOcean_BucketName"),
             };
-            return EmptyDODataConfig;
+
+            var environmentType = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            if (environmentType == "Development")
+            {
+                DODataConfig.DOAccessKey = this._retrieveExternalSecretHelper.GetSecret("DigitalOcean_AccessKey_Dev");
+                DODataConfig.DOSecretAccessKey = this._retrieveExternalSecretHelper.GetSecret("DigitalOcean_SecretAccessKey_Dev");
+            }
+            else if (environmentType == "Production")
+            {
+                DODataConfig.DOAccessKey = this._retrieveExternalSecretHelper.GetSecret("DigitalOcean_AccessKey_Prod");
+                DODataConfig.DOSecretAccessKey = this._retrieveExternalSecretHelper.GetSecret("DigitalOcean_SecretAccessKey_Prod");
+            }
+
+            return DODataConfig;
         }
     }
 }

@@ -6,6 +6,8 @@ using LinkMicroservice.UnitTests;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Moq;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -35,7 +37,10 @@ namespace LinkMicroservice.IntegrationTests
             
             this._linkContext.Database.Migrate();
 
-            this._linkRepository = new LinkRepository(_linkContext);
+            var loggerMock = new Mock<ILogger<LinkRepository>>();
+            ILogger<LinkRepository> linkRepositorylogger = loggerMock.Object;
+
+            this._linkRepository = new LinkRepository(_linkContext, linkRepositorylogger);
             this._linkService = new LinkService(this._linkRepository);
         }
 
@@ -43,7 +48,7 @@ namespace LinkMicroservice.IntegrationTests
         public async Task CreateSaveALink()
         {
             // Arrange
-            FileDTO fileDto = new FileDTO() { FileName = "qwerty.txt", SenderID = "Jan", ReceiverID = "Bob", AllowedDownloads = 1 };
+            FileDTO fileDto = new FileDTO() { FileName = "qwerty.txt", SenderId = "Jan", ReceiverId = "Bob", AllowedDownloads = 1 };
 
             // Act
             await this._linkService.CreateSaveLink(fileDto);
@@ -147,7 +152,7 @@ namespace LinkMicroservice.IntegrationTests
             this._linkContext.Links.Add(new Link() { FileName = "grades Jan.pdf", Address = "rwermo3994-4329r99", SenderID = "Mr. Henk", ReceiverID = "Jan", AllowedDownloads = 1 });
             await this._linkContext.SaveChangesAsync();
 
-            FileDTO deletedFile = new FileDTO() { FileName = "assignment Jan.docx", SenderID = "Jan", ReceiverID = "Mr. Henk", AllowedDownloads = 1 };
+            FileDTO deletedFile = new FileDTO() { FileName = "assignment Jan.docx", SenderId = "Jan", ReceiverId = "Mr. Henk", AllowedDownloads = 1 };
 
             // Act
             await this._linkService.RemoveLink(deletedFile);
@@ -167,7 +172,7 @@ namespace LinkMicroservice.IntegrationTests
             this._linkContext.Links.Add(new Link() { FileName = "grades Jan.pdf", Address = "rwermo3994-4329r99", SenderID = "Mr. Henk", ReceiverID = "Jan", AllowedDownloads = 1 });
             await this._linkContext.SaveChangesAsync();
 
-            FileDTO deletedFile = new FileDTO() { FileName = "assignment Adrian.docx", SenderID = "Adrian", ReceiverID = "Mr. Henk", AllowedDownloads = 1 };
+            FileDTO deletedFile = new FileDTO() { FileName = "assignment Adrian.docx", SenderId = "Adrian", ReceiverId = "Mr. Henk", AllowedDownloads = 1 };
 
             // Act
             await this._linkService.RemoveLink(deletedFile);

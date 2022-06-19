@@ -1,0 +1,40 @@
+name: "workflow - analyse"
+on:
+  workflow_call:
+    inputs:
+      project-location:
+        required: true
+        type: string
+        description: "Path to project files"
+      test-location:
+        required: true
+        type: string
+        description: "Path to test files"
+    secrets:
+      sonar-token:
+        required: true
+      github-token:
+        required: true
+
+env:
+  SONAR_TOKEN: ${{ secrets.sonar-token }}
+  GITHUB_TOKEN: ${{ secrets.github-token }}
+
+jobs:
+  analyse:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: "checkout project code"
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
+      
+      - name: "Run Sonarcloud analysis"
+        uses: highbyte/sonarscan-dotnet@v2.1.2
+        with: 
+          sonarProjectKey: MrTech12_backend-beavergoose
+          sonarProjectName:  backend-beavergoose
+          sonarOrganization: mrtech12
+          dotnetBuildArguments: ${{ inputs.project-location }}
+          dotnetTestArguments: ${{ inputs.test-location }} --logger trx --collect:"XPlat Code Coverage"
+          sonarBeginArguments: /d:sonar.cs.opencover.reportsPaths="${{ inputs.test-location }}/TestResults/**/In/**/coverage.opencover.xml"  -d:sonar.cs.vstest.reportsPaths="${{ inputs.test-location }}/TestResults/*.trx"

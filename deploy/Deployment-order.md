@@ -7,6 +7,7 @@
 * The inner-communication, Event Bus solution for all microservices.
 * Certain services **expect** a working RabbitMQ instance upon startup.
 * This will be the **first** deployed component. <br><br>
+* First the `deployment` & then the `service` manifest needs to be applied.
 
 
 2. Seq
@@ -16,7 +17,11 @@
 * This component makes use of a `Persistent Volume` & `Persistent Volume Claim` for storing log data.
 * After deployment, one needs to login in order to create an **API key**, that is used by other applications to ingest data.
 * This will be the **second** deployed component. <br><br>
-
+* The commands to deploy Seq are as follows:
+```yml
+1. kubectl apply -f seq-volume.yml # Create the Volume & Claims for storage of Seq data.
+2. helm install -f seq-config.yml my-seq datalust/seq # Install seq onto the cluster.
+```
 
 3. PostgeSQL database for LinkMicroservice
 * Database for storing data from LinkMicroservice.
@@ -24,14 +29,22 @@
 * The **password of the user** is stored in a `Secrets` object.
 * This component makes use of a `Peristent Volume` & `Peristent Volume Claim` for storing user data. 
 * This will be the **third** deployed component. <br><br>
+* First the `volume`, then `deployment` & then the `service` manifest needs to be applied.
 
+4. PostgeSQL database for AccountMicroservice
+* Database for storing data from AccountMicroservice.
+* Is **not required** upon bootup of the service, but is needed for functionality.
+* The **password of the user** is stored in a `Secrets` object.
+* This component makes use of a `Peristent Volume` & `Peristent Volume Claim` for storing user data. 
+* This will be the **fourth** deployed component. <br><br>
+* First the `volume`, then `deployment` & then the `service` manifest needs to be applied.
 
-4. APIGateway
+5. APIGateway
 * The component that the frontend will talk to & communicates with the other microservices.
 * Does **not require** that other microservices are available upon bootup of the gateway, but they are needed for functionality.
 * This component depends on: Seq for logging storage.
 * The **API key for Seq** is stored in a `Secrets` object.
-* This will be the **fourth** deployed component. <br><br>
+* This will be the **fifth** deployed component. <br><br>
 
 # LinkMicroservice
 * This component makes use of Entity Framework, which requires that the database contains a certain schema in order to read and store data.
@@ -41,10 +54,20 @@
 * The **connection string for PostgreSQL** is stored in a `Secrets` object.
 * The **API key for Seq** is stored in a `Secrets` object.
 * This component depends on: RabbitMQ for messaging, PostgeSQL database for data storage & Seq for logging storage. <br><br>
-* This can be the fifth or six deployed component.<br><br>
+* This can be the sixth or above deployed component.<br><br>
+
+# AccountMicroservice
+* This component makes use of Entity Framework, which requires that the database contains a certain schema in order to read and store data.
+* The deployment of this component contains an `InitContainer`, which reaches out to a `Kubernetes Job` before starting the 'AccountMicroservice' component.
+* The `Job` updates the database to the desired schema. After the Job has been completed, the regular component will start.
+* There is a custom `ServiceAccount` & `Role` which allows the `InitContainer` to access the status of the `Job`. Without the Account, the `InitContainer` would receive a *Forbidden* error.
+* The **connection string for PostgreSQL** is stored in a `Secrets` object.
+* The **API key for Seq** is stored in a `Secrets` object.
+* This component depends on: PostgeSQL database for data storage & Seq for logging storage. <br><br>
+* This can be the sixth or above deployed component.<br><br>
 
 # LinkMicroservice
 * The **credentials for DigitalOcean Spaces** is stored in a `Secrets` object.
 * The **API key for Seq** is stored in a `Secrets` object.
 * This component depends on: RabbitMQ for messaging, Seq for logging storage and External file storage: DigitalOcean Spaces.
-* This can be the fifth or six deployed component.<br><br>
+* This can be the sixth or above deployed component.<br><br>
