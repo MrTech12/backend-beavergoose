@@ -21,9 +21,17 @@ jobs:
     secrets:
       digitalocean-access-token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
       digitalocean-cluster-name: ${{ secrets.DIGITALOCEAN_CLUSTER_NAME }}
+  apigateway-kubernetes-scaler:
+    uses: "./.github/workflows/workflow-deploy-kubernetes-scaler.yml"
+    needs: apigateway-kubernetes-deployment
+    with:
+      project-name: "apigateway"
+    secrets:
+      digitalocean-access-token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      digitalocean-cluster-name: ${{ secrets.DIGITALOCEAN_CLUSTER_NAME }}
   apigateway-kubernetes-ingress:
     uses: "./.github/workflows/workflow-deploy-kubernetes-ingress.yml"
-    needs: apigateway-kubernetes-deployment
+    needs: apigateway-kubernetes-scaler
     with:
       project-name: "apigateway"
     secrets:

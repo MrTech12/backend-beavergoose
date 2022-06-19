@@ -5,7 +5,7 @@ metadata:
   labels:
     app: filemicroservice
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: filemicroservice
@@ -73,16 +73,3 @@ spec:
         - name: "gcp-service-account"
           secret:
             secretName: "gcp-serviceaccount-credentials"
----
-apiVersion: autoscaling/v1
-kind: HorizontalPodAutoscaler
-metadata:
-  name: filemicroservice-horizontalscaler
-spec:
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: filemicroservice-deployment
-  minReplicas: 2
-  maxReplicas: 4
-  targetCPUUtilizationPercentage: 55
