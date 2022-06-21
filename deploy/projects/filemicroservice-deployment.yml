@@ -38,7 +38,7 @@ spec:
                   key: issuer
                   optional: false
             - name: "Seq_ServerUrl"
-              value: "my-seq.default.svc.cluster.local"
+              value: "http://my-seq.default.svc.cluster.local"
             - name: "Seq_ApiKey"
               valueFrom:
                 secretKeyRef:
