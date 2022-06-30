@@ -12,7 +12,7 @@
 * Request CPU: 128m
 * Request RAM: 128Mi
 * Limit CPU: 256m
-* Limit RAM: 640Mi
+* Limit RAM: 512Mi
 
 # LinkMicroservice
 * Request CPU: 128m
@@ -48,7 +48,7 @@
 
 # Seq
 * Request CPU: ?
-* Request RAM: ?
+* Request RAM: 512Mi
 * Limit CPU: ?
 * Limit RAM: 2Gbi
 * Volume: 3Gi
