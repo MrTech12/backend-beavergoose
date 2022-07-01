@@ -1,73 +1,93 @@
 # Deployment Order
 
-* There are a few components that needs to be deployed inside the Kubernetes cluster. A couple of them are required by other component, that they are given priority. <br><br>
-* This file provides an overview of all component and their deployment order.
+* There are a few components that needs to be deployed inside the Kubernetes cluster. A couple of them are required by other component, that they are given priority.
+* This file provides an overview of all component and their deployment order. <br><br>
 
-1. RabbitMQ
+1. Metric Server
+* This component fetches metrics data (CPU, RAM) from the worker nodes.
+* It is used for implementing scaling in the cluster.
+* This will be the **first** deployed component.
+* The `metrics-server-deployment.yml` manifest needs to be applied, which handles all the parts of the Metric Server. <br><br>
+
+2. Dbmigration Account
+* This component is used for applying a Service Account.
+* This account is used to get info about the `Jobs` resource.
+* This will be the **second** deployed component.
+* The `dbmigration-account.yml` manifest needs to be applied, which handles all the parts of the Metric Server. <br><br>
+
+3. RabbitMQ
 * The inner-communication, Event Bus solution for all microservices.
 * Certain services **expect** a working RabbitMQ instance upon startup.
-* This will be the **first** deployed component. <br><br>
-* First the `deployment` & then the `service` manifest needs to be applied.
+* This will be the **third** deployed component.
+* First the `deployment` & then the `service` manifest needs to be applied. <br><br>
 
-
-2. Seq
+4. Seq
 * Centralized logging system for all other components.
-* An instance of this component is **required** by other services for sending logs info.
-* The **passwordhash** for the user is stored in a `Secrets` object.
+* An instance of this component is **required** by other services to send logs to.
 * This component makes use of a `Persistent Volume` & `Persistent Volume Claim` for storing log data.
-* After deployment, one needs to login in order to create an **API key**, that is used by other applications to ingest data.
-* This will be the **second** deployed component. <br><br>
+* After deployment, a password needs to be set and  **API keys** need to be created for the other application, so that they can ingest log data.
+* The following applications need an API Key:
+  - AccountMicroservice
+  - FileMicroservice
+  - LinkMicroservice
+  - DeleteFileApp
+* The component uses `Helm` for deployment and makes use of an `Ingress` for UI and ingesting log data.
+* This will be the **fourth** deployed component. 
 * The commands to deploy Seq are as follows:
 ```yml
 1. kubectl apply -f seq-volume.yml # Create the Volume & Claims for storage of Seq data.
-2. helm install -f seq-config.yml my-seq datalust/seq # Install seq onto the cluster.
+2. helm install -f seq-config.yml my-seq datalust/seq # Deploy seq onto the cluster.
 ```
+<br><br>
 
-3. PostgeSQL database for LinkMicroservice
-* Database for storing data from LinkMicroservice.
+5. PostgeSQL database for LinkMicroservice
+* Database for storing user data from LinkMicroservice.
 * Is **not required** upon bootup of the service, but is needed for functionality.
 * The **password of the user** is stored in a `Secrets` object.
 * This component makes use of a `Peristent Volume` & `Peristent Volume Claim` for storing user data. 
-* This will be the **third** deployed component. <br><br>
-* First the `volume`, then `deployment` & then the `service` manifest needs to be applied.
+* This will be the **fifth** deployed component.
+* First the `volume`, then `deployment` & then the `service` manifest needs to be applied. <br><br>
 
-4. PostgeSQL database for AccountMicroservice
-* Database for storing data from AccountMicroservice.
+6. PostgeSQL database for AccountMicroservice
+* Database for storing user data from AccountMicroservice.
 * Is **not required** upon bootup of the service, but is needed for functionality.
 * The **password of the user** is stored in a `Secrets` object.
 * This component makes use of a `Peristent Volume` & `Peristent Volume Claim` for storing user data. 
-* This will be the **fourth** deployed component. <br><br>
-* First the `volume`, then `deployment` & then the `service` manifest needs to be applied.
+* This will be the **Sixth** deployed component. 
+* First the `volume`, then `deployment` & then the `service` manifest needs to be applied. <br><br>
 
-5. APIGateway
+7. APIGateway
 * The component that the frontend will talk to & communicates with the other microservices.
 * Does **not require** that other microservices are available upon bootup of the gateway, but they are needed for functionality.
-* This component depends on: Seq for logging storage.
-* The **API key for Seq** is stored in a `Secrets` object.
-* This will be the **fifth** deployed component. <br><br>
+* The **JWT values** are stored in a `Secrets` object.
+* This will be the **seventh** deployed component. <br><br>
 
-# LinkMicroservice
-* This component makes use of Entity Framework, which requires that the database contains a certain schema in order to read and store data.
-* The deployment of this component contains an `InitContainer`, which reaches out to a `Kubernetes Job` before starting the 'LinkMicroservice' component.
-* The `Job` updates the database to the desired schema. After the Job has been completed, the regular component will start.
+8. LinkMicroservice
+* This component makes use of `Entity Framework Core`, which requires that the database contains a certain schema in order to read and store data.
+* The deployment of this component contains an `InitContainer`, which reaches out to a `Kubernetes Job` before starting the 'LinkMicroservice' container.
+* The `Job` applied the desired schema to the database. After the Job has been completed, the regular container will start.
 * There is a custom `ServiceAccount` & `Role` which allows the `InitContainer` to access the status of the `Job`. Without the Account, the `InitContainer` would receive a *Forbidden* error.
-* The **connection string for PostgreSQL** is stored in a `Secrets` object.
+* The **connectionstring for PostgreSQL** is stored in a `Secrets` object.
 * The **API key for Seq** is stored in a `Secrets` object.
-* This component depends on: RabbitMQ for messaging, PostgeSQL database for data storage & Seq for logging storage. <br><br>
-* This can be the sixth or above deployed component.<br><br>
+* The **JWT values** are stored in a `Secrets` object.
+* This component depends on: `PostgeSQL database` for storing user data, `RabbitMQ` for messaging & `Seq` for sending logs to.
+* This can be the eight or above deployed component.<br><br>
 
-# AccountMicroservice
-* This component makes use of Entity Framework, which requires that the database contains a certain schema in order to read and store data.
-* The deployment of this component contains an `InitContainer`, which reaches out to a `Kubernetes Job` before starting the 'AccountMicroservice' component.
-* The `Job` updates the database to the desired schema. After the Job has been completed, the regular component will start.
+9. AccountMicroservice
+* This component makes use of `Entity Framework Core`, which requires that the database contains a certain schema in order to read and store data.
+* The deployment of this component contains an `InitContainer`, which reaches out to a `Kubernetes Job` before starting the 'AccountMicroservice' container.
+* The `Job` applied the desired schema to the database. After the Job has been completed, the regular container will start.
 * There is a custom `ServiceAccount` & `Role` which allows the `InitContainer` to access the status of the `Job`. Without the Account, the `InitContainer` would receive a *Forbidden* error.
-* The **connection string for PostgreSQL** is stored in a `Secrets` object.
+* The **connectionstring for PostgreSQL** is stored in a `Secrets` object.
 * The **API key for Seq** is stored in a `Secrets` object.
-* This component depends on: PostgeSQL database for data storage & Seq for logging storage. <br><br>
-* This can be the sixth or above deployed component.<br><br>
+* The **JWT values** are stored in a `Secrets` object.
+* This component depends on: `PostgeSQL database` for storing user data & `Seq` for sending logs to.
+* This can be the ninth or above deployed component.<br><br>
 
-# LinkMicroservice
-* The **credentials for DigitalOcean Spaces** is stored in a `Secrets` object.
+10. FileMicroservice
+* The **credentials for GCP Service Account & GCP Project id** are stored in `Secrets` objects.
+* The **endpoint of the DeleteFileApp program** is stored in `Secrets` object.
 * The **API key for Seq** is stored in a `Secrets` object.
-* This component depends on: RabbitMQ for messaging, Seq for logging storage and External file storage: DigitalOcean Spaces.
-* This can be the sixth or above deployed component.<br><br>
+* The **JWT values** are stored in a `Secrets` object.
+* This component depends on: `PostgreSQL database` for storing user data, `RabbitMQ` for messaging and `Seq` for sending logs to.
+* This can be the tenth or above deployed component.<br><br>

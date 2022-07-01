@@ -38,5 +38,5 @@ These files also contain jobs which houses steps. These steps can be the executi
 * Uses: project files of the microservice & Kubernetes manifest files.
 * Special information
     - The workflow makes use of a program called `yq` to change the Docker image version of the Kubernetes manifest files, so that the deployment makes use of the newest Docker image.
-    - There are Kubernetes jobs, that get activited by the `initContainer` of the `LinkMicroservice` and `AccountMicroservice` deployments. The jobs make sure that the PostgreSQL databases contains the correct schema, that both microservices need to interact with the database. The jobs calls upon a simple Console application, which performs the creation of the schema.
+    - There are Kubernetes jobs, that get invoked by the `initContainer` of the `LinkMicroservice` and `AccountMicroservice` deployments. The jobs make sure that the PostgreSQL databases contains the correct schema, that both microservices need to interact with the database. The jobs calls upon a simple Console application, which performs the schema creation.
     - the doctl (DigitalOcean CLI) is used to retrieve a kubeconfig file, for interacting with the Kubernetes cluster.
