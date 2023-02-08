@@ -3,6 +3,9 @@
 ## APIGateways
 * Contains API Gateway projects
 
+## Common
+* Contains projects which have logic, that can be shared between other projects.
+
 ## Services
 * Contains projects of all the microservices
 
