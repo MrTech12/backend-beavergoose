@@ -1,4 +1,4 @@
-﻿using AccountMicroservice.DBMigration.Helpers;
+﻿using Common.Configuration.Helpers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -26,8 +26,7 @@ namespace AccountMicroservice.Data
         {
             if (!optionsBuilder.IsConfigured)
             {
-                string connectionString = RetrieveConnectionStringHelper.GetConnectionString();
-
+                string connectionString = ConnectionStringHelper.GetConnectionString("AccountContext");
                 optionsBuilder.UseNpgsql(connectionString);
             }
             base.OnConfiguring(optionsBuilder);

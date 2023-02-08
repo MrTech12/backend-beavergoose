@@ -1,5 +1,5 @@
-﻿using LinkMicroservice.DBMigration.Entities;
-using LinkMicroservice.DBMigration.Helpers;
+﻿using Common.Configuration.Helpers;
+using LinkMicroservice.DBMigration.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace LinkMicroservice.DBMigration.Data
@@ -27,7 +27,7 @@ namespace LinkMicroservice.DBMigration.Data
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseNpgsql(RetrieveConnectionStringHelper.GetConnectionString());
+                optionsBuilder.UseNpgsql(ConnectionStringHelper.GetConnectionString("LinkContext"));
             }
             base.OnConfiguring(optionsBuilder);
         }

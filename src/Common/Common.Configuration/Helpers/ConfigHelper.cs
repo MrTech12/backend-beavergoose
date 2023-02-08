@@ -6,15 +6,17 @@ namespace Common.Configuration.Helpers
     {
         public static string GetConfigValue(string section, string key)
         {
-            var environmentType = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            var environmentTypeAsp = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            var environmentTypeDotnet = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
             string configValue = string.Empty;
 
-            if (environmentType == "Development")
+            if (environmentTypeAsp == "Development" || environmentTypeDotnet == "Development")
             {
                 IConfiguration configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile($"appsettings.json").Build();
                 configValue = configuration[$"{section}:{key}"] ?? string.Empty;
             }
-            else if (environmentType == "Production")
+            else
             {
                 IConfiguration configuration = new ConfigurationBuilder().AddEnvironmentVariables().Build();
                 configValue = configuration[$"{section}_{key}"] ?? string.Empty;

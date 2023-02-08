@@ -6,15 +6,17 @@ namespace Common.Configuration.Helpers
     {
         public static string GetConnectionString(string databaseContext)
         {
-            var environmentType = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            var environmentTypeAsp = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            var environmentTypeDotnet = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
             string connectionString = string.Empty;
 
-            if (environmentType == "Development")
+            if (environmentTypeAsp == "Development" || environmentTypeDotnet == "Development")
             {
                 IConfiguration configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile($"appsettings.json").Build();
                 connectionString = configuration.GetConnectionString(databaseContext) ?? string.Empty;
             }
-            else if (environmentType == "Production")
+            else
             {
                 IConfiguration configuration = new ConfigurationBuilder().AddEnvironmentVariables().Build();
                 connectionString = configuration[$"{databaseContext}"] ?? string.Empty;
