@@ -39,14 +39,9 @@
 * The required credentials for them are present in the `appsettings-template.json` file.
 * To run this project, one must create an `appsettings.json` file and place the value for the credentials.
 
-### DigitalOcean Spaces & GCP Secret Manager
+### DigitalOcean Spaces
 * The project depends on a DigitalOcean Spaces instance.
 * This is the file storage service for the program, to save and retrieve files.
-* The credentials to interact with this service, are stored inside GCP Secret Manager.
-* To communicate with GCP, three item are required.
-  - A JSON file of the Service Account credentials, that is present on the machine.
-  - An Environment Variable called `GOOGLE_APPLICATION_CREDENTIALS`, which points to the location of the Service Account JSON.
-  - The GCP project id (`ProjectId`), of the project that contains the Secrets. This value needs to be placed inside the `appsettings.json` file.
 
 ### RabbitMQ
 * The project also depends on a RabbitMQ instance, to exchange data between applications.
@@ -86,4 +81,3 @@
 | Seq_ServerUrl        | Host of Seq instance for ingesting log entries                 |
 | Seq_ApiKey           | API key for the project                                        |
 | DeleteFile_Endpoint  | Endpoint for reaching the DeleteFile program to delete files   |
-| GCP_ProjectId        | Project id of the GCP project that contains the Secrets        |

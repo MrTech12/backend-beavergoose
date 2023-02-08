@@ -90,7 +90,7 @@ dotnet ef dbcontext info
 
 | Environment Variable          | Purpose                                                                      |
 |:-----------------------------:|------------------------------------------------------------------------------|
-| ConnectionStrings_LinkContext | Connectionstring with host, database and user credentials to access database |
+| LinkContext                   | Connectionstring with host, database and user credentials to access database |
 | RabbitMQ_HostName             | Host of RabbitMQ instance for exchanging data between programs               |
 | RabbitMQ_Port                 | Port to reach the RabbitMQ instance                                          |
 | JWT_Issuer                    | Issuer of tokens                                                             |

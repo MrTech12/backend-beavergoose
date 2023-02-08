@@ -95,7 +95,7 @@ dotnet ef dbcontext info
 
 | Environment Variable             | Purpose                                                                      |
 |:--------------------------------:|------------------------------------------------------------------------------|
-| ConnectionStrings_AccountContext | Connectionstring with host, database and user credentials to access database |
+| AccountContext                   | Connectionstring with host, database and user credentials to access database |
 | JWT_Issuer                       | Issuer of tokens                                                             |
 | JWT_Secret                       | Secret for signing tokens                                                    |
 | Seq_ServerUrl                    | Host of Seq instance for ingesting log entries                               |
