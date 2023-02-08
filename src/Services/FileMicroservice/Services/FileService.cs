@@ -1,4 +1,5 @@
-﻿using FileMicroservice.DTOs;
+﻿using Common.Configuration.Helpers;
+using FileMicroservice.DTOs;
 using FileMicroservice.Interfaces;
 using FileMicroservice.Types;
 
@@ -9,13 +10,11 @@ namespace FileMicroservice.Services
         private readonly IFileProvider _fileProvider;
         private readonly IMessagingProducer _messagingProducer;
         private readonly IDeleteFileHelper _deleteFileHelper;
-        private readonly IRetrieveConfigHelper _retrieveConfigHelper;
 
-        public FileService(IFileProvider fileProvider, IMessagingProducer messagingProducer, IRetrieveConfigHelper retrieveConfigHelper, IDeleteFileHelper _deleteFileHelper)
+        public FileService(IFileProvider fileProvider, IMessagingProducer messagingProducer, IDeleteFileHelper _deleteFileHelper)
         {
             this._fileProvider = fileProvider;
             this._messagingProducer = messagingProducer;
-            this._retrieveConfigHelper = retrieveConfigHelper;
             this._deleteFileHelper = _deleteFileHelper;
         }
 
@@ -80,20 +79,20 @@ namespace FileMicroservice.Services
         {
             var DODataConfig = new DigitalOceanDataConfigDTO()
             {
-                DOServiceURL = this._retrieveConfigHelper.GetConfigValue("DigitalOcean", "ServiceURL"),
-                DOBucketName = this._retrieveConfigHelper.GetConfigValue("DigitalOcean","BucketName")
+                DOServiceURL = ConfigHelper.GetConfigValue("DigitalOcean", "ServiceURL"),
+                DOBucketName = ConfigHelper.GetConfigValue("DigitalOcean","BucketName")
             };
 
             var environmentType = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             if (environmentType == "Development")
             {
-                DODataConfig.DOAccessKey = this._retrieveConfigHelper.GetConfigValue("DigitalOcean","AccessKey_Dev");
-                DODataConfig.DOSecretAccessKey = this._retrieveConfigHelper.GetConfigValue("DigitalOcean","SecretAccessKey_Dev");
+                DODataConfig.DOAccessKey = ConfigHelper.GetConfigValue("DigitalOcean","AccessKey_Dev");
+                DODataConfig.DOSecretAccessKey = ConfigHelper.GetConfigValue("DigitalOcean","SecretAccessKey_Dev");
             }
             else if (environmentType == "Production")
             {
-                DODataConfig.DOAccessKey = this._retrieveConfigHelper.GetConfigValue("DigitalOcean","AccessKey_Prod");
-                DODataConfig.DOSecretAccessKey = this._retrieveConfigHelper.GetConfigValue("DigitalOcean", "SecretAccessKey_Prod");
+                DODataConfig.DOAccessKey = ConfigHelper.GetConfigValue("DigitalOcean","AccessKey_Prod");
+                DODataConfig.DOSecretAccessKey = ConfigHelper.GetConfigValue("DigitalOcean", "SecretAccessKey_Prod");
             }
 
             return DODataConfig;
