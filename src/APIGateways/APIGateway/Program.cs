@@ -1,4 +1,4 @@
-using APIGateway.Helpers;
+using Common.Configuration.Helpers;
 using Microsoft.IdentityModel.Tokens;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
@@ -27,14 +27,14 @@ namespace OcelotBasic
                 s.AddCors(options =>
                 {
                     options.AddPolicy(name: "CorsPolicy",
-                        builder => builder.WithOrigins(new string[] { "http://localhost:4200", "https://frontend.demo-beavergoose.nl" })
+                        builder => builder.WithOrigins(new string[] { "http://localhost:4200" })
                                 .AllowAnyMethod()
                                 .AllowAnyHeader());
                 });
 
                 // Add JWT verification
-                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(RetrieveConfigHelper.GetConfigValue("JWT", "Secret")));
-                var authIssuer = RetrieveConfigHelper.GetConfigValue("JWT", "Issuer");
+                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(ConfigHelper.GetConfigValue("JWT", "Secret")));
+                var authIssuer = ConfigHelper.GetConfigValue("JWT", "Issuer");
 
                 var tokenValidationParameters = new TokenValidationParameters
                 {
