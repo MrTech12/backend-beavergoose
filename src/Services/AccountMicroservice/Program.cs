@@ -1,13 +1,13 @@
 using AccountMicroservice.Data;
-using AccountMicroservice.Helpers;
 using AccountMicroservice.Models;
+using Common.Configuration.Helpers;
+using Common.Http.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Exceptions;
-using System.Configuration;
 using System.Reflection;
 using System.Text;
 
@@ -47,7 +47,7 @@ builder.Host.UseSerilog((ctx, lc) => lc.ReadFrom.Configuration(builder.Configura
     .Enrich.WithExceptionDetails()
     .Enrich.FromLogContext()
     .WriteTo.Console(outputTemplate: "[{Timestamp:dd-MM-yyyy HH:mm:ss}] [{Level}] ({SourceContext}) {Message}{NewLine}{Exception}")
-    .WriteTo.Seq(RetrieveConfigHelper.GetConfigValue("Seq", "ServerUrl"), apiKey: RetrieveConfigHelper.GetConfigValue("Seq", "ApiKey")));
+    .WriteTo.Seq(ConfigHelper.GetConfigValue("Seq", "ServerUrl"), apiKey: ConfigHelper.GetConfigValue("Seq", "ApiKey")));
 
 Serilog.Debugging.SelfLog.Enable(Console.Error);
 
@@ -82,8 +82,8 @@ builder.Services.Configure<PasswordHasherOptions>(option => option.Compatibility
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true); // Needed for saving DateTime variables
 
 // Add JWT verification
-var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(RetrieveConfigHelper.GetConfigValue("JWT", "Secret")));
-var authIssuer = RetrieveConfigHelper.GetConfigValue("JWT", "Issuer");
+var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(ConfigHelper.GetConfigValue("JWT", "Secret")));
+var authIssuer = ConfigHelper.GetConfigValue("JWT", "Issuer");
 
 var tokenValidationParameters = new TokenValidationParameters
 {
