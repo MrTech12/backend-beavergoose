@@ -14,15 +14,13 @@ namespace DeleteFileApp.Controllers
     {
         private readonly ILogger<DeleteFileService> _serviceLogger;
         private readonly IFileProvider _fileProvider;
-        private readonly IRetrieveConfigHelper _retrieveConfigHelper;
         private DeleteFileService _deleteFileService;
 
-        public DeleteFileController(ILogger<DeleteFileService> serviceLogger, IFileProvider fileProvider, IRetrieveConfigHelper retrieveConfigHelper)
+        public DeleteFileController(ILogger<DeleteFileService> serviceLogger, IFileProvider fileProvider)
         {
             _serviceLogger = serviceLogger;
             _fileProvider = fileProvider;
-            _retrieveConfigHelper = retrieveConfigHelper;
-            _deleteFileService = new DeleteFileService(_fileProvider, _retrieveConfigHelper, _serviceLogger);
+            _deleteFileService = new DeleteFileService(_fileProvider, _serviceLogger);
         }
 
         /// <summary>

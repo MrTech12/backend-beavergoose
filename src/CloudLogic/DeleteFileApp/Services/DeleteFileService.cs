@@ -1,4 +1,5 @@
-﻿using DeleteFileApp.DTOs;
+﻿using Common.Configuration.Helpers;
+using DeleteFileApp.DTOs;
 using DeleteFileApp.Interfaces;
 using DeleteFileApp.Types;
 
@@ -7,13 +8,11 @@ namespace DeleteFileApp.Services
     public class DeleteFileService
     {
         private readonly IFileProvider _fileProvider;
-        private readonly IRetrieveConfigHelper _retrieveConfigHelper;
         private readonly ILogger _logger;
 
-        public DeleteFileService(IFileProvider fileProvider, IRetrieveConfigHelper retrieveConfigHelper, ILogger<DeleteFileService> logger)
+        public DeleteFileService(IFileProvider fileProvider, ILogger<DeleteFileService> logger)
         {
             _fileProvider = fileProvider;
-            _retrieveConfigHelper = retrieveConfigHelper;
             _logger = logger;
         }
 
@@ -36,16 +35,16 @@ namespace DeleteFileApp.Services
             return ResultType.FileRemoved;
         }
 
-        internal DigitalOceanDataConfigDTO retrieveDODataConfig()
+        internal DigitalOceanAccessConfigDTO retrieveDODataConfig()
         {
-            var EmptyDODataConfig = new DigitalOceanDataConfigDTO()
+            var DoDataConfig = new DigitalOceanAccessConfigDTO()
             {
-                DOServiceURL = this._retrieveConfigHelper.GetConfigValue("DigitalOcean", "ServiceURL"),
-                DOBucketName = this._retrieveConfigHelper.GetConfigValue("DigitalOcean", "BucketName"),
-                DOAccessKey = this._retrieveConfigHelper.GetConfigValue("DigitalOcean", "AccessKey"),
-                DOSecretAccessKey = this._retrieveConfigHelper.GetConfigValue("DigitalOcean", "SecretAccessKey")
+                ServiceURL = ConfigHelper.GetConfigValue("DigitalOcean", "ServiceURL"),
+                BucketName = ConfigHelper.GetConfigValue("DigitalOcean", "BucketName"),
+                AccessKey = ConfigHelper.GetConfigValue("DigitalOcean", "AccessKey"),
+                SecretAccessKey = ConfigHelper.GetConfigValue("DigitalOcean", "SecretAccessKey")
             };
-            return EmptyDODataConfig;
+            return DoDataConfig;
         }
     }
 }

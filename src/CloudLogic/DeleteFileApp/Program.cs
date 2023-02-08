@@ -1,5 +1,6 @@
+using Common.Configuration.Helpers;
+using Common.Http.Helpers;
 using DeleteFileApp.Data;
-using DeleteFileApp.Helpers;
 using DeleteFileApp.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -38,7 +39,6 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 // Configure Serilog Logging
-var retrieveConfigHelper = new RetrieveConfigHelper();
 builder.Host.UseSerilog((ctx, lc) => lc.ReadFrom.Configuration(builder.Configuration)
     .MinimumLevel.Information()
     .Enrich.WithProperty("Application", builder.Environment.ApplicationName)
@@ -46,16 +46,15 @@ builder.Host.UseSerilog((ctx, lc) => lc.ReadFrom.Configuration(builder.Configura
     .Enrich.WithExceptionDetails()
     .Enrich.FromLogContext()
     .WriteTo.Console(outputTemplate: "[{Timestamp:dd-MM-yyyy HH:mm:ss}] [{Level}] ({SourceContext}) {Message}{NewLine}{Exception}")
-    .WriteTo.Seq(retrieveConfigHelper.GetConfigValue("Seq", "ServerUrl"), apiKey: retrieveConfigHelper.GetConfigValue("Seq", "ApiKey")));
+    .WriteTo.Seq(ConfigHelper.GetConfigValue("Seq", "ServerUrl"), apiKey: ConfigHelper.GetConfigValue("Seq", "ApiKey")));
 
 Serilog.Debugging.SelfLog.Enable(Console.Error);
 
 builder.Services.AddScoped<IFileProvider, DigitalOceanFileProvider>();
-builder.Services.AddScoped<IRetrieveConfigHelper, RetrieveConfigHelper>();
 
 // Add JWT verification
-var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(retrieveConfigHelper.GetConfigValue("JWT", "Secret")));
-var authIssuer = retrieveConfigHelper.GetConfigValue("JWT", "Issuer");
+var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(ConfigHelper.GetConfigValue("JWT", "Secret")));
+var authIssuer = ConfigHelper.GetConfigValue("JWT", "Issuer");
 
 var tokenValidationParameters = new TokenValidationParameters
 {

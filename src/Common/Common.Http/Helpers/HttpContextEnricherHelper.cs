@@ -6,7 +6,7 @@ namespace Common.Http.Helpers
 {
     public static class HttpContextEnricherHelper
     {
-        internal static void HttpRequestEnricher(IDiagnosticContext diagnosticContext, HttpContext httpContext)
+        public static void HttpRequestEnricher(IDiagnosticContext diagnosticContext, HttpContext httpContext)
         {
             var httpContextInfo = new HttpContextInfo
             {

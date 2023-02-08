@@ -14,15 +14,15 @@ namespace DeleteFileApp.Data
             this._logger = logger;
         }
 
-        public async Task DeleteFileAsync(string fileName, DigitalOceanDataConfigDTO DODataConfigDto)
+        public async Task DeleteFileAsync(string fileName, DigitalOceanAccessConfigDTO DOAccessConfigDto)
         {
-            var _awsS3Client = CreateAWSS3Client(DODataConfigDto);
+            var _awsS3Client = CreateAWSS3Client(DOAccessConfigDto);
 
             try
             {
                 var deleteObjectRequest = new DeleteObjectRequest
                 {
-                    BucketName = DODataConfigDto.DOBucketName,
+                    BucketName = DOAccessConfigDto.BucketName,
                     Key = fileName // Keys are the full filename, including the file extension.
                 };
 
@@ -36,15 +36,15 @@ namespace DeleteFileApp.Data
             }
         }
 
-        public async Task<Dictionary<bool, string>> FindFileAsync(string fileName, DigitalOceanDataConfigDTO DODataConfigDto)
+        public async Task<Dictionary<bool, string>> FindFileAsync(string fileName, DigitalOceanAccessConfigDTO DOAccessConfigDto)
         {
-            var _awsS3Client = CreateAWSS3Client(DODataConfigDto);
+            var _awsS3Client = CreateAWSS3Client(DOAccessConfigDto);
 
             try
             {
                 var getRequest = new GetObjectRequest()
                 {
-                    BucketName = DODataConfigDto.DOBucketName,
+                    BucketName = DOAccessConfigDto.BucketName,
                     Key = fileName // Keys are the full filename, including the file extension.
                 };
 
@@ -75,10 +75,10 @@ namespace DeleteFileApp.Data
             }
         }
 
-        internal IAmazonS3 CreateAWSS3Client(DigitalOceanDataConfigDTO DODataConfigDto)
+        internal IAmazonS3 CreateAWSS3Client(DigitalOceanAccessConfigDTO DOAccessConfigDto)
         {
-            var s3ClientConfig = new AmazonS3Config { ServiceURL = DODataConfigDto.DOServiceURL };
-            IAmazonS3 _awsS3Client = new AmazonS3Client(DODataConfigDto.DOAccessKey, DODataConfigDto.DOSecretAccessKey, s3ClientConfig);
+            var s3ClientConfig = new AmazonS3Config { ServiceURL = DOAccessConfigDto.ServiceURL };
+            IAmazonS3 _awsS3Client = new AmazonS3Client(DOAccessConfigDto.AccessKey, DOAccessConfigDto.SecretAccessKey, s3ClientConfig);
             return _awsS3Client;
         }
     }

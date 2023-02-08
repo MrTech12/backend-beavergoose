@@ -4,8 +4,8 @@ namespace DeleteFileApp.Interfaces
 {
     public interface IFileProvider
     {
-        Task<Dictionary<bool, string>> FindFileAsync(string fileName, DigitalOceanDataConfigDTO DODataConfigDto);
+        Task<Dictionary<bool, string>> FindFileAsync(string fileName, DigitalOceanAccessConfigDTO DODataConfigDto);
 
-        Task DeleteFileAsync(string fileName, DigitalOceanDataConfigDTO DODataConfigDto);
+        Task DeleteFileAsync(string fileName, DigitalOceanAccessConfigDTO DODataConfigDto);
     }
 }
