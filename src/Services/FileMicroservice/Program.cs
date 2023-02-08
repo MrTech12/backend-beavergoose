@@ -58,7 +58,6 @@ builder.Services.AddScoped<IFileProvider, DigitalOceanFileProvider>();
 builder.Services.AddScoped<IMessagingProducer, RabbitMQProducer>();
 builder.Services.AddScoped<IRetrieveConfigHelper, RetrieveConfigHelper>();
 builder.Services.AddScoped<IDeleteFileHelper, DeleteFileHelper>();
-builder.Services.AddScoped<IRetrieveExternalSecretHelper, RetrieveExternalSecretHelper>();
 
 builder.Services.Configure<FormOptions>(x => { x.MultipartBodyLengthLimit = 524288000; });
 

@@ -19,17 +19,15 @@ namespace FileMicroservice.Controllers
         private readonly IMessagingProducer _messagingProducer;
         private readonly IRetrieveConfigHelper _retrieveConfigHelper;
         private readonly IDeleteFileHelper _deleteFileHelper;
-        private readonly IRetrieveExternalSecretHelper _retrieveExternalSecretHelper;
         private readonly FileService _fileService;
 
-        public FileController(IFileProvider fileProvider, IMessagingProducer messagingProducer, IRetrieveConfigHelper retrieveConfigHelper, IDeleteFileHelper deleteFileHelper, IRetrieveExternalSecretHelper retrieveExternalSecretHelper)
+        public FileController(IFileProvider fileProvider, IMessagingProducer messagingProducer, IRetrieveConfigHelper retrieveConfigHelper, IDeleteFileHelper deleteFileHelper)
         {
             this._fileProvider = fileProvider;
             this._messagingProducer = messagingProducer;
             this._retrieveConfigHelper = retrieveConfigHelper;
             this._deleteFileHelper = deleteFileHelper;
-            this._retrieveExternalSecretHelper = retrieveExternalSecretHelper;
-            this._fileService = new FileService(this._fileProvider, this._messagingProducer, this._retrieveConfigHelper, this._deleteFileHelper, this._retrieveExternalSecretHelper);
+            this._fileService = new FileService(this._fileProvider, this._messagingProducer, this._retrieveConfigHelper, this._deleteFileHelper);
         }
 
         /// <summary>

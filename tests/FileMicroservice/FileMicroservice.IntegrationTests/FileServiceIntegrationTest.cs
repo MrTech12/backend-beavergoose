@@ -18,7 +18,7 @@ namespace FileMicroservice.IntegrationTests
 
         public FileServiceIntegrationTest()
         {
-            this.fileService = new FileService(new LocalstackFileProvider(), new StubMessagingProducer(), new StubRetrieveConfigHelper(), new StubDeleteFileHelper(), new StubRetrieveExternalSecretHelper());
+            this.fileService = new FileService(new LocalstackFileProvider(), new StubMessagingProducer(), new StubRetrieveConfigHelper(), new StubDeleteFileHelper());
         }
 
         [Fact]
