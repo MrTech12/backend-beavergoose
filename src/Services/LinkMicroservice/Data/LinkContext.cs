@@ -1,5 +1,5 @@
-﻿using LinkMicroservice.Entities;
-using LinkMicroservice.Helpers;
+﻿using Common.Configuration.Helpers;
+using LinkMicroservice.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace LinkMicroservice.Data
@@ -27,7 +27,7 @@ namespace LinkMicroservice.Data
         {
             if (!optionsBuilder.IsConfigured)
             {
-                string connectionString = RetrieveConnectionStringHelper.GetConnectionString();
+                string connectionString = ConnectionStringHelper.GetConnectionString("LinkContext");
 
                 optionsBuilder.UseNpgsql(connectionString);
             }

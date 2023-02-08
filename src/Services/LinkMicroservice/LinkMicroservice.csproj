@@ -31,4 +31,9 @@
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\Common.Configuration\Common.Configuration.csproj" />
+    <ProjectReference Include="..\..\Common\Common.Http\Common.Http.csproj" />
+  </ItemGroup>
+
 </Project>

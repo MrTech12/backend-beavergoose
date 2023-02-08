@@ -1,5 +1,5 @@
-﻿using LinkMicroservice.DTOs;
-using LinkMicroservice.Helpers;
+﻿using Common.Configuration.Helpers;
+using LinkMicroservice.DTOs;
 using LinkMicroservice.Interfaces;
 using LinkMicroservice.Services;
 using RabbitMQ.Client;
@@ -38,8 +38,8 @@ namespace LinkMicroservice.Messaging
 
             this._connectionFactory = new ConnectionFactory
             {
-                HostName = RetrieveConfigHelper.GetConfigValue("RabbitMQ", "HostName"),
-                Port = Convert.ToInt32(RetrieveConfigHelper.GetConfigValue("RabbitMQ", "Port")),
+                HostName = ConfigHelper.GetConfigValue("RabbitMQ", "HostName"),
+                Port = Convert.ToInt32(ConfigHelper.GetConfigValue("RabbitMQ", "Port")),
                 DispatchConsumersAsync = true
             };
             try

@@ -1,5 +1,6 @@
+using Common.Configuration.Helpers;
+using Common.Http.Helpers;
 using LinkMicroservice.Data;
-using LinkMicroservice.Helpers;
 using LinkMicroservice.Interfaces;
 using LinkMicroservice.Messaging;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -45,7 +46,7 @@ builder.Host.UseSerilog((ctx, lc) => lc.ReadFrom.Configuration(builder.Configura
     .Enrich.WithExceptionDetails()
     .Enrich.FromLogContext()
     .WriteTo.Console(outputTemplate: "[{Timestamp:dd-MM-yyyy HH:mm:ss}] [{Level}] ({SourceContext}) {Message}{NewLine}{Exception}")
-    .WriteTo.Seq(RetrieveConfigHelper.GetConfigValue("Seq", "ServerUrl"), apiKey: RetrieveConfigHelper.GetConfigValue("Seq", "ApiKey")));
+    .WriteTo.Seq(ConfigHelper.GetConfigValue("Seq", "ServerUrl"), apiKey: ConfigHelper.GetConfigValue("Seq", "ApiKey")));
 
 Serilog.Debugging.SelfLog.Enable(Console.Error);
 
@@ -55,8 +56,8 @@ builder.Services.AddSingleton<LinkContext>();
 builder.Services.AddTransient<ILinkRepository, LinkRepository>();
 
 // Add JWT verification
-var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(RetrieveConfigHelper.GetConfigValue("JWT", "Secret")));
-var authIssuer = RetrieveConfigHelper.GetConfigValue("JWT", "Issuer");
+var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(ConfigHelper.GetConfigValue("JWT", "Secret")));
+var authIssuer = ConfigHelper.GetConfigValue("JWT", "Issuer");
 
 var tokenValidationParameters = new TokenValidationParameters
 {
