@@ -1,4 +1,5 @@
 ﻿using Common.Configuration.Helpers;
+using Common.Configuration.Interfaces;
 using LinkMicroservice.DTOs;
 using LinkMicroservice.Interfaces;
 using LinkMicroservice.Services;
@@ -20,12 +21,14 @@ namespace LinkMicroservice.Messaging
         private const string queueName = "link.managing";
         private readonly IConfiguration _configuration;
         private readonly ILinkRepository _linkRepository;
+        private readonly IConfigHelper _configHelper;
 
-        public ConsumerRabbitMQHostedService(IConfiguration configuration, ILogger<ConsumerRabbitMQHostedService> logger, ILinkRepository linkRepository)
+        public ConsumerRabbitMQHostedService(IConfiguration configuration, ILogger<ConsumerRabbitMQHostedService> logger, ILinkRepository linkRepository, IConfigHelper configHelper)
         {
             this._configuration = configuration;
             this._logger = logger;
             this._linkRepository = linkRepository;
+            this._configHelper = configHelper;
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)
@@ -38,8 +41,8 @@ namespace LinkMicroservice.Messaging
 
             this._connectionFactory = new ConnectionFactory
             {
-                HostName = LocalConfigHelper.GetConfigValue("RabbitMQ", "HostName"),
-                Port = Convert.ToInt32(LocalConfigHelper.GetConfigValue("RabbitMQ", "Port")),
+                HostName = this._configHelper.GetConfigValue("RabbitMQ", "HostName"),
+                Port = Convert.ToInt32(this._configHelper.GetConfigValue("RabbitMQ", "Port")),
                 DispatchConsumersAsync = true
             };
             try

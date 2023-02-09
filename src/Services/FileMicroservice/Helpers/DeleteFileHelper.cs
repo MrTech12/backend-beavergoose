@@ -1,4 +1,5 @@
 ﻿using Common.Configuration.Helpers;
+using Common.Configuration.Interfaces;
 using FileMicroservice.Interfaces;
 using System.Net.Http.Headers;
 using System.Text.Json;
@@ -9,14 +10,16 @@ namespace FileMicroservice.Helpers
     {
         private readonly ILogger _logger;
         private readonly HttpClient client = new HttpClient();
+        private readonly IConfigHelper _configHelper;
 
-        public DeleteFileHelper(ILogger<DeleteFileHelper> logger)
+        public DeleteFileHelper(ILogger<DeleteFileHelper> logger, IConfigHelper configHelper)
         {
             this._logger = logger;
+            this._configHelper = configHelper;
         }
         public async Task DeleteFile(string fileName, string token)
         {
-            string url = LocalConfigHelper.GetConfigValue("DeleteFile", "Endpoint");
+            string url = this._configHelper.GetConfigValue("DeleteFile", "Endpoint");
             string uri = url + fileName;
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);

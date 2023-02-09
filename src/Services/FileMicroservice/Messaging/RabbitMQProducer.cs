@@ -1,5 +1,4 @@
-﻿using Common.Configuration.Helpers;
-using FileMicroservice.Helpers;
+﻿using Common.Configuration.Interfaces;
 using FileMicroservice.Interfaces;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
@@ -11,11 +10,13 @@ namespace FileMicroservice.Messaging
     public class RabbitMQProducer : IMessagingProducer
     {
         private readonly ILogger _logger;
+        private readonly IConfigHelper _configHelper;
         private const string exchangeName = "link-exchange";
         private const string queueName = "link.managing";
 
-        public RabbitMQProducer(ILogger<RabbitMQProducer> logger)
+        public RabbitMQProducer(ILogger<RabbitMQProducer> logger, IConfigHelper configHelper)
         {
+            this._configHelper = configHelper;
             this._logger = logger;
         }
 
@@ -25,8 +26,8 @@ namespace FileMicroservice.Messaging
 
             var factory = new ConnectionFactory()
             {
-                HostName = LocalConfigHelper.GetConfigValue("RabbitMQ", "HostName"),
-                Port = Convert.ToInt32(LocalConfigHelper.GetConfigValue("RabbitMQ", "Port")),
+                HostName = this._configHelper.GetConfigValue("RabbitMQ", "HostName"),
+                Port = Convert.ToInt32(this._configHelper.GetConfigValue("RabbitMQ", "Port")),
             };
 
             try

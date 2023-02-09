@@ -1,5 +1,6 @@
 ﻿using AccountMicroservice.DTOs;
 using AccountMicroservice.Helpers;
+using Common.Configuration.Interfaces;
 using Microsoft.AspNetCore.Identity;
 
 namespace AccountMicroservice.Service
@@ -9,12 +10,14 @@ namespace AccountMicroservice.Service
         private readonly UserManager<IdentityUser> _userManager;
         private readonly TokenHelper tokenHelper;
         private readonly ILogger _logger;
+        private readonly IConfigHelper _configHelper;
 
-        public AccountService(UserManager<IdentityUser> userManager, ILogger<AccountService> logger)
+        public AccountService(UserManager<IdentityUser> userManager, IConfigHelper configHelper, ILogger<AccountService> logger)
         {
-            this._userManager = userManager;
-            tokenHelper = new TokenHelper();
             this._logger = logger;
+            this._userManager = userManager;
+            this._configHelper = configHelper;
+            tokenHelper = new TokenHelper(this._configHelper);
         }
 
         public async Task<Dictionary<bool, string>> CreateAccount(RegisterDTO registerDto)

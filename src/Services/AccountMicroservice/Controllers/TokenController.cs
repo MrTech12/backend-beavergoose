@@ -1,5 +1,6 @@
 ﻿using AccountMicroservice.DTOs;
 using AccountMicroservice.Service;
+using Common.Configuration.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,12 +16,14 @@ namespace AccountMicroservice.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly AccountService _accountService;
         private readonly ILogger<AccountService> _accountServiceLogger;
+        private readonly IConfigHelper _configHelper;
 
-        public TokenController(UserManager<IdentityUser> userManager, ILogger<AccountService> accountServiceLogger)
+        public TokenController(UserManager<IdentityUser> userManager, ILogger<AccountService> accountServiceLogger, IConfigHelper configHelper)
         {
             this._userManager = userManager;
             this._accountServiceLogger = accountServiceLogger;
-            this._accountService = new AccountService(this._userManager, _accountServiceLogger);
+            this._configHelper = configHelper;
+            this._accountService = new AccountService(this._userManager, this._configHelper, _accountServiceLogger);
         }
 
         /// <summary>

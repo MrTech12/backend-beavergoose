@@ -1,4 +1,5 @@
-﻿using FileMicroservice.DTOs;
+﻿using Common.Configuration.Interfaces;
+using FileMicroservice.DTOs;
 using FileMicroservice.Interfaces;
 using FileMicroservice.Services;
 using FileMicroservice.Types;
@@ -18,14 +19,16 @@ namespace FileMicroservice.Controllers
         private readonly IFileProvider _fileProvider;
         private readonly IMessagingProducer _messagingProducer;
         private readonly IDeleteFileHelper _deleteFileHelper;
+        private readonly IConfigHelper _configHelper;
         private readonly FileService _fileService;
 
-        public FileController(IFileProvider fileProvider, IMessagingProducer messagingProducer, IDeleteFileHelper deleteFileHelper)
+        public FileController(IFileProvider fileProvider, IMessagingProducer messagingProducer, IDeleteFileHelper deleteFileHelper, IConfigHelper configHelper)
         {
             this._fileProvider = fileProvider;
             this._messagingProducer = messagingProducer;
             this._deleteFileHelper = deleteFileHelper;
-            this._fileService = new FileService(this._fileProvider, this._messagingProducer, this._deleteFileHelper);
+            this._configHelper = configHelper;
+            this._fileService = new FileService(this._fileProvider, this._messagingProducer, this._deleteFileHelper, this._configHelper);
         }
 
         /// <summary>

@@ -1,5 +1,6 @@
 ﻿using AccountMicroservice.DTOs;
 using Common.Configuration.Helpers;
+using Common.Configuration.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -11,6 +12,12 @@ namespace AccountMicroservice.Helpers
 {
     public class TokenHelper
     {
+        private readonly IConfigHelper _configHelper;
+
+        public TokenHelper(IConfigHelper configHelper) 
+        {
+            this._configHelper = configHelper;
+        }
         public string CreateAccessToken(UserDTO userDto)
         {
             var authClaims = new List<Claim>
@@ -19,8 +26,8 @@ namespace AccountMicroservice.Helpers
                 new Claim("Username", userDto.UserName),
             };
 
-            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(LocalConfigHelper.GetConfigValue("JWT", "Secret")));
-            var authIssuer = LocalConfigHelper.GetConfigValue("JWT", "Issuer");
+            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this._configHelper.GetConfigValue("JWT", "Secret")));
+            var authIssuer = this._configHelper.GetConfigValue("JWT", "Issuer");
             var signCredentials = new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
@@ -44,8 +51,8 @@ namespace AccountMicroservice.Helpers
 
         public ClaimsPrincipal GetPrincipalFromExpiredAccessToken(string token)
         {
-            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(LocalConfigHelper.GetConfigValue("JWT", "Secret")));
-            var authIssuer = LocalConfigHelper.GetConfigValue("JWT", "Issuer");
+            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this._configHelper.GetConfigValue("JWT", "Secret")));
+            var authIssuer = this._configHelper.GetConfigValue("JWT", "Issuer");
 
             var tokenValidationParameters = new TokenValidationParameters
             {
