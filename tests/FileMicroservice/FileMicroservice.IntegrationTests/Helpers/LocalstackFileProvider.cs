@@ -15,9 +15,9 @@ namespace FileMicroservice.IntegrationTests.Helpers
 {
     public class LocalstackFileProvider : IFileProvider
     {
-        public async Task<byte[]> DownloadFileAsync(string fileName, DigitalOceanDataConfigDTO DODataConfigDto)
+        public async Task<byte[]> DownloadFileAsync(string fileName, AccessConfigDTO accessConfigDto)
         {
-			var _awsS3Client = CreateAWSS3Client(DODataConfigDto);
+			var _awsS3Client = CreateAWSS3Client(accessConfigDto);
 
 			MemoryStream memoryStream;
 
@@ -25,7 +25,7 @@ namespace FileMicroservice.IntegrationTests.Helpers
 			{
 				var getRequest = new GetObjectRequest()
 				{
-					BucketName = DODataConfigDto.DOBucketName,
+					BucketName = accessConfigDto.BucketName,
 					Key = fileName // Keys are the full filename, including the file extension.
 				};
 				var response = await _awsS3Client.GetObjectAsync(getRequest);
@@ -44,15 +44,15 @@ namespace FileMicroservice.IntegrationTests.Helpers
 			}
 		}
 
-        public async Task<Dictionary<bool, string>> FindFileAsync(string fileName, DigitalOceanDataConfigDTO DODataConfigDto)
+        public async Task<Dictionary<bool, string>> FindFileAsync(string fileName, AccessConfigDTO accessConfigDto)
         {
-			var _awsS3Client = CreateAWSS3Client(DODataConfigDto);
+			var _awsS3Client = CreateAWSS3Client(accessConfigDto);
 
 			try
 			{
 				var getRequest = new GetObjectRequest()
 				{
-					BucketName = DODataConfigDto.DOBucketName,
+					BucketName = accessConfigDto.BucketName,
 					Key = fileName // Keys are the full filename, including the file extension.
 				};
 				await _awsS3Client.GetObjectAsync(getRequest);
@@ -77,9 +77,9 @@ namespace FileMicroservice.IntegrationTests.Helpers
 			}
 		}
 
-        public async Task UploadFileAsync(SaveFileDTO saveFileDto, DigitalOceanDataConfigDTO DODataConfigDto)
+        public async Task UploadFileAsync(SaveFileDTO saveFileDto, AccessConfigDTO accessConfigDto)
         {
-			var _awsS3Client = CreateAWSS3Client(DODataConfigDto);
+			var _awsS3Client = CreateAWSS3Client(accessConfigDto);
 
 			try
 			{
@@ -92,7 +92,7 @@ namespace FileMicroservice.IntegrationTests.Helpers
 					{
 						InputStream = newMemoryStream,
 						Key = saveFileDto.FileName,
-						BucketName = DODataConfigDto.DOBucketName,
+						BucketName = accessConfigDto.BucketName,
 						ContentType = saveFileDto.File.ContentType,
 						CannedACL = S3CannedACL.Private
 					};
@@ -113,10 +113,10 @@ namespace FileMicroservice.IntegrationTests.Helpers
 			}
 		}
 
-		internal IAmazonS3 CreateAWSS3Client(DigitalOceanDataConfigDTO DODataConfigDto)
+		internal IAmazonS3 CreateAWSS3Client(AccessConfigDTO accessConfigDto)
 		{
-			var s3ClientConfig = new AmazonS3Config { ServiceURL = DODataConfigDto.DOServiceURL, ForcePathStyle = true };
-			IAmazonS3 _awsS3Client = new AmazonS3Client(DODataConfigDto.DOAccessKey, DODataConfigDto.DOSecretAccessKey, s3ClientConfig);
+			var s3ClientConfig = new AmazonS3Config { ServiceURL = accessConfigDto.ServiceURL, ForcePathStyle = true };
+			IAmazonS3 _awsS3Client = new AmazonS3Client(accessConfigDto.AccessKey, accessConfigDto.SecretAccessKey, s3ClientConfig);
 			return _awsS3Client;
 		}
 	}

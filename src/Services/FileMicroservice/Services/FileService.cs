@@ -78,27 +78,27 @@ namespace FileMicroservice.Services
             return new Dictionary<ResultType, byte[]?>() { { ResultType.FileNotFound, null } };
         }
 
-        internal DigitalOceanDataConfigDTO retrieveDODataConfig()
+        internal AccessConfigDTO retrieveDODataConfig()
         {
-            var DODataConfig = new DigitalOceanDataConfigDTO()
+            var accessConfigDto = new AccessConfigDTO()
             {
-                DOServiceURL = this._configHelper.GetConfigValue("DigitalOcean", "ServiceURL"),
-                DOBucketName = this._configHelper.GetConfigValue("DigitalOcean","BucketName")
+                ServiceURL = this._configHelper.GetConfigValue("DigitalOcean", "ServiceURL"),
+                BucketName = this._configHelper.GetConfigValue("DigitalOcean","BucketName")
             };
 
             var environmentType = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             if (environmentType == "Development")
             {
-                DODataConfig.DOAccessKey = this._configHelper.GetConfigValue("DigitalOcean","AccessKey_Dev");
-                DODataConfig.DOSecretAccessKey = this._configHelper.GetConfigValue("DigitalOcean","SecretAccessKey_Dev");
+                accessConfigDto.AccessKey = this._configHelper.GetConfigValue("DigitalOcean","AccessKey_Dev");
+                accessConfigDto.SecretAccessKey = this._configHelper.GetConfigValue("DigitalOcean","SecretAccessKey_Dev");
             }
             else if (environmentType == "Production")
             {
-                DODataConfig.DOAccessKey = this._configHelper.GetConfigValue("DigitalOcean","AccessKey_Prod");
-                DODataConfig.DOSecretAccessKey = this._configHelper.GetConfigValue("DigitalOcean", "SecretAccessKey_Prod");
+                accessConfigDto.AccessKey = this._configHelper.GetConfigValue("DigitalOcean","AccessKey_Prod");
+                accessConfigDto.SecretAccessKey = this._configHelper.GetConfigValue("DigitalOcean", "SecretAccessKey_Prod");
             }
 
-            return DODataConfig;
+            return accessConfigDto;
         }
     }
 }

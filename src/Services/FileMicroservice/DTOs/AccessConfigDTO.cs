@@ -1,6 +1,6 @@
-﻿namespace DeleteFileApp.DTOs
+﻿namespace FileMicroservice.DTOs
 {
-    public class DigitalOceanAccessConfigDTO
+    public class AccessConfigDTO
     {
         public string ServiceURL { get; set; } = string.Empty;
         public string BucketName { get; set; } = string.Empty;

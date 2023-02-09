@@ -15,9 +15,9 @@ namespace FileMicroservice.Data
 			this._logger = logger;
 		}
 
-		public async Task<byte[]> DownloadFileAsync(string fileName, DigitalOceanDataConfigDTO DODataConfigDto)
+		public async Task<byte[]> DownloadFileAsync(string fileName, AccessConfigDTO AccessConfigDto)
 		{
-			var _awsS3Client = CreateAWSS3Client(DODataConfigDto);
+			var _awsS3Client = CreateAWSS3Client(AccessConfigDto);
 
 			MemoryStream memoryStream;
 
@@ -25,7 +25,7 @@ namespace FileMicroservice.Data
 			{
 				var getRequest = new GetObjectRequest()
                 {
-					BucketName = DODataConfigDto.DOBucketName,
+					BucketName = AccessConfigDto.BucketName,
 					Key = fileName // Keys are the full filename, including the file extension.
 				};
 
@@ -46,9 +46,9 @@ namespace FileMicroservice.Data
 			}
 		}
 
-        public async Task UploadFileAsync(SaveFileDTO saveFileDto, DigitalOceanDataConfigDTO DODataConfigDto)
+        public async Task UploadFileAsync(SaveFileDTO saveFileDto, AccessConfigDTO AccessConfigDto)
 		{
-			var _awsS3Client = CreateAWSS3Client(DODataConfigDto);
+			var _awsS3Client = CreateAWSS3Client(AccessConfigDto);
 
 			try
 			{
@@ -62,7 +62,7 @@ namespace FileMicroservice.Data
 						InputStream = newMemoryStream,
 						Key = saveFileDto.FileName,
 						ContentType = saveFileDto.File.ContentType,
-						BucketName = DODataConfigDto.DOBucketName,
+						BucketName = AccessConfigDto.BucketName,
 						CannedACL = S3CannedACL.Private
 					};
 
@@ -84,15 +84,15 @@ namespace FileMicroservice.Data
 			}
 		}
 
-		public async Task<Dictionary<bool, string>> FindFileAsync(string fileName, DigitalOceanDataConfigDTO DODataConfigDto)
+		public async Task<Dictionary<bool, string>> FindFileAsync(string fileName, AccessConfigDTO accessConfigDto)
 		{
-			var _awsS3Client = CreateAWSS3Client(DODataConfigDto);
+			var _awsS3Client = CreateAWSS3Client(accessConfigDto);
 
 			try
             {
                 var getRequest = new GetObjectRequest()
                 {
-                    BucketName = DODataConfigDto.DOBucketName,
+                    BucketName = accessConfigDto.BucketName,
                     Key = fileName // Keys are the full filename, including the file extension.
 				};
 
@@ -120,10 +120,10 @@ namespace FileMicroservice.Data
 			}
 		}
 
-		internal IAmazonS3 CreateAWSS3Client(DigitalOceanDataConfigDTO DODataConfigDto)
+		internal IAmazonS3 CreateAWSS3Client(AccessConfigDTO accessConfigDto)
         {
-			var s3ClientConfig = new AmazonS3Config { ServiceURL = DODataConfigDto.DOServiceURL };
-			IAmazonS3 _awsS3Client = new AmazonS3Client(DODataConfigDto.DOAccessKey, DODataConfigDto.DOSecretAccessKey, s3ClientConfig);
+			var s3ClientConfig = new AmazonS3Config { ServiceURL = accessConfigDto.ServiceURL };
+			IAmazonS3 _awsS3Client = new AmazonS3Client(accessConfigDto.AccessKey, accessConfigDto.SecretAccessKey, s3ClientConfig);
 			return _awsS3Client;
 		}
     }

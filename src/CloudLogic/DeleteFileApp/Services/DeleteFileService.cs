@@ -21,7 +21,7 @@ namespace DeleteFileApp.Services
 
         public async Task<ResultType> RemoveFile(DeleteFileDTO deleteFileDto)
         {
-            var DODataConfig = retrieveDODataConfig();
+            var DODataConfig = retrieveAccessConfig();
 
             var result = await _fileProvider.FindFileAsync(deleteFileDto.FileName, DODataConfig);
             if (!result.SingleOrDefault().Key)
@@ -38,16 +38,16 @@ namespace DeleteFileApp.Services
             return ResultType.FileRemoved;
         }
 
-        internal DigitalOceanAccessConfigDTO retrieveDODataConfig()
+        internal AccessConfigDTO retrieveAccessConfig()
         {
-            var DoDataConfig = new DigitalOceanAccessConfigDTO()
+            var AccessConfig = new AccessConfigDTO()
             {
                 ServiceURL = _configHelper.GetConfigValue("DigitalOcean", "ServiceURL"),
                 BucketName = _configHelper.GetConfigValue("DigitalOcean", "BucketName"),
                 AccessKey = _configHelper.GetConfigValue("DigitalOcean", "AccessKey"),
                 SecretAccessKey = _configHelper.GetConfigValue("DigitalOcean", "SecretAccessKey")
             };
-            return DoDataConfig;
+            return AccessConfig;
         }
     }
 }

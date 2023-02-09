@@ -10,12 +10,12 @@ namespace FileMicroservice.UnitTests.Stubs
 {
     internal class StubFileProvider : IFileProvider
     {
-        public async Task<byte[]> DownloadFileAsync(string fileName, DigitalOceanDataConfigDTO DODataConfigurationDTO)
+        public async Task<byte[]> DownloadFileAsync(string fileName, AccessConfigDTO accessConfigDto)
         {
             return await File.ReadAllBytesAsync(Path.GetTempPath() + fileName);
         }
 
-        public Task<Dictionary<bool, string>> FindFileAsync(string fileName, DigitalOceanDataConfigDTO DODataConfigurationDTO)
+        public Task<Dictionary<bool, string>> FindFileAsync(string fileName, AccessConfigDTO accessConfigDto)
         {
             if (!File.Exists(Path.GetTempPath() + fileName))
             {
@@ -24,7 +24,7 @@ namespace FileMicroservice.UnitTests.Stubs
             return Task.FromResult(new Dictionary<bool, string>() { { true, "24"} });
         }
 
-        public async Task UploadFileAsync(SaveFileDTO saveFileDto, DigitalOceanDataConfigDTO DODataConfigurationDTO)
+        public async Task UploadFileAsync(SaveFileDTO saveFileDto, AccessConfigDTO accessConfigDto)
         {
             var saveToPath = Path.Combine(Path.GetTempPath(), saveFileDto.FileName);
 
