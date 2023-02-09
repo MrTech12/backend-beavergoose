@@ -1,4 +1,5 @@
 ﻿using Common.Configuration.Helpers;
+using Common.Configuration.Interfaces;
 using DeleteFileApp.DTOs;
 using DeleteFileApp.Interfaces;
 using DeleteFileApp.Types;
@@ -8,11 +9,13 @@ namespace DeleteFileApp.Services
     public class DeleteFileService
     {
         private readonly IFileProvider _fileProvider;
+        private readonly IConfigHelper _configHelper;
         private readonly ILogger _logger;
 
-        public DeleteFileService(IFileProvider fileProvider, ILogger<DeleteFileService> logger)
+        public DeleteFileService(IFileProvider fileProvider, IConfigHelper configHelper, ILogger<DeleteFileService> logger)
         {
             _fileProvider = fileProvider;
+            _configHelper = configHelper;
             _logger = logger;
         }
 
@@ -39,10 +42,10 @@ namespace DeleteFileApp.Services
         {
             var DoDataConfig = new DigitalOceanAccessConfigDTO()
             {
-                ServiceURL = ConfigHelper.GetConfigValue("DigitalOcean", "ServiceURL"),
-                BucketName = ConfigHelper.GetConfigValue("DigitalOcean", "BucketName"),
-                AccessKey = ConfigHelper.GetConfigValue("DigitalOcean", "AccessKey"),
-                SecretAccessKey = ConfigHelper.GetConfigValue("DigitalOcean", "SecretAccessKey")
+                ServiceURL = _configHelper.GetConfigValue("DigitalOcean", "ServiceURL"),
+                BucketName = _configHelper.GetConfigValue("DigitalOcean", "BucketName"),
+                AccessKey = _configHelper.GetConfigValue("DigitalOcean", "AccessKey"),
+                SecretAccessKey = _configHelper.GetConfigValue("DigitalOcean", "SecretAccessKey")
             };
             return DoDataConfig;
         }

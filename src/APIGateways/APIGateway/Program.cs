@@ -33,8 +33,9 @@ namespace OcelotBasic
                 });
 
                 // Add JWT verification
-                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(ConfigHelper.GetConfigValue("JWT", "Secret")));
-                var authIssuer = ConfigHelper.GetConfigValue("JWT", "Issuer");
+                var localConfigHelper = new LocalConfigHelper();
+                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(localConfigHelper.GetConfigValue("JWT", "Secret")));
+                var authIssuer = localConfigHelper.GetConfigValue("JWT", "Issuer");
 
                 var tokenValidationParameters = new TokenValidationParameters
                 {

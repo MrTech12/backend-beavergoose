@@ -79,20 +79,20 @@ namespace FileMicroservice.Services
         {
             var DODataConfig = new DigitalOceanDataConfigDTO()
             {
-                DOServiceURL = ConfigHelper.GetConfigValue("DigitalOcean", "ServiceURL"),
-                DOBucketName = ConfigHelper.GetConfigValue("DigitalOcean","BucketName")
+                DOServiceURL = LocalConfigHelper.GetConfigValue("DigitalOcean", "ServiceURL"),
+                DOBucketName = LocalConfigHelper.GetConfigValue("DigitalOcean","BucketName")
             };
 
             var environmentType = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             if (environmentType == "Development")
             {
-                DODataConfig.DOAccessKey = ConfigHelper.GetConfigValue("DigitalOcean","AccessKey_Dev");
-                DODataConfig.DOSecretAccessKey = ConfigHelper.GetConfigValue("DigitalOcean","SecretAccessKey_Dev");
+                DODataConfig.DOAccessKey = LocalConfigHelper.GetConfigValue("DigitalOcean","AccessKey_Dev");
+                DODataConfig.DOSecretAccessKey = LocalConfigHelper.GetConfigValue("DigitalOcean","SecretAccessKey_Dev");
             }
             else if (environmentType == "Production")
             {
-                DODataConfig.DOAccessKey = ConfigHelper.GetConfigValue("DigitalOcean","AccessKey_Prod");
-                DODataConfig.DOSecretAccessKey = ConfigHelper.GetConfigValue("DigitalOcean", "SecretAccessKey_Prod");
+                DODataConfig.DOAccessKey = LocalConfigHelper.GetConfigValue("DigitalOcean","AccessKey_Prod");
+                DODataConfig.DOSecretAccessKey = LocalConfigHelper.GetConfigValue("DigitalOcean", "SecretAccessKey_Prod");
             }
 
             return DODataConfig;

@@ -1,4 +1,5 @@
-﻿using DeleteFileApp.DTOs;
+﻿using Common.Configuration.Interfaces;
+using DeleteFileApp.DTOs;
 using DeleteFileApp.Interfaces;
 using DeleteFileApp.Services;
 using DeleteFileApp.Types;
@@ -14,13 +15,15 @@ namespace DeleteFileApp.Controllers
     {
         private readonly ILogger<DeleteFileService> _serviceLogger;
         private readonly IFileProvider _fileProvider;
+        private readonly IConfigHelper _configHelper;
         private DeleteFileService _deleteFileService;
 
-        public DeleteFileController(ILogger<DeleteFileService> serviceLogger, IFileProvider fileProvider)
+        public DeleteFileController(ILogger<DeleteFileService> serviceLogger, IFileProvider fileProvider, IConfigHelper configHelper)
         {
             _serviceLogger = serviceLogger;
             _fileProvider = fileProvider;
-            _deleteFileService = new DeleteFileService(_fileProvider, _serviceLogger);
+            _configHelper = configHelper;
+            _deleteFileService = new DeleteFileService(_fileProvider, _configHelper, _serviceLogger);
         }
 
         /// <summary>

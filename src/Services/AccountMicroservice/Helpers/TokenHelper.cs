@@ -19,8 +19,8 @@ namespace AccountMicroservice.Helpers
                 new Claim("Username", userDto.UserName),
             };
 
-            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(ConfigHelper.GetConfigValue("JWT", "Secret")));
-            var authIssuer = ConfigHelper.GetConfigValue("JWT", "Issuer");
+            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(LocalConfigHelper.GetConfigValue("JWT", "Secret")));
+            var authIssuer = LocalConfigHelper.GetConfigValue("JWT", "Issuer");
             var signCredentials = new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
@@ -44,8 +44,8 @@ namespace AccountMicroservice.Helpers
 
         public ClaimsPrincipal GetPrincipalFromExpiredAccessToken(string token)
         {
-            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(ConfigHelper.GetConfigValue("JWT", "Secret")));
-            var authIssuer = ConfigHelper.GetConfigValue("JWT", "Issuer");
+            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(LocalConfigHelper.GetConfigValue("JWT", "Secret")));
+            var authIssuer = LocalConfigHelper.GetConfigValue("JWT", "Issuer");
 
             var tokenValidationParameters = new TokenValidationParameters
             {

@@ -1,4 +1,5 @@
 using Common.Configuration.Helpers;
+using Common.Configuration.Interfaces;
 using Common.Http.Helpers;
 using DeleteFileApp.Data;
 using DeleteFileApp.Interfaces;
@@ -38,6 +39,8 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
+var localConfigHelper = new LocalConfigHelper();
+
 // Configure Serilog Logging
 builder.Host.UseSerilog((ctx, lc) => lc.ReadFrom.Configuration(builder.Configuration)
     .MinimumLevel.Information()
@@ -46,15 +49,16 @@ builder.Host.UseSerilog((ctx, lc) => lc.ReadFrom.Configuration(builder.Configura
     .Enrich.WithExceptionDetails()
     .Enrich.FromLogContext()
     .WriteTo.Console(outputTemplate: "[{Timestamp:dd-MM-yyyy HH:mm:ss}] [{Level}] ({SourceContext}) {Message}{NewLine}{Exception}")
-    .WriteTo.Seq(ConfigHelper.GetConfigValue("Seq", "ServerUrl"), apiKey: ConfigHelper.GetConfigValue("Seq", "ApiKey")));
+    .WriteTo.Seq(localConfigHelper.GetConfigValue("Seq", "ServerUrl"), apiKey: localConfigHelper.GetConfigValue("Seq", "ApiKey")));
 
 Serilog.Debugging.SelfLog.Enable(Console.Error);
 
 builder.Services.AddScoped<IFileProvider, DigitalOceanFileProvider>();
+builder.Services.AddScoped<IConfigHelper, LocalConfigHelper>();
 
 // Add JWT verification
-var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(ConfigHelper.GetConfigValue("JWT", "Secret")));
-var authIssuer = ConfigHelper.GetConfigValue("JWT", "Issuer");
+var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(localConfigHelper.GetConfigValue("JWT", "Secret")));
+var authIssuer = localConfigHelper.GetConfigValue("JWT", "Issuer");
 
 var tokenValidationParameters = new TokenValidationParameters
 {

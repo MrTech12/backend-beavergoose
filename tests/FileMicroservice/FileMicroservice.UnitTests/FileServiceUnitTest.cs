@@ -1,8 +1,10 @@
+using Common.Configuration.Helpers;
 using FileMicroservice.DTOs;
 using FileMicroservice.Services;
 using FileMicroservice.Types;
 using FileMicroservice.UnitTests.Stubs;
 using Microsoft.AspNetCore.Http;
+using Moq;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -13,6 +15,7 @@ namespace FileMicroservice.UnitTests
 {
     public class FileServiceUnitTest
     {
+        private Mock<LocalConfigHelper> fakeConfigHelper;
         private FileService fileService;
 
         public FileServiceUnitTest()

@@ -25,8 +25,8 @@ namespace FileMicroservice.Messaging
 
             var factory = new ConnectionFactory()
             {
-                HostName = ConfigHelper.GetConfigValue("RabbitMQ", "HostName"),
-                Port = Convert.ToInt32(ConfigHelper.GetConfigValue("RabbitMQ", "Port")),
+                HostName = LocalConfigHelper.GetConfigValue("RabbitMQ", "HostName"),
+                Port = Convert.ToInt32(LocalConfigHelper.GetConfigValue("RabbitMQ", "Port")),
             };
 
             try

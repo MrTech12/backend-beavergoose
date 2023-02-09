@@ -16,7 +16,7 @@ namespace FileMicroservice.Helpers
         }
         public async Task DeleteFile(string fileName, string token)
         {
-            string url = ConfigHelper.GetConfigValue("DeleteFile", "Endpoint");
+            string url = LocalConfigHelper.GetConfigValue("DeleteFile", "Endpoint");
             string uri = url + fileName;
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);

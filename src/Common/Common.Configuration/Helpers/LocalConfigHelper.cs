@@ -1,15 +1,16 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Common.Configuration.Interfaces;
+using Microsoft.Extensions.Configuration;
 
 namespace Common.Configuration.Helpers
 {
-    public static class ConfigHelper
+    public class LocalConfigHelper : IConfigHelper
     {
-        public static string GetConfigValue(string section, string key)
+        public string GetConfigValue(string section, string key)
         {
             var environmentTypeAsp = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             var environmentTypeDotnet = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
-            string configValue = string.Empty;
+            string configValue;
 
             if (environmentTypeAsp == "Development" || environmentTypeDotnet == "Development")
             {
