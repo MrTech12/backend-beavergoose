@@ -13,17 +13,17 @@ namespace DeleteFileApp.Controllers
     [ApiVersion("1.0")]
     public class DeleteFileController : ControllerBase
     {
-        private readonly ILogger<DeleteFileService> _serviceLogger;
+        private readonly ILoggerFactory _loggerFactory;
         private readonly IFileProvider _fileProvider;
         private readonly IConfigHelper _configHelper;
         private DeleteFileService _deleteFileService;
 
-        public DeleteFileController(ILogger<DeleteFileService> serviceLogger, IFileProvider fileProvider, IConfigHelper configHelper)
+        public DeleteFileController(IFileProvider fileProvider, IConfigHelper configHelper, ILoggerFactory loggerFactory)
         {
-            _serviceLogger = serviceLogger;
             _fileProvider = fileProvider;
             _configHelper = configHelper;
-            _deleteFileService = new DeleteFileService(_fileProvider, _configHelper, _serviceLogger);
+            _loggerFactory = loggerFactory;
+            _deleteFileService = new DeleteFileService(_fileProvider, _configHelper, this._loggerFactory.CreateLogger<DeleteFileService>());
         }
 
         /// <summary>

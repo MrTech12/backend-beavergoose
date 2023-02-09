@@ -15,15 +15,15 @@ namespace AccountMicroservice.Controllers
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly AccountService _accountService;
-        private readonly ILogger<AccountService> _accountServiceLogger;
         private readonly IConfigHelper _configHelper;
+        private readonly ILoggerFactory _loggerFactory;
 
-        public TokenController(UserManager<IdentityUser> userManager, ILogger<AccountService> accountServiceLogger, IConfigHelper configHelper)
+        public TokenController(UserManager<IdentityUser> userManager, IConfigHelper configHelper, ILoggerFactory loggerFactory)
         {
             this._userManager = userManager;
-            this._accountServiceLogger = accountServiceLogger;
             this._configHelper = configHelper;
-            this._accountService = new AccountService(this._userManager, this._configHelper, _accountServiceLogger);
+            this._loggerFactory = loggerFactory;
+            this._accountService = new AccountService(this._userManager, this._configHelper, this._loggerFactory.CreateLogger<AccountService>());
         }
 
         /// <summary>
