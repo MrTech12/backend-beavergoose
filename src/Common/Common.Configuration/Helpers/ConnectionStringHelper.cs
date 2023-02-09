@@ -9,7 +9,7 @@ namespace Common.Configuration.Helpers
             var environmentTypeAsp = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             var environmentTypeDotnet = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
-            string connectionString = string.Empty;
+            string connectionString;
 
             if (environmentTypeAsp == "Development" || environmentTypeDotnet == "Development")
             {

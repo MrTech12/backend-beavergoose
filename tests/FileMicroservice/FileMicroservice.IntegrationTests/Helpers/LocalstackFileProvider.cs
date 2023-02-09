@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FileMicroservice.IntegrationTests.Stubs
+namespace FileMicroservice.IntegrationTests.Helpers
 {
     public class LocalstackFileProvider : IFileProvider
     {

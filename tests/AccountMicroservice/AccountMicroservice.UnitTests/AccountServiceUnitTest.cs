@@ -2,6 +2,7 @@ using AccountMicroservice.DTOs;
 using AccountMicroservice.Helpers;
 using AccountMicroservice.Service;
 using AccountMicroservice.UnitTests.Helpers;
+using AccountMicroservice.UnitTests.Stubs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -27,7 +28,7 @@ namespace AccountMicroservice.UnitTests
             var loggerMock = new Mock<ILogger<AccountService>>();
             ILogger<AccountService> accountServiceLogger = loggerMock.Object;
 
-            this._accountService = new AccountService(fakeUserManager.Object, accountServiceLogger);
+            this._accountService = new AccountService(fakeUserManager.Object, new StubConfigHelper(), accountServiceLogger);
         }
 
         [Fact]

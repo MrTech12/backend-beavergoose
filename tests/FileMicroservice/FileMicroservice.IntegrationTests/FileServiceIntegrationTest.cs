@@ -1,5 +1,5 @@
 using FileMicroservice.DTOs;
-using FileMicroservice.IntegrationTests.Stubs;
+using FileMicroservice.IntegrationTests.Helpers;
 using FileMicroservice.Services;
 using FileMicroservice.Types;
 using Microsoft.AspNetCore.Http;
@@ -18,7 +18,7 @@ namespace FileMicroservice.IntegrationTests
 
         public FileServiceIntegrationTest()
         {
-            this.fileService = new FileService(new LocalstackFileProvider(), new StubMessagingProducer(), new StubDeleteFileHelper());
+            this.fileService = new FileService(new LocalstackFileProvider(), new StubMessagingProducer(), new StubDeleteFileHelper(), new StubConfigHelper());
         }
 
         [Fact]
