@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.name }}
+  labels:
+    app: {{ .Values.name }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.name }}
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.name }}
+    spec:
+      serviceAccountName: {{ .Values.sa.name }}
+      initContainers:
+        - name: "accountmicroservice-dbmigration-init"
+          image: "groundnuty/k8s-wait-for:1.3"
+          imagePullPolicy: Always
+          args:
+            - "job"
+            - "{{ $values.name }}-{{ $values.dbmigration-job.name }}-{{ $values.deploy.tag }}"
+      containers:
+        - name: {{ .Values.name }}
+          image: {{ .Values.deploy.image }}:{{ .Values.deploy.tag }}
+          imagePullPolicy: Always
+          ports:
+            - containerPort: {{ .Values.deploy.containerPort }}
+          env:
+          {{ range $v := .Values.deploy.envConfigMap }}
+            - name: {{ $v | quote }}
+              valueFrom:
+                configMapKeyRef:
+                {{ range $q, $w := .Values.deploy.configMaps }}
+                  name: $q
+                  key: $w
+                {{- end }}
+          {{- end }}
+          {{ range $v := .Values.deploy.envSecret }}
+            - name: {{ $v | quote }}
+              valueFrom:
+                secretKeyRef:
+                {{ range $q, $w := .Values.deploy.secrets }}
+                  name: $q
+                  key: $w
+                  optional: false
+                {{- end }}
+          {{- end }}
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "128m"
+            limits:
+              memory: "512Mi"
+              cpu: "256m"

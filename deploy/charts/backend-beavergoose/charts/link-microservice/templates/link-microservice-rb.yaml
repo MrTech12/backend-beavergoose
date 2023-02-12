@@ -1,0 +1,11 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: link-microservice-dbmigration-reader
+subjects:
+- kind: ServiceAccount
+  name: link-microservice-dbmigration
+roleRef:
+  kind: Role
+  name: link-microservice-read-jobs
+  apiGroup: rbac.authorization.k8s.io

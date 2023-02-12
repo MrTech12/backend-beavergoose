@@ -1,0 +1,65 @@
+global:
+
+
+account-microservice:
+  name: account-microservice
+  
+  deploy:
+    image: mrtech12/beavergoose-accountmicroservice
+    tag: release-1.0.0
+    containerPort: 8000 
+
+    envConfigMap:
+      - JWT_Issuer
+      - Seq_ServerUrl
+    
+    configMaps:
+      jwt-config: issuer
+      seq-config: hostname
+    
+    envSecret:
+      - AccountContext
+      - JWT_Secret
+      - Seq_ApiKey
+
+    secrets:
+      account-microservice-dbconnectionstring: accountcontext
+      jwt-config: secret
+      seq-apikeys: accountmicroservice
+    
+
+  dbmigration-job:
+    name: dbmigration
+    image: mrtech12/beavergoose-accountmicroservice-dbmigration
+    tag: release-1.0.0
+    args: AccountMicroservice.DBMigration
+
+    envSecret:
+      - AccountContext
+
+    secrets:
+      account-microservice-dbconnectionstring: accountcontext
+
+  hpa:
+    targetCPUUtilization: 55
+
+  rb:
+    name: account-microservice-dbmigration-reader
+
+  role:
+    name: account-microservice-read-jobs
+
+  sa:
+    name: account-microservice-dbmigration
+
+
+api-gateway:
+
+
+file-microservice:
+
+
+link-microservice:
+
+## TODO: add 2x PostgreSQL DB, 1x RabbitMQ, 1x Seq
+## TOD: add 1x Metrics Server, 1x Kubernetes dashboard.

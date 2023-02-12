@@ -5,16 +5,21 @@ metadata:
   labels:
     app: linkmicroservice
 spec:
-  replicas: 1
   selector:
     matchLabels:
       app: linkmicroservice
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
   template:
     metadata:
       labels:
         app: linkmicroservice
     spec:
-      serviceAccountName: dbmigration-account
+      serviceAccountName: link-microservice-dbmigration
       initContainers:
         - name: "linkmicroservice-dbmigration-init"
           image: "groundnuty/k8s-wait-for:1.3"
