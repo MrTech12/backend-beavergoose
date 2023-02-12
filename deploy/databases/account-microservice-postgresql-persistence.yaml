@@ -1,10 +1,10 @@
 kind: PersistentVolume
 apiVersion: v1
 metadata:
-  name: postgresql-accountmicroservice-pv
+  name: account-microservice-postgresql
   labels:
     type: local
-    app: postgresql-accountmicroservice
+    app: account-microservice-postgresql
 spec:
   storageClassName: manual
   persistentVolumeReclaimPolicy: Retain
@@ -13,14 +13,14 @@ spec:
   accessModes:
     - ReadWriteMany
   hostPath:
-    path: "/mnt/data/accountmicroservice"
+    path: "/mnt/data/account-microservice"
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: postgresql-accountmicroservice-pv-claim
+  name: account-microservice-postgresql
   labels:
-    app: postgresql-accountmicroservice
+    app: account-microservice-postgresql
 spec:
   storageClassName: manual
   accessModes:
