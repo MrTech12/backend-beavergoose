@@ -1,5 +1,42 @@
 global:
 
+metrics-server:
+  apiService:
+    insecureSkipTLSVerify: true
+
+  args:
+    - --kubelet-insecure-tls
+
+  metrics:
+    enabled: true
+
+seq:
+  acceptEULA: "Y"
+  firstRunRequireAuthenticationForHttpIngestion: true
+
+  ingress:
+    annotations:
+      kubernetes.io/ingress.class: nginx
+
+  ui:
+    service:
+      port: 80
+    ingress:
+      enabled: true
+      path: /seq
+
+  resources:
+    limits:
+      memory: "1Gi"
+
+  persistence:
+    enabled: true
+    path: /mnt/data/seqdata
+    existingClaim: seqdata
+    storageClass: "manual"
+    accessMode: ReadWriteMany
+    size: 2Gi
+
 
 account-microservice:
   name: account-microservice
@@ -55,10 +92,6 @@ account-microservice:
   postgesql:
     global:
       postgresql:
-      ## @param global.postgresql.auth.database Name for a custom database to create.
-      ## @param global.postgresql.auth.existingSecret Name of existing secret to use for PostgreSQL credentials.
-      ## @param global.postgresql.auth.secretKeys.adminPasswordKey Name of key in existing secret to use for PostgreSQL credentials. Only used when `global.postgresql.auth.existingSecret` is set.
-      ## @param global.postgresql.auth.secretKeys.userPasswordKey Name of key in existing secret to use for PostgreSQL credentials. Only used when `global.postgresql.auth.existingSecret` is set.
       auth:
         database: "beavergoose"
         existingSecret: "account-microservice-postgresql-credentials"
@@ -66,18 +99,12 @@ account-microservice:
           adminPasswordKey: "username"
           userPasswordKey: "password"
 
-    ## @section PostgreSQL Primary parameters
     primary:
-      ## PostgreSQL Primary persistence configuration
       persistence:
-        ## @param primary.persistence.enabled Enable PostgreSQL Primary data persistence using PVC
         enabled: true
-        ## @param primary.persistence.existingClaim Name of an existing PVC to use
         existingClaim: "account-microservice-postgresql"
 
-    ## volumePermissions: Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each node
     volumePermissions:
-      ## @param volumePermissions.enabled Enable init container that changes the owner and group of the persistent volume
       enabled: true
 
 
@@ -88,6 +115,24 @@ file-microservice:
 
 
 link-microservice:
+
+  postgesql:
+    global:
+      postgresql:
+      auth:
+        database: "beavergoose"
+        existingSecret: "link-microservice-postgresql-credentials"
+        secretKeys:
+          adminPasswordKey: "username"
+          userPasswordKey: "password"
+
+    primary:
+      persistence:
+        enabled: true
+        existingClaim: "link-microservice-postgresql"
+
+    volumePermissions:
+      enabled: true
 
 ## TODO: add 2x PostgreSQL DB, 1x RabbitMQ, 1x Seq
 ## TOD: add 1x Metrics Server, 1x Kubernetes dashboard.

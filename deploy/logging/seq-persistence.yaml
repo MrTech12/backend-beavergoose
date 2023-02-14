@@ -1,7 +1,7 @@
 kind: PersistentVolume
 apiVersion: v1
 metadata:
-  name: seqdata-pv
+  name: seqdata
   labels:
     type: local
     app: seq
@@ -9,16 +9,16 @@ spec:
   storageClassName: manual
   persistentVolumeReclaimPolicy: Retain
   capacity:
-    storage: 3Gi
+    storage: 2Gi
   accessModes:
     - ReadWriteMany
   hostPath:
-    path: "/mnt/data/seq"
+    path: "/mnt/data/seqdata"
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: seqdata-pv-claim
+  name: seqdata
   labels:
     app: seq
 spec:
@@ -27,4 +27,4 @@ spec:
     - ReadWriteMany
   resources:
     requests:
-      storage: 3Gi
+      storage: 2Gi
