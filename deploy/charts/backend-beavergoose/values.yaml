@@ -1,5 +1,3 @@
-global:
-
 metrics-server:
   apiService:
     insecureSkipTLSVerify: true
@@ -36,6 +34,13 @@ seq:
     storageClass: "manual"
     accessMode: ReadWriteMany
     size: 2Gi
+
+rabbitmq:
+  fullnameOverride: "rabbitmq"
+
+  auth:
+    existingPasswordSecret: "rabbitmq-credentials"
+
 
 
 account-microservice:
@@ -97,10 +102,18 @@ account-microservice:
       postgresql:
       auth:
         database: "beavergoose"
-        existingSecret: "account-microservice-postgresql-credentials"
-        secretKeys:
-          adminPasswordKey: "username"
-          userPasswordKey: "password"
+      service:
+        ports:
+          postgresql: 5432
+
+    fullnameOverride: "account-microservice-postgresql" # hostname for connectionstring 
+
+    auth:
+      username: "testbox"
+      existingSecret: "account-microservice-postgresql-credentials"
+      secretKeys:
+        adminPasswordKey: postgres-password
+        userPasswordKey: password
 
     primary:
       persistence:
@@ -168,6 +181,7 @@ file-microservice:
   hpa:
     targetCPUUtilization: 55
 
+
 link-microservice:
   name: link-microservice
   
@@ -231,10 +245,18 @@ link-microservice:
       postgresql:
       auth:
         database: "beavergoose"
-        existingSecret: "link-microservice-postgresql-credentials"
-        secretKeys:
-          adminPasswordKey: "username"
-          userPasswordKey: "password"
+      service:
+        ports:
+          postgresql: 5432
+
+    fullnameOverride: "link-microservice-postgresql" # hostname for connectionstring
+
+    auth:
+      username: "testbox"
+      existingSecret: "link-microservice-postgresql-credentials"
+      secretKeys:
+        adminPasswordKey: postgres-password
+        userPasswordKey: password
 
     primary:
       persistence:
@@ -243,6 +265,3 @@ link-microservice:
 
     volumePermissions:
       enabled: true
-
-## TODO: add 2x PostgreSQL DB, 1x RabbitMQ, 1x Seq
-## TOD: add 1x Metrics Server, 1x Kubernetes dashboard.
