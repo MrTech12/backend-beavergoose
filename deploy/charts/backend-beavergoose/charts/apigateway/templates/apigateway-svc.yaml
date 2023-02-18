@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: apigateway-service
+  name: {{ .Values.name }}
 spec:
   selector:
-    app: apigateway
+    app: {{ .Values.name }}
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 5001
+      targetPort: {{ .Values.deploy.containerPort }}

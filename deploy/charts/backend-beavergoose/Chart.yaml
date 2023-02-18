@@ -30,3 +30,6 @@ dependencies:
   - name: seq
     version: "2022.1.7929"
     repository: https://helm.datalust.co
+  - name: rabbitmq
+    version: "11.9.3"
+    repository: https://charts.bitnami.com/bitnami

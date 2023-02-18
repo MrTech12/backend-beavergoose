@@ -1,4 +1,4 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: link-microservice-dbmigration
+  name: {{ .Values.sa.name }}

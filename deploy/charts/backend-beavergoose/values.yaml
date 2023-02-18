@@ -43,8 +43,11 @@ account-microservice:
   
   deploy:
     image: mrtech12/beavergoose-accountmicroservice
-    tag: release-1.0.0
+    tag: release-2.1.0
     containerPort: 8000 
+
+    initContainer:
+      tag: 1.3 
 
     envConfigMap:
       - JWT_Issuer
@@ -109,12 +112,119 @@ account-microservice:
 
 
 api-gateway:
+  name: api-gateway
+  
+  deploy:
+    image: mrtech12/beavergoose-api-gateway
+    tag: release-2.1.0
+    containerPort: 5001
+
+    envConfigMap:
+      - JWT_Issuer
+    
+    configMaps:
+      jwt-config: issuer
+    
+    envSecret:
+      - JWT_Secret
+
+    secrets:
+      jwt-config: secret
+
+  hpa:
+    targetCPUUtilization: 55
 
 
 file-microservice:
+  name: file-microservice
+    
+  deploy:
+    image: mrtech12/beavergoose-filemicroservice
+    tag: release-2.1.0
+    containerPort: 6000
 
+    envConfigMap:
+      - JWT_Issuer
+      - Seq_ServerUrl
+      - RabbitMQ_HostName
+      - RabbitMQ_Port
+      - DeleteFile_Endpoint
+    
+    configMaps:
+      jwt-config: issuer
+      seq-config: hostname
+      rabbitmq-config: hostname
+      rabbitmq-config: port
+      deletefile: hostname
+    
+    envSecret:
+      - JWT_Secret
+      - Seq_ApiKey
+
+    secrets:
+      jwt-config: secret
+      seq-apikeys: filemicroservice
+    
+  hpa:
+    targetCPUUtilization: 55
 
 link-microservice:
+  name: link-microservice
+  
+  deploy:
+    image: mrtech12/beavergoose-linkmicroservice
+    tag: release-2.1.0
+    containerPort: 7000
+
+    initContainer:
+      tag: 1.3 
+
+    envConfigMap:
+      - JWT_Issuer
+      - Seq_ServerUrl
+      - RabbitMQ_HostName
+      - RabbitMQ_Port
+    
+    configMaps:
+      jwt-config: issuer
+      seq-config: hostname
+      rabbitmq-config: hostname
+      rabbitmq-config: port
+    
+    envSecret:
+      - LinkContext
+      - JWT_Secret
+      - Seq_ApiKey
+
+    secrets:
+      link-microservice-dbconnectionstring: linkcontext
+      jwt-config: secret
+      seq-apikeys: linkmicroservice
+    
+
+  dbmigration-job:
+    name: dbmigration
+    image: mrtech12/beavergoose-linkmicroservice-dbmigration
+    tag: release-1.0.0
+    args: LinkMicroservice.DBMigration
+
+    envSecret:
+      - LinkContext
+
+    secrets:
+      link-microservice-dbconnectionstring: linkcontext
+
+  hpa:
+    targetCPUUtilization: 55
+
+  rb:
+    name: link-microservice-dbmigration-reader
+
+  role:
+    name: link-microservice-read-jobs
+
+  sa:
+    name: link-microservice-dbmigration
 
   postgesql:
     global:

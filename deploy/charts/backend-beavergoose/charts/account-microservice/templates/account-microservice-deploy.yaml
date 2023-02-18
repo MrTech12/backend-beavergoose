@@ -21,8 +21,8 @@ spec:
     spec:
       serviceAccountName: {{ .Values.sa.name }}
       initContainers:
-        - name: "accountmicroservice-dbmigration-init"
-          image: "groundnuty/k8s-wait-for:1.3"
+        - name: "{{ .Values.name }}-dbmigration-init"
+          image: "groundnuty/k8s-wait-for:{{ .Values.initContainer.tag }}"
           imagePullPolicy: Always
           args:
             - "job"
@@ -43,13 +43,13 @@ spec:
                   key: $w
                 {{- end }}
           {{- end }}
-          {{ range $v := .Values.deploy.envSecret }}
-            - name: {{ $v | quote }}
+          {{ range $z := .Values.deploy.envSecret }}
+            - name: {{ $z | quote }}
               valueFrom:
                 secretKeyRef:
-                {{ range $q, $w := .Values.deploy.secrets }}
-                  name: $q
-                  key: $w
+                {{ range $a, $b := .Values.deploy.secrets }}
+                  name: $a
+                  key: $b
                   optional: false
                 {{- end }}
           {{- end }}

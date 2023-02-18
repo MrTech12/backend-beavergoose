@@ -1,13 +1,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: filemicroservice-deployment
+  name: {{ .Values.name }}
   labels:
-    app: filemicroservice
+    app: {{ .Values.name }}
 spec:
   selector:
     matchLabels:
-      app: filemicroservice
+      app: {{ .Values.name }}
   replicas: 2
   strategy:
     type: RollingUpdate
@@ -17,53 +17,34 @@ spec:
   template:
     metadata:
       labels:
-        app: filemicroservice
+        app: {{ .Values.name }}
     spec:
       containers:
-        - name: filemicroservice
-          image: mrtech12/beavergoose-filemicroservice:release-1.0.0
+        - name: {{ .Values.name }}
+          image: {{ .Values.deploy.image }}:{{ .Values.deploy.tag }}
           imagePullPolicy: Always
           ports:
-            - containerPort: 6000
+            - containerPort: {{ .Values.deploy.containerPort }}
           env:
-            - name: "RabbitMQ_HostName"
-              value: "rabbitmq-service"
-            - name: "RabbitMQ_Port"
-              value: "5672"
-            - name: "JWT_Secret"
+          {{ range $v := .Values.deploy.envConfigMap }}
+            - name: {{ $v | quote }}
+              valueFrom:
+                configMapKeyRef:
+                {{ range $q, $w := .Values.deploy.configMaps }}
+                  name: $q
+                  key: $w
+                {{- end }}
+          {{- end }}
+          {{ range $z := .Values.deploy.envSecret }}
+            - name: {{ $z | quote }}
               valueFrom:
                 secretKeyRef:
-                  name: jwt-config
-                  key: secret
+                {{ range $a, $b := .Values.deploy.secrets }}
+                  name: $a
+                  key: $b
                   optional: false
-            - name: "JWT_Issuer"
-              valueFrom:
-                secretKeyRef:
-                  name: jwt-config
-                  key: issuer
-                  optional: false
-            - name: "Seq_ServerUrl"
-              value: "http://my-seq.default.svc.cluster.local"
-            - name: "Seq_ApiKey"
-              valueFrom:
-                secretKeyRef:
-                  name: seq-apikeys
-                  key: filemicroservice
-                  optional: false
-            - name: "DeleteFile_Endpoint"
-              valueFrom:
-                secretKeyRef:
-                  name: deletefile
-                  key: endpoint
-                  optional: false
-            - name: "GCP_ProjectId"
-              valueFrom:
-                secretKeyRef:
-                  name: gcp
-                  key: projectid
-                  optional: false
-            - name: "GOOGLE_APPLICATION_CREDENTIALS"
-              value: "/var/run/secret/gcp/serviceaccount.json"
+                {{- end }}
+          {{- end }}
           resources:
             requests:
               memory: "128Mi"
@@ -71,10 +52,3 @@ spec:
             limits:
               memory: "512Mi"
               cpu: "256m"
-          volumeMounts:
-              - name: "gcp-service-account"
-                mountPath: "/var/run/secret/gcp"
-      volumes:
-        - name: "gcp-service-account"
-          secret:
-            secretName: "gcp-serviceaccount-credentials"
