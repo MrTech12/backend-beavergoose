@@ -10,7 +10,6 @@ metrics-server:
 
 seq:
   acceptEULA: "Y"
-  firstRunRequireAuthenticationForHttpIngestion: true
 
   ingress:
     annotations:

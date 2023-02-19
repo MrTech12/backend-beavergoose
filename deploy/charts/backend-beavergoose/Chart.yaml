@@ -28,7 +28,7 @@ dependencies:
     version: "3.8.3"
     repository: https://kubernetes-sigs.github.io/metrics-server/
   - name: seq
-    version: "2022.1.7929"
+    version: "2023.1.8899"
     repository: https://helm.datalust.co
   - name: rabbitmq
     version: "11.9.3"
