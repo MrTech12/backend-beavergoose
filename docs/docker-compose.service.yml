@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   postgresqlbeavergoose-accountdb:
-    image: postgres:14.2
+    image: postgres:14.7
     container_name: postgresqlbeavergoose-accountdb
     environment:
       - POSTGRES_USER=Sina
@@ -13,7 +13,7 @@ services:
     volumes:
       - postgresqlbeavergoose-accountdata:/var/lib/postgresql/data
   postgresqlbeavergoose-linkdb:
-    image: postgres:14.2
+    image: postgres:14.7
     container_name: postgresqlbeavergoose-linkdb
     environment:
       - POSTGRES_USER=Sina
@@ -24,20 +24,20 @@ services:
     volumes:
       - postgresqlbeavergoose-linkdata:/var/lib/postgresql/data
   rabbitmq-messaging:
-    image: rabbitmq:3.9-management
+    image: rabbitmq:3.9.28-management
     container_name: RabbitMQ
     ports:
       - "15672:15672"
       - "5672:5672"
   seq:
-      image: datalust/seq:2022.1
+      image: datalust/seq:2023.1.8948
       container_name: seq
       environment:
         - ACCEPT_EULA=Y
         - SEQ_API_INGESTIONPORT=5341
         - SEQ_API_CANONICALURI=http://localhost:80
         - SEQ_FIRSTRUN_ADMINUSERNAME=sina
-        - SEQ_FIRSTRUN_ADMINPASSWORDHASH=FEwKPzEYAI9OeTBjg0vPvW1CNBnccNfHF8SfWyGVsLa1g9rXSA==
+        - SEQ_FIRSTRUN_ADMINPASSWORDHASH=QJnZhu3bL/Jv0amiIjlR1r3Aeh6hhcWDYiK4bEZ3kqMPWFCJsWxKMrmO1cyLCHdltbfcZHjpHMgrjXi9idcFWyfanoVG5svDAhMcW2eT8ZtA #password: yGeZoY%YT*w9Nxy2
         - SEQ_FIRSTRUN_REQUIREAUTHENTICATIONFORHTTPINGESTION=true
       ports:
         - "80:80"

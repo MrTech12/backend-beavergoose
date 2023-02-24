@@ -56,7 +56,7 @@ Serilog.Debugging.SelfLog.Enable(Console.Error);
 
 // For Entity Framework
 builder.Services.AddSingleton<AccountContext>();
-builder.Services.AddScoped<IConfigHelper, LocalConfigHelper>();
+builder.Services.AddSingleton<IConfigHelper, LocalConfigHelper>();
 
 // For Identity
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>

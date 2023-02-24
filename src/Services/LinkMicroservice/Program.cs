@@ -1,4 +1,5 @@
 using Common.Configuration.Helpers;
+using Common.Configuration.Interfaces;
 using Common.Http.Helpers;
 using LinkMicroservice.Data;
 using LinkMicroservice.Interfaces;
@@ -56,6 +57,7 @@ builder.Services.AddHostedService<ConsumerRabbitMQHostedService>();
 
 builder.Services.AddSingleton<LinkContext>();
 builder.Services.AddTransient<ILinkRepository, LinkRepository>();
+builder.Services.AddSingleton<IConfigHelper, LocalConfigHelper>();
 
 // Add JWT verification
 var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(localConfigHelper.GetConfigValue("JWT", "Secret")));

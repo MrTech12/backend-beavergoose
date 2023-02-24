@@ -26,11 +26,11 @@ namespace OcelotBasic
 
                 s.AddCors(options =>
                 {
-                    options.AddPolicy(name: "CorsPolicy",
+                    options.AddDefaultPolicy(
                         builder => builder.WithOrigins(new string[] { "http://localhost:4200" })
-                                .AllowAnyMethod()
-                                .AllowAnyHeader());
-                });
+                            .AllowAnyMethod()
+                            .AllowAnyHeader());
+            });
 
                 // Add JWT verification
                 var localConfigHelper = new LocalConfigHelper();
@@ -64,7 +64,7 @@ namespace OcelotBasic
             .UseIISIntegration()
             .Configure(app =>
             {
-                app.UseCors("CorsPolicy");
+                app.UseCors();
 
                 app.UseOcelot().Wait();
             })

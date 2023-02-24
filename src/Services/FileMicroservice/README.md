@@ -42,6 +42,8 @@
 ### DigitalOcean Spaces
 * The project depends on a DigitalOcean Spaces instance.
 * This is the file storage service for the program, to save and retrieve files.
+* One can also use a Localstack instance for the files. For this, use the following serviceURL: `http://s3.localhost.localstack.cloud:4566`
+* For Localstack, use the following command to list the stored files: `aws --endpoint-url=http://localhost:4566 s3 ls s3://test-bucket --summarize`
 
 ### RabbitMQ
 * The project also depends on a RabbitMQ instance, to exchange data between applications.

@@ -83,20 +83,10 @@ namespace FileMicroservice.Services
             var accessConfigDto = new AccessConfigDTO()
             {
                 ServiceURL = this._configHelper.GetConfigValue("DigitalOcean", "ServiceURL"),
-                BucketName = this._configHelper.GetConfigValue("DigitalOcean","BucketName")
+                BucketName = this._configHelper.GetConfigValue("DigitalOcean","BucketName"),
+                AccessKey = this._configHelper.GetConfigValue("DigitalOcean", "AccessKey"),
+                SecretAccessKey = this._configHelper.GetConfigValue("DigitalOcean", "SecretAccessKey")
             };
-
-            var environmentType = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            if (environmentType == "Development")
-            {
-                accessConfigDto.AccessKey = this._configHelper.GetConfigValue("DigitalOcean","AccessKey_Dev");
-                accessConfigDto.SecretAccessKey = this._configHelper.GetConfigValue("DigitalOcean","SecretAccessKey_Dev");
-            }
-            else if (environmentType == "Production")
-            {
-                accessConfigDto.AccessKey = this._configHelper.GetConfigValue("DigitalOcean","AccessKey_Prod");
-                accessConfigDto.SecretAccessKey = this._configHelper.GetConfigValue("DigitalOcean", "SecretAccessKey_Prod");
-            }
 
             return accessConfigDto;
         }
