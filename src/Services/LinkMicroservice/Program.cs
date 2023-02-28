@@ -56,7 +56,7 @@ Serilog.Debugging.SelfLog.Enable(Console.Error);
 builder.Services.AddHostedService<ConsumerRabbitMQHostedService>();
 
 builder.Services.AddSingleton<LinkContext>();
-builder.Services.AddTransient<ILinkRepository, LinkRepository>();
+builder.Services.AddSingleton<ILinkRepository, LinkRepository>();
 builder.Services.AddSingleton<IConfigHelper, LocalConfigHelper>();
 
 // Add JWT verification
