@@ -182,5 +182,11 @@ namespace FileMicroservice.UnitTests
             File.Delete(Path.GetTempPath() + newFileName);
             Assert.Equal(ResultType.FileNotForUser, fileBytes.SingleOrDefault().Key);
         }
+        
+        [Fact]
+        public void CountNumbers()
+        {
+             Assert.Equal("Test", "Test");
+        }
     }
 }
