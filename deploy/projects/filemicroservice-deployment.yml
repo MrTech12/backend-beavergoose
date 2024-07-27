@@ -48,25 +48,25 @@ spec:
             - name: "DigitalOcean_ServiceURL"
               valueFrom:
                 secretKeyRef:
-                  name: filedatastore
+                  name: filemicroservice-datastore-credentials
                   key: serviceurl
                   optional: false
             - name: "DigitalOcean_BucketName"
               valueFrom:
                 secretKeyRef:
-                  name: filedatastore
+                  name: filemicroservice-datastore-credentials
                   key: bucketname
                   optional: false
             - name: "DigitalOcean_AccessKey"
               valueFrom:
                 secretKeyRef:
-                  name: filedatastore
+                  name: filemicroservice-datastore-credentials
                   key: accesskey
                   optional: false
             - name: "DigitalOcean_SecretAccessKey"
               valueFrom:
                 secretKeyRef:
-                  name: filedatastore
+                  name: filemicroservice-datastore-credentials
                   key: secretaccesskey
                   optional: false
             - name: "DeleteFile_Endpoint"
