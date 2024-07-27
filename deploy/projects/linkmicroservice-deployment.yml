@@ -59,10 +59,3 @@ spec:
                   name: seq-apikeys
                   key: linkmicroservice
                   optional: false
-          resources:
-            requests:
-              memory: "128Mi"
-              cpu: "128m"
-            limits:
-              memory: "512Mi"
-              cpu: "256m"

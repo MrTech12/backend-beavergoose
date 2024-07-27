@@ -17,7 +17,7 @@ namespace FileMicroservice.UnitTests
 
         public FileServiceUnitTest()
         {
-            this.fileService = new FileService(new StubFileProvider(), new StubMessagingProducer(), new StubRetrieveConfigHelper(), new StubDeleteFileHelper(), new StubRetrieveExternalSecretHelper());
+            this.fileService = new FileService(new StubFileProvider(), new StubMessagingProducer(), new StubRetrieveConfigHelper(), new StubDeleteFileHelper());
         }
 
         [Fact]

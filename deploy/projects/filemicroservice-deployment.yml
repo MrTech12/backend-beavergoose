@@ -45,31 +45,33 @@ spec:
                   name: seq-apikeys
                   key: filemicroservice
                   optional: false
+            - name: "DigitalOcean_ServiceURL"
+              valueFrom:
+                secretKeyRef:
+                  name: filedatastore
+                  key: serviceurl
+                  optional: false
+            - name: "DigitalOcean_BucketName"
+              valueFrom:
+                secretKeyRef:
+                  name: filedatastore
+                  key: bucketname
+                  optional: false
+            - name: "DigitalOcean_AccessKey"
+              valueFrom:
+                secretKeyRef:
+                  name: filedatastore
+                  key: accesskey
+                  optional: false
+            - name: "DigitalOcean_SecretAccessKey"
+              valueFrom:
+                secretKeyRef:
+                  name: filedatastore
+                  key: secretaccesskey
+                  optional: false
             - name: "DeleteFile_Endpoint"
               valueFrom:
                 secretKeyRef:
                   name: deletefile
                   key: endpoint
                   optional: false
-            - name: "GCP_ProjectId"
-              valueFrom:
-                secretKeyRef:
-                  name: gcp
-                  key: projectid
-                  optional: false
-            - name: "GOOGLE_APPLICATION_CREDENTIALS"
-              value: "/var/run/secret/gcp/serviceaccount.json"
-          resources:
-            requests:
-              memory: "128Mi"
-              cpu: "128m"
-            limits:
-              memory: "512Mi"
-              cpu: "256m"
-          volumeMounts:
-              - name: "gcp-service-account"
-                mountPath: "/var/run/secret/gcp"
-      volumes:
-        - name: "gcp-service-account"
-          secret:
-            secretName: "gcp-serviceaccount-credentials"

@@ -41,12 +41,12 @@
 * Name: deletefileapp
   - Value:
     - endpoint
-* Name: GCP
+* Name: filedatastore
   - Value:
-    - projectid
-* Name: GOOGLE_APPLICATION_CREDENTIALS
-  - Value:
-    - volume mountpoint
+    - serviceurl
+    - bucketname
+    - accesskey
+    - secretaccesskey
 
 # LinkMicroservice
 * Name: linkmicroservice-dbconnectionstring

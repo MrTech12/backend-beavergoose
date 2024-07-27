@@ -85,7 +85,7 @@
 * This can be the ninth or above deployed component.<br><br>
 
 10. FileMicroservice
-* The **credentials for GCP Service Account & GCP Project id** are stored in `Secrets` objects.
+* The **connection information for the file datastore** are stored in a `Secrets` object.
 * The **endpoint of the DeleteFileApp program** is stored in `Secrets` object.
 * The **API key for Seq** is stored in a `Secrets` object.
 * The **JWT values** are stored in a `Secrets` object.

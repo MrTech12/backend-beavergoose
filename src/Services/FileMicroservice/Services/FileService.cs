@@ -8,15 +8,15 @@ namespace FileMicroservice.Services
     {
         private readonly IFileProvider _fileProvider;
         private readonly IMessagingProducer _messagingProducer;
-        private readonly IRetrieveExternalSecretHelper _retrieveExternalSecretHelper;
+        private readonly IRetrieveConfigHelper _retrieveConfigHelper;
         private readonly IDeleteFileHelper _deleteFileHelper;
 
-        public FileService(IFileProvider fileProvider, IMessagingProducer messagingProducer, IRetrieveConfigHelper retrieveConfigHelper, IDeleteFileHelper _deleteFileHelper, IRetrieveExternalSecretHelper retrieveExternalSecretHelper)
+        public FileService(IFileProvider fileProvider, IMessagingProducer messagingProducer, IRetrieveConfigHelper retrieveConfigHelper, IDeleteFileHelper _deleteFileHelper)
         {
             this._fileProvider = fileProvider;
             this._messagingProducer = messagingProducer;
+            this._retrieveConfigHelper = retrieveConfigHelper;
             this._deleteFileHelper = _deleteFileHelper;
-            this._retrieveExternalSecretHelper = retrieveExternalSecretHelper;
         }
 
         public async Task<string> SaveFile(UploadFileDTO uploadFileDto)
@@ -78,25 +78,15 @@ namespace FileMicroservice.Services
 
         internal DigitalOceanDataConfigDTO retrieveDODataConfig()
         {
-            var DODataConfig = new DigitalOceanDataConfigDTO()
+            var accessConfigDto = new DigitalOceanDataConfigDTO()
             {
-                DOServiceURL = this._retrieveExternalSecretHelper.GetSecret("DigitalOcean_ServiceURL"),
-                DOBucketName = this._retrieveExternalSecretHelper.GetSecret("DigitalOcean_BucketName"),
+                DOServiceURL = this._retrieveConfigHelper.GetConfigValue("DigitalOcean", "ServiceURL"),
+                DOBucketName = this._retrieveConfigHelper.GetConfigValue("DigitalOcean", "BucketName"),
+                DOAccessKey = this._retrieveConfigHelper.GetConfigValue("DigitalOcean", "AccessKey"),
+                DOSecretAccessKey = this._retrieveConfigHelper.GetConfigValue("DigitalOcean", "SecretAccessKey")
             };
 
-            var environmentType = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            if (environmentType == "Development")
-            {
-                DODataConfig.DOAccessKey = this._retrieveExternalSecretHelper.GetSecret("DigitalOcean_AccessKey_Dev");
-                DODataConfig.DOSecretAccessKey = this._retrieveExternalSecretHelper.GetSecret("DigitalOcean_SecretAccessKey_Dev");
-            }
-            else if (environmentType == "Production")
-            {
-                DODataConfig.DOAccessKey = this._retrieveExternalSecretHelper.GetSecret("DigitalOcean_AccessKey_Prod");
-                DODataConfig.DOSecretAccessKey = this._retrieveExternalSecretHelper.GetSecret("DigitalOcean_SecretAccessKey_Prod");
-            }
-
-            return DODataConfig;
+            return accessConfigDto;
         }
     }
 }

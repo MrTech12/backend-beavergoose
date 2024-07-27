@@ -33,10 +33,3 @@ spec:
                   name: jwt-config
                   key: issuer
                   optional: false
-          resources:
-            requests:
-              memory: "128Mi"
-              cpu: "128m"
-            limits:
-              memory: "320Mi"
-              cpu: "256m"
