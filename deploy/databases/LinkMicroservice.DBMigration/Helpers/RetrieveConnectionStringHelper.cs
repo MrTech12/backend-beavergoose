@@ -9,7 +9,7 @@ namespace LinkMicroservice.DBMigration.Helpers
             var environmentType = Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT");
             if (environmentType == "Development")
             {
-                IConfiguration conf = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json").Build();
+                IConfiguration conf = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json", optional: true, reloadOnChange: false).Build();
                 string connectionString = conf.GetConnectionString("LinkContext");
 
                 if (!string.IsNullOrEmpty(connectionString))

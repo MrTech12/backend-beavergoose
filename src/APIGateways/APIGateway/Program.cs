@@ -17,9 +17,9 @@ namespace OcelotBasic
             {
                 config
                     .SetBasePath(hostingContext.HostingEnvironment.ContentRootPath)
-                    .AddJsonFile("appsettings.json", true, true)
-                    .AddJsonFile($"appsettings.{hostingContext.HostingEnvironment.EnvironmentName}.json", true, true)
-                    .AddJsonFile($"ocelot.{hostingContext.HostingEnvironment.EnvironmentName}.json", false, true)
+                    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: false)
+                    .AddJsonFile($"appsettings.{hostingContext.HostingEnvironment.EnvironmentName}.json", optional: true, reloadOnChange: false)
+                    .AddJsonFile($"ocelot.{hostingContext.HostingEnvironment.EnvironmentName}.json", optional: false, reloadOnChange: false)
                     .AddEnvironmentVariables();
             })
             .ConfigureServices(s => {
@@ -27,7 +27,7 @@ namespace OcelotBasic
                 s.AddCors(options =>
                 {
                     options.AddPolicy(name: "CorsPolicy",
-                        builder => builder.WithOrigins(new string[] { "http://localhost:4200", "https://frontend.demo-beavergoose.nl" })
+                        builder => builder.WithOrigins(new string[] { })
                                 .AllowAnyMethod()
                                 .AllowAnyHeader());
                 });

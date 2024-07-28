@@ -7,7 +7,7 @@
             var environmentType = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             if (environmentType == "Development")
             {
-                IConfiguration conf = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json").Build();
+                IConfiguration conf = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json", optional: true, reloadOnChange: false).Build();
                 var configurationValue = conf[$"{configurationSection}:{configurationKey}"];
 
                 if (!string.IsNullOrEmpty(configurationValue))
