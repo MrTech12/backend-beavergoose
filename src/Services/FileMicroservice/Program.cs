@@ -1,5 +1,4 @@
 using FileMicroservice.Data;
-using FileMicroservice.DTOs;
 using FileMicroservice.Helpers;
 using FileMicroservice.Interfaces;
 using FileMicroservice.Messaging;
@@ -21,7 +20,7 @@ builder.Services.AddControllers();
 builder.Services.AddApiVersioning(options =>
 {
     options.AssumeDefaultVersionWhenUnspecified = true;
-    options.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
+    options.DefaultApiVersion = new Asp.Versioning.ApiVersion(1, 0);
     options.ReportApiVersions = true;
 });
 

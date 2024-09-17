@@ -1,4 +1,5 @@
-﻿using LinkMicroservice.Interfaces;
+﻿using Asp.Versioning;
+using LinkMicroservice.Interfaces;
 using LinkMicroservice.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
