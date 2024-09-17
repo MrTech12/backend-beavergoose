@@ -18,8 +18,8 @@ echo $PWD
 printf '\n'
 
 printf "Message: Running Docker compose file to pull up & boot up Localstack container. \n"
-printf "Message: Command that is executed: 'docker-compose up -d' \n"
-docker-compose up -d
+printf "Message: Command that is executed: 'docker compose up -d' \n"
+docker compose up -d
 printf "\n"
 
 printf "Message: Waiting for Localstack to boot up \n"
