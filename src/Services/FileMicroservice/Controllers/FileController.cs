@@ -1,9 +1,9 @@
-﻿using FileMicroservice.DTOs;
+﻿using Asp.Versioning;
+using FileMicroservice.DTOs;
 using FileMicroservice.Interfaces;
 using FileMicroservice.Services;
 using FileMicroservice.Types;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using System.Text.RegularExpressions;

@@ -18,13 +18,13 @@ on:
 
 jobs:
   build-push-docker:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - name: "checkout project code"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: "Setup Docker"
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v3
 
       - name: "Login into DockerHub"
         run: docker login -u ${{ secrets.docker-username }} -p ${{ secrets.docker-token }}
